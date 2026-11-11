@@ -1,0 +1,847 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<meta name="theme-color" content="#D3121B">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<meta name="apple-mobile-web-app-title" content="Faixa Azul">
+<link rel="manifest" href="manifest.webmanifest">
+<link rel="icon" href="icons/icon-192.png">
+<link rel="apple-touch-icon" href="icons/apple-touch-icon.png">
+<style>:root{color-scheme:light;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}body{margin:0;font:14px system-ui,sans-serif}img{max-width:100%}[hidden]{display:none!important}</style>
+</head>
+<body>
+<title>Rumo à Faixa Azul</title>
+<meta name="claude:viewport-fit-sides" content="cover">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Saira+Condensed:wght@600;700;800&family=Inter:wght@400;500;600;700&display=swap">
+<style>
+/* Layout: app de celular numa coluna, faixa vermelha da B9 no topo, navegação fixa embaixo */
+:root{
+  --bg:#F4F2F1; --surface:#FFFFFF; --surface-2:#EDE9E8; --ink:#1B1516; --muted:#6E6466; --line:#DDD6D5;
+  --red:#D3121B; --red-ink:#FFFFFF; --blue:#1C5FC9; --blue-soft:#DCE7FA; --gold:#F2C300;
+  --ok:#1D8A4E; --ok-soft:#DDF3E6; --bad:#C8261E; --bad-soft:#FBE2E0;
+  --gi-you:#2E6FD8; --gi-you-line:#123F87; --gi-op:#FFFFFF; --gi-op-line:#4A4245; --mat:#E7E1DF;
+  --display:"Saira Condensed","Arial Narrow",system-ui,sans-serif;
+  --body:"Inter",system-ui,-apple-system,"Segoe UI",sans-serif;
+}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]){
+  --bg:#141012; --surface:#1F1A1C; --surface-2:#2A2427; --ink:#F4EDEE; --muted:#A99EA1; --line:#3A3236;
+  --red:#E3242C; --red-ink:#FFFFFF; --blue:#6FA2F5; --blue-soft:#1D2C47; --gold:#F2C300;
+  --ok:#4CC783; --ok-soft:#173527; --bad:#FF6B61; --bad-soft:#40201E;
+  --gi-you:#3F7FE6; --gi-you-line:#A9C8FF; --gi-op:#ECE7E8; --gi-op-line:#ECE7E8; --mat:#2A2427; color-scheme:dark}}
+:root[data-theme="dark"]{
+  --bg:#141012; --surface:#1F1A1C; --surface-2:#2A2427; --ink:#F4EDEE; --muted:#A99EA1; --line:#3A3236;
+  --red:#E3242C; --red-ink:#FFFFFF; --blue:#6FA2F5; --blue-soft:#1D2C47; --gold:#F2C300;
+  --ok:#4CC783; --ok-soft:#173527; --bad:#FF6B61; --bad-soft:#40201E;
+  --gi-you:#3F7FE6; --gi-you-line:#A9C8FF; --gi-op:#ECE7E8; --gi-op-line:#ECE7E8; --mat:#2A2427; color-scheme:dark}
+
+*{box-sizing:border-box}
+html,body{min-height:100%}
+body{background:var(--bg);color:var(--ink);font-family:var(--body);font-size:15px;line-height:1.5;-webkit-tap-highlight-color:transparent}
+body::before{content:"";position:fixed;inset:0 0 auto;height:env(safe-area-inset-top,0px);z-index:10;background:var(--red)}
+button{font:inherit;color:inherit;cursor:pointer}
+button:focus-visible,input:focus-visible,textarea:focus-visible,select:focus-visible{outline:3px solid var(--gold);outline-offset:2px}
+h1,h2,h3{font-family:var(--display);text-wrap:balance;margin:0;line-height:1.05;letter-spacing:.01em}
+.wrap{max-width:560px;margin:0 auto;padding-left:max(16px,env(safe-area-inset-left,0px));padding-right:max(16px,env(safe-area-inset-right,0px));padding-block:0 110px}
+
+/* faixa da B9 */
+.band{background:var(--red);color:var(--red-ink);margin:0 calc(-1 * max(16px,env(safe-area-inset-left,0px))) 0;padding:14px max(16px,env(safe-area-inset-left,0px)) 18px;position:relative;overflow:hidden}
+.band-top{display:flex;align-items:center;justify-content:space-between;gap:12px}
+.brand{display:flex;align-items:center;gap:10px;font-family:var(--display);font-weight:800;font-size:20px;letter-spacing:.04em;text-transform:uppercase}
+.badge9{width:34px;height:34px;border-radius:50%;background:var(--gold);color:#B00E15;display:grid;place-items:center;font-weight:800;font-size:17px;border:2px solid #fff}
+.exam-tag{font-family:var(--display);font-weight:700;font-size:13px;letter-spacing:.08em;text-transform:uppercase;background:rgba(0,0,0,.18);padding:4px 10px;border-radius:99px;white-space:nowrap}
+.count{display:flex;align-items:flex-end;gap:14px;margin-top:14px}
+.count-num{font-family:var(--display);font-weight:800;font-size:76px;line-height:.8;font-variant-numeric:tabular-nums}
+.count-txt{font-family:var(--display);font-weight:700;font-size:20px;line-height:1.05;text-transform:uppercase;padding-bottom:4px}
+.count-txt small{display:block;font-family:var(--body);font-weight:500;font-size:13px;text-transform:none;opacity:.9;margin-top:4px}
+
+/* faixa (belt) */
+.beltcard{background:var(--surface);border-radius:14px;padding:16px;margin-top:-10px;position:relative;box-shadow:0 6px 20px rgba(40,10,12,.10);display:grid;gap:12px}
+.belt-row{display:flex;align-items:center;justify-content:space-between;gap:10px}
+.belt-row h2{font-size:24px}
+.belt-meta{font-size:13px;color:var(--muted)}
+.stats{display:grid;grid-template-columns:repeat(3,1fr);gap:8px}
+.stat{background:var(--surface-2);border-radius:10px;padding:8px 10px}
+.stat b{display:block;font-family:var(--display);font-size:24px;line-height:1;font-variant-numeric:tabular-nums}
+.stat span{font-size:12px;color:var(--muted)}
+
+.section-h{display:flex;align-items:baseline;justify-content:space-between;margin:26px 0 10px;gap:10px}
+.section-h h2{font-size:22px;text-transform:uppercase;letter-spacing:.03em}
+.section-h span{font-size:13px;color:var(--muted)}
+
+.btn{border:0;border-radius:12px;padding:13px 16px;font-weight:700;background:var(--surface-2)}
+.btn-primary{background:var(--red);color:var(--red-ink)}
+.btn-blue{background:var(--blue);color:#fff}
+.btn-wide{width:100%;display:flex;align-items:center;justify-content:center;gap:8px}
+.btn:active{transform:translateY(1px)}
+
+.today{background:var(--blue-soft);border-radius:14px;padding:14px 16px;display:grid;gap:10px;margin-top:16px}
+.today p{margin:0;font-size:14px}
+.today b{color:var(--blue)}
+
+/* mapa da prova */
+.map{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:8px}
+.tile{background:var(--surface);border:1px solid var(--line);border-radius:12px;padding:10px 12px;text-align:left;display:grid;gap:6px;min-width:0}
+.tile-top{display:flex;justify-content:space-between;align-items:baseline;gap:6px}
+.tile b{font-family:var(--display);font-size:17px;text-transform:uppercase;letter-spacing:.02em;line-height:1.05}
+.tile em{font-style:normal;font-size:12px;color:var(--muted);font-variant-numeric:tabular-nums;white-space:nowrap}
+.bar{height:6px;background:var(--surface-2);border-radius:99px;overflow:hidden}
+.bar i{display:block;height:100%;background:var(--blue);border-radius:99px;transition:width .4s}
+.tile.weak .bar i{background:var(--red)}
+
+/* nav */
+.nav{position:fixed;left:0;right:0;bottom:0;z-index:20;background:var(--surface);border-top:1px solid var(--line);padding:6px max(10px,env(safe-area-inset-right,0px)) calc(6px + env(safe-area-inset-bottom,0px)) max(10px,env(safe-area-inset-left,0px))}
+.nav-in{max-width:560px;margin:0 auto;display:grid;grid-template-columns:repeat(4,1fr);gap:4px}
+.nav button{border:0;background:none;padding:6px 2px;border-radius:10px;display:grid;justify-items:center;gap:2px;font-size:11px;font-weight:600;color:var(--muted)}
+.nav button svg{width:24px;height:24px}
+.nav button[aria-current="page"]{color:var(--red);background:var(--surface-2)}
+
+/* telas */
+.screen-h{padding:20px 0 6px;display:grid;gap:4px}
+.screen-h h1{font-size:34px;text-transform:uppercase}
+.screen-h p{margin:0;color:var(--muted);font-size:14px}
+.modes{display:grid;gap:8px;margin-top:12px}
+.mode{display:flex;align-items:center;gap:12px;background:var(--surface);border:1px solid var(--line);border-radius:12px;padding:12px;text-align:left}
+.mode-ic{width:44px;height:44px;border-radius:10px;display:grid;place-items:center;flex:none;font-family:var(--display);font-weight:800;font-size:20px;color:#fff}
+.mode b{display:block;font-size:15px}
+.mode span{font-size:13px;color:var(--muted)}
+
+/* quiz */
+.qtop{display:flex;align-items:center;gap:10px;padding:16px 0 8px}
+.qtop .bar{flex:1;height:8px}
+.xbtn{border:0;background:var(--surface-2);width:36px;height:36px;border-radius:50%;font-size:18px;flex:none}
+.qcat{font-family:var(--display);font-weight:700;font-size:14px;letter-spacing:.08em;text-transform:uppercase;color:var(--red)}
+.qtext{font-size:20px;font-weight:700;line-height:1.3;margin:6px 0 12px;text-wrap:pretty}
+.figure{background:var(--surface);border:1px solid var(--line);border-radius:14px;padding:6px;margin-bottom:12px}
+.figure svg{display:block;width:100%;height:auto}
+.photo{display:block;width:100%;aspect-ratio:16/9;object-fit:cover;border-radius:10px;background:#000;max-width:100%}
+.yt{background:var(--ink);color:var(--bg);text-decoration:none;margin-top:4px}
+.thumb img{display:block;width:100%;aspect-ratio:16/10;object-fit:cover;border-radius:8px}
+.sig{display:grid;place-items:center;aspect-ratio:16/10;border-radius:8px;color:#fff;font-family:var(--display);font-weight:800;font-size:22px;letter-spacing:.04em}
+.credits{font-size:12px;color:var(--muted);margin-top:18px;display:grid;gap:4px}
+.credits a{color:var(--muted)}
+.opts{display:grid;gap:8px}
+.opts.grid{grid-template-columns:repeat(2,minmax(0,1fr))}
+.opt{border:2px solid var(--line);background:var(--surface);border-radius:12px;padding:12px 14px;text-align:left;font-weight:600;min-width:0}
+.opt svg{display:block;width:100%;height:auto}
+.opt.correct{border-color:var(--ok);background:var(--ok-soft)}
+.opt.wrong{border-color:var(--bad);background:var(--bad-soft)}
+.opt[disabled]{cursor:default}
+.feedback{margin-top:12px;border-radius:12px;padding:12px 14px;font-size:14px}
+.feedback.ok{background:var(--ok-soft)}
+.feedback.no{background:var(--bad-soft)}
+.feedback b{display:block;font-family:var(--display);font-size:20px;text-transform:uppercase}
+.next{margin-top:12px}
+.order-picked{display:flex;flex-wrap:wrap;gap:6px;min-height:44px;background:var(--surface-2);border-radius:12px;padding:8px;margin-bottom:10px}
+.chip{border:0;border-radius:99px;padding:8px 12px;font-weight:600;background:var(--surface);border:1px solid var(--line)}
+.chip.on{background:var(--ink);color:var(--bg);border-color:var(--ink)}
+.belt-chip{display:inline-flex;align-items:center;gap:6px}
+.belt-chip i{width:22px;height:10px;border-radius:2px;border:1px solid var(--gi-op-line);display:inline-block}
+
+.result{text-align:center;padding:30px 0;display:grid;gap:10px;justify-items:center}
+.result .big{font-family:var(--display);font-weight:800;font-size:80px;line-height:1}
+
+/* técnicas */
+.chips{display:flex;gap:6px;overflow-x:auto;padding:8px 0 10px;scrollbar-width:none}
+.chips::-webkit-scrollbar{display:none}
+.chips .chip{white-space:nowrap;flex:none}
+.tlist{display:grid;gap:8px}
+.titem{display:flex;align-items:center;gap:10px;background:var(--surface);border:1px solid var(--line);border-radius:12px;padding:8px 12px 8px 8px;text-align:left;width:100%}
+.titem .thumb{width:84px;flex:none;border-radius:8px;position:relative}
+.play{position:absolute;inset:0;display:grid;place-items:center;color:#fff;font-style:normal;font-size:20px;text-shadow:0 1px 4px rgba(0,0,0,.6)}
+.titem .vtag{display:inline;font-size:12px;color:var(--red)}
+.titem{min-height:58px}
+.titem .thumb svg{display:block;width:100%;height:auto}
+.titem b{display:block;font-size:15px;line-height:1.25}
+.titem span{font-size:12px;color:var(--muted)}
+.titem .info{flex:1;min-width:0}
+.dot{width:12px;height:12px;border-radius:50%;flex:none;background:var(--surface-2);border:2px solid var(--line)}
+.dot.l1{background:var(--bad);border-color:var(--bad)}
+.dot.l2{background:var(--gold);border-color:var(--gold)}
+.dot.l3{background:var(--ok);border-color:var(--ok)}
+
+.sheet-bg{position:fixed;inset:0;background:rgba(10,5,6,.55);z-index:30;display:flex;align-items:flex-end;justify-content:center}
+.sheet{background:var(--bg);width:100%;max-width:560px;max-height:92%;overflow-y:auto;border-radius:18px 18px 0 0;padding:16px max(16px,env(safe-area-inset-right,0px)) calc(24px + env(safe-area-inset-bottom,0px)) max(16px,env(safe-area-inset-left,0px))}
+.sheet-h{display:flex;justify-content:space-between;gap:10px;align-items:flex-start}
+.sheet-h h2{font-size:28px;text-transform:uppercase}
+.steps{margin:0;padding-left:22px;display:grid;gap:8px}
+.steps li{padding-left:4px}
+.warn{background:var(--bad-soft);border-radius:10px;padding:10px 12px;font-size:14px;margin-top:12px}
+.rate{display:grid;grid-template-columns:repeat(3,1fr);gap:6px;margin-top:14px}
+.rate button{border:2px solid var(--line);background:var(--surface);border-radius:10px;padding:10px 4px;font-weight:700;font-size:13px}
+.rate button.on.l1{border-color:var(--bad);background:var(--bad-soft)}
+.rate button.on.l2{border-color:var(--gold)}
+.rate button.on.l3{border-color:var(--ok);background:var(--ok-soft)}
+.sub{font-family:var(--display);font-size:16px;text-transform:uppercase;letter-spacing:.05em;color:var(--muted);margin:18px 0 8px}
+.media{display:grid;gap:8px}
+.media img,.media video{width:100%;border-radius:10px;background:#000}
+.file{display:flex;align-items:center;justify-content:center;gap:8px;border:2px dashed var(--line);border-radius:12px;padding:12px;font-weight:600;color:var(--muted);cursor:pointer}
+.file input{position:absolute;opacity:0;width:1px;height:1px}
+textarea{width:100%;min-height:80px;border:1px solid var(--line);background:var(--surface);color:var(--ink);border-radius:10px;padding:10px;font:inherit;resize:vertical}
+.note{font-size:12px;color:var(--muted);margin-top:8px}
+.legend{display:flex;gap:12px;font-size:12px;color:var(--muted);padding:0 6px 4px}
+.legend i{display:inline-block;width:10px;height:10px;border-radius:3px;margin-right:4px;vertical-align:-1px}
+
+/* simulado */
+.wheel{background:var(--red);color:#fff;border-radius:18px;padding:22px 16px;text-align:center;display:grid;gap:8px;margin-top:12px;min-height:160px;align-content:center}
+.wheel .cat{font-family:var(--display);font-size:15px;letter-spacing:.1em;text-transform:uppercase;opacity:.85}
+.wheel .name{font-family:var(--display);font-weight:800;font-size:32px;line-height:1.05;text-transform:uppercase;text-wrap:balance}
+.wheel .sensei{font-size:13px;opacity:.85}
+.timer{font-family:var(--display);font-size:44px;font-weight:800;text-align:center;font-variant-numeric:tabular-nums;margin:10px 0 0}
+.row{display:flex;gap:8px;flex-wrap:wrap}
+.row > *{flex:1}
+.quote{font-style:italic;color:var(--muted);font-size:14px;border-left:3px solid var(--gold);padding:4px 0 4px 12px;margin:24px 0 0}
+.toast{position:fixed;left:50%;bottom:calc(84px + env(safe-area-inset-bottom,0px));transform:translateX(-50%);background:var(--ink);color:var(--bg);padding:10px 16px;border-radius:99px;font-weight:700;font-size:14px;z-index:40;box-shadow:0 6px 18px rgba(0,0,0,.25)}
+@keyframes pop{0%{transform:scale(.9)}60%{transform:scale(1.05)}100%{transform:scale(1)}}
+.pop{animation:pop .3s ease-out}
+@media (prefers-reduced-motion:reduce){*{animation:none!important;transition:none!important}}
+</style>
+
+<div class="wrap" id="app"></div>
+<nav class="nav" aria-label="Seções">
+  <div class="nav-in">
+    <button data-go="home"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 11l9-7 9 7v9a1 1 0 0 1-1 1h-5v-6h-6v6H4a1 1 0 0 1-1-1z"/></svg>Início</button>
+    <button data-go="quiz"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9"/><path d="M9.5 9.5a2.5 2.5 0 1 1 3.5 2.3c-.6.3-1 .9-1 1.6v.6"/><circle cx="12" cy="17.2" r=".6" fill="currentColor"/></svg>Quiz</button>
+    <button data-go="tec"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="4" y="3" width="13" height="17" rx="2"/><path d="M8 3v17M20 7v13"/></svg>Técnicas</button>
+    <button data-go="sim"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="13" r="8"/><path d="M12 9v4l2.5 2.5M9 2h6"/></svg>Simulado</button>
+  </div>
+</nav>
+
+<script>
+"use strict";
+/* ================= DATA ================= */
+const EXAM = new Date(2026, 10, 30); // 30/11/2026
+
+const CATS = [
+  {id:"historia",  nome:"História",          tipo:"teoria"},
+  {id:"etica",     nome:"Ética",             tipo:"teoria"},
+  {id:"regras",    nome:"Regras",            tipo:"teoria"},
+  {id:"aquec",     nome:"Aquecimento",       tipo:"tec"},
+  {id:"saidas",    nome:"Saídas",            tipo:"tec"},
+  {id:"quedas",    nome:"Quedas",            tipo:"tec"},
+  {id:"raspagens", nome:"Raspagens",         tipo:"tec"},
+  {id:"passagem",  nome:"Passagem de guarda",tipo:"tec"},
+  {id:"estrang",   nome:"Estrangulamento",   tipo:"tec"},
+  {id:"chavepe",   nome:"Chave de pé",       tipo:"tec"},
+  {id:"armlock",   nome:"Arm lock",          tipo:"tec"},
+  {id:"triangulo", nome:"Triângulo",         tipo:"tec"},
+  {id:"maovaca",   nome:"Mão de vaca",       tipo:"tec"},
+  {id:"kimura",    nome:"Kimura / Americana",tipo:"tec"},
+  {id:"omoplata",  nome:"Omoplata",          tipo:"tec"},
+  {id:"crucifixo", nome:"Crucifixo",         tipo:"tec"},
+  {id:"defesa",    nome:"Defesa pessoal",    tipo:"tec"}
+];
+const CAT = Object.fromEntries(CATS.map(c => [c.id, c]));
+
+const POS_NOME = {
+  em_pe:"Em pé, com pegada", guarda:"Guarda fechada", montada:"Montada", cem:"100 kg",
+  costas:"Pegada nas costas", meia:"Meia-guarda", borboleta:"Guarda borboleta",
+  joelho:"Joelho na barriga", cinquenta:"50/50", tartaruga:"Tartaruga (4 apoios)",
+  queda:"Queda", solo:"Exercício individual", abraco:"Abraço pelas costas"
+};
+
+/* Técnicas: pos = posição da ilustração; swap = você (azul) por baixo/por cima invertido */
+const TEC = [
+ // Aquecimento técnico
+ {id:"a1",cat:"aquec",nome:"Cambalhotas",pos:"solo",passos:["Agache com as mãos no chão à frente dos pés.","Queixo colado no peito e costas arredondadas.","Role apoiando a nuca e as costas, nunca o topo da cabeça.","Termine sentado ou de pé, em base."],erro:"Apoiar o topo da cabeça no chão."},
+ {id:"a2",cat:"aquec",nome:"Emborcadas",pos:"solo",passos:["Deitado de costas, queixo no peito.","Leve as pernas por cima de um dos ombros (não por cima do pescoço).","Passe o corpo para trás apoiando no ombro.","Termine de joelhos ou em base, pronto para continuar."],erro:"Rolar por cima do pescoço. Confirme com o sensei o formato que ele cobra.",confirmar:true},
+ {id:"a3",cat:"aquec",nome:"Amortecimentos",pos:"solo",passos:["Queixo no peito para proteger a cabeça.","Caia arredondando as costas.","Bata os braços estendidos no chão a uns 45° do corpo, palmas para baixo.","Faça para trás e para os dois lados."],erro:"Tentar apoiar a queda com a mão ou o cotovelo esticado."},
+ {id:"a4",cat:"aquec",nome:"Rolamentos",pos:"solo",passos:["Base com uma perna à frente e o braço do mesmo lado em arco.","Role em diagonal do ombro até o quadril oposto.","Mantenha a cabeça virada para o lado de fora.","Termine em base técnica, de pé."],erro:"Rolar em linha reta sobre a coluna."},
+ {id:"a5",cat:"aquec",nome:"Fugas de quadril",pos:"solo",passos:["Deitado de lado, pé de cima apoiado no chão.","Empurre o chão com o pé e leve o quadril para trás.","As mãos empurram para frente, como se afastassem o adversário.","Troque de lado e repita pelo tatame."],erro:"Ficar de costas retas no chão em vez de virar de lado."},
+ {id:"a6",cat:"aquec",nome:"Reposição de guarda",pos:"solo",passos:["Deitado, apoie o ombro e o pé no chão.","Gire o quadril usando fuga de quadril.","Traga o joelho para a frente do seu corpo.","Recoloque as pernas entre você e o adversário."],erro:"Deixar as pernas para trás e expor o quadril."},
+ {id:"a7",cat:"aquec",nome:"Baratinha",pos:"solo",passos:["De costas no chão, pernas e braços para o alto.","Gire o corpo no chão usando ombros e quadril.","Mantenha os pés sempre virados para o adversário imaginário.","Gire para os dois lados."],erro:"Apoiar a cabeça e travar o giro. Confirme com o sensei o formato que ele cobra.",confirmar:true},
+ // Saídas
+ {id:"s1",cat:"saidas",nome:"Da montada barrigada (upa)",pos:"montada",swap:true,passos:["Prenda o braço do adversário pelo punho, junto ao seu corpo.","Prenda o pé dele do mesmo lado com o seu pé.","Faça a ponte forte com o quadril, na diagonal, sobre o seu ombro do lado preso.","Gire e termine dentro da guarda dele, com postura."],erro:"Fazer a ponte reta para cima, sem prender braço e pé do mesmo lado."},
+ {id:"s2",cat:"saidas",nome:"Do arm lock subindo",pos:"guarda",swap:true,passos:["Junte as mãos e proteja o braço atacado.","Vire o polegar para cima, para o cotovelo não ficar na linha.","Suba empilhando o adversário, levando o peso para cima dele.","Puxe o cotovelo para fora e passe para o lado."],erro:"Puxar o braço para trás com o cotovelo esticado."},
+ {id:"s3",cat:"saidas",nome:"Do 100 kg reposição de guarda",pos:"cem",swap:true,passos:["Monte as defesas: antebraço no pescoço e mão no quadril dele.","Fuga de quadril para criar espaço.","Coloque o joelho por dentro, entre você e ele.","Recomponha a guarda com as duas pernas."],erro:"Empurrar com os braços esticados e deixar o peito exposto."},
+ {id:"s4",cat:"saidas",nome:"Das costas básica travando o braço",pos:"costas",swap:true,passos:["Proteja o pescoço segurando o braço que vai estrangular.","Trave esse braço no seu peito.","Escorregue o quadril para o lado do braço de baixo e encoste as costas no chão.","Tire o gancho, gire para dentro e fique por cima."],erro:"Soltar o pescoço para tirar os ganchos primeiro."},
+ {id:"s5",cat:"saidas",nome:"Do triângulo balde",pos:"guarda",passos:["Postura reta, sem deixar a cabeça ser puxada.","Cotovelo do braço preso colado ao corpo.","Suba e empilhe, levando o peso sobre o quadril dele.","Controle o quadril e passe para o lado do braço preso."],erro:"Ficar parado com a cabeça baixa. Confirme com o sensei o detalhe do \"balde\".",confirmar:true},
+ {id:"s6",cat:"saidas",nome:"Do omoplata cambalhota",pos:"guarda",passos:["Assim que sentir a perna dele no seu ombro, não espere o ajuste.","Role para frente (cambalhota) na direção do braço preso.","O giro desfaz a torção do ombro.","Volte para a frente dele, por cima ou na guarda."],erro:"Tentar puxar o braço preso para trás com força."},
+ {id:"s7",cat:"saidas",nome:"Do estrangulamento com pegada na gola",pos:"guarda",swap:false,passos:["Queixo para baixo e para o lado da mão de dentro.","Duas mãos no mesmo braço dele, tirando a pressão do punho.","Afaste o cotovelo dele do seu pescoço.","Recupere a postura ou passe para o lado."],erro:"Tentar empurrar o rosto ou o peito dele."},
+ {id:"s8",cat:"saidas",nome:"Do mata-leão com pegada nas costas",pos:"costas",swap:true,passos:["Queixo no peito.","Duas mãos no braço que estrangula: punho e cotovelo.","Puxe o braço para baixo e afaste o cotovelo.","Escorregue para o lado do braço, encoste as costas no chão e vire."],erro:"Usar uma mão só."},
+ // Quedas
+ {id:"q1",cat:"quedas",nome:"Morote-gari (baiana)",pos:"queda",passos:["Baixe o nível dobrando os joelhos, sem dobrar só as costas.","Passo de penetração entre as pernas dele.","Ombro no quadril e mãos atrás dos joelhos.","Puxe as pernas e empurre com o ombro, terminando por cima."],erro:"Abaixar a cabeça olhando o chão."},
+ {id:"q2",cat:"quedas",nome:"Single leg",pos:"queda",passos:["Baixe o nível e entre numa perna.","Cabeça colada ao corpo dele, por dentro.","Prenda a perna com as duas mãos na altura do joelho.","Gire ou empurre para derrubar e estabilize por cima."],erro:"Agarrar a perna sem baixar o quadril."},
+ {id:"q3",cat:"quedas",nome:"O-soto-gari",pos:"queda",passos:["Pegada na gola e na manga.","Desequilibre para trás, sobre o calcanhar da perna de apoio dele.","Passo ao lado e ceife a perna de apoio por trás com a sua perna.","Acompanhe a queda e estabilize por cima."],erro:"Ceifar sem antes desequilibrar."},
+ {id:"q4",cat:"quedas",nome:"O-soto-guruma",pos:"queda",passos:["Mesmo desequilíbrio para trás do o-soto-gari.","A sua perna passa por trás das DUAS pernas dele.","Use a perna como eixo e gire o tronco dele por cima.","Termine por cima, estabilizado."],erro:"Confundir com o o-soto-gari: aqui a perna bloqueia as duas pernas."},
+ {id:"q5",cat:"quedas",nome:"Ô-uti-gari (o-uchi-gari)",pos:"queda",passos:["Pegada na gola e na manga.","Desequilibre para trás e um pouco para o lado.","Ceife a perna dele por DENTRO, em semicírculo.","Empurre o tronco para trás e termine por cima."],erro:"Ceifar por fora (isso é o-soto)."},
+ // Raspagens
+ {id:"r1",cat:"raspagens",nome:"Em pé básica",pos:"guarda",passos:["Adversário fica em pé na sua guarda.","Segure os dois calcanhares dele.","Pé no quadril empurrando enquanto puxa os calcanhares.","Ele cai sentado: levante em base técnica e fique por cima."],erro:"Soltar os calcanhares antes de ele cair."},
+ {id:"r2",cat:"raspagens",nome:"Da guarda pêndulo",pos:"guarda",passos:["Pegada na manga e por dentro da perna dele.","Abra a guarda e gire o corpo de lado.","A perna de fora faz o pêndulo, chutando para cima.","Puxe a manga e role para a montada."],erro:"Não girar o corpo antes do pêndulo."},
+ {id:"r3",cat:"raspagens",nome:"De meia buscando a perna",pos:"meia",swap:true,passos:["Pegue o underhook (braço por baixo do braço dele).","Fuga de quadril e vá por baixo dele.","Abrace a perna de trás dele.","Levante ou empurre para o lado e fique por cima."],erro:"Ficar de costas no chão sem o underhook."},
+ {id:"r4",cat:"raspagens",nome:"Da guarda butterfly (gancho)",pos:"borboleta",passos:["Sentado com ganchos por dentro das coxas dele.","Underhook de um lado e manga do outro.","Caia de lado, para o lado da manga presa.","Eleve o gancho do underhook e role por cima."],erro:"Cair de costas retas em vez de cair de lado."},
+ {id:"r5",cat:"raspagens",nome:"Da guarda tesoura",pos:"guarda",passos:["Pegada na gola e na manga do mesmo lado.","Canela atravessada na barriga dele.","Perna de baixo no joelho dele, encostada no chão.","Puxe gola e manga e feche as pernas como tesoura."],erro:"Deixar a manga solta: ele apoia a mão e não cai."},
+ // Passagem de guarda
+ {id:"p1",cat:"passagem",nome:"Em pé básica",pos:"guarda",swap:true,passos:["Postura reta, mãos no quadril e no peito dele.","Levante um pé de cada vez.","Abra a guarda empurrando o joelho para baixo.","Controle a perna, passe para o lado e estabilize no 100 kg."],erro:"Levantar com a cabeça para frente: ele puxa e quebra a postura."},
+ {id:"p2",cat:"passagem",nome:"Subindo",pos:"guarda",swap:true,passos:["Quebre a guarda e suba de pé com postura.","Controle a calça ou o quadril dele.","Desça por cima de uma perna, pressionando.","Estabilize 3 segundos no 100 kg."],erro:"Descer sem controle da perna dele."},
+ {id:"p3",cat:"passagem",nome:"Básica empurrando joelho",pos:"guarda",swap:true,passos:["Joelho no cóccix dele para abrir a guarda.","Empurre o joelho dele para baixo com a mão.","Passe o seu joelho por cima da coxa dele.","Controle e estabilize no 100 kg."],erro:"Apoiar a mão dentro da guarda: risco de triângulo e armlock."},
+ {id:"p4",cat:"passagem",nome:"Básica com joelho trocado",pos:"guarda",swap:true,passos:["Com a guarda aberta, prenda a coxa dele.","Troque o joelho, cortando por cima da coxa dele.","Controle a gola e o underhook.","Tire a perna presa e estabilize no 100 kg."],erro:"Ficar com o peso para trás."},
+ {id:"p5",cat:"passagem",nome:"De meia pesando por cima",pos:"meia",passos:["Crossface (ombro no rosto) e underhook.","Peso no peito dele.","Use o outro pé para soltar o joelho preso.","Libere a perna e estabilize no 100 kg."],erro:"Deixar ele pegar o underhook."},
+ {id:"p6",cat:"passagem",nome:"De meia lapela atrás da cabeça",pos:"meia",passos:["Puxe a lapela dele e passe por trás da cabeça.","Use a lapela para prender e pesar.","Solte a perna presa.","Estabilize no 100 kg."],erro:"Afrouxar a lapela antes de soltar a perna."},
+ // Estrangulamento
+ {id:"e1",cat:"estrang",nome:"Das costas mata-leão com trava",pos:"costas",passos:["Braço em volta do pescoço, cotovelo alinhado ao queixo dele.","A mão segura o bíceps do outro braço.","A outra mão vai atrás da cabeça dele.","Feche os cotovelos e encoste a cabeça na dele."],erro:"Fazer com o antebraço no queixo, sem chegar no pescoço."},
+ {id:"e2",cat:"estrang",nome:"Da montada básico (3 formas)",pos:"montada",passos:["Primeira mão bem funda na gola, quatro dedos dentro.","Segunda mão cruzada na outra gola.","3 formas: as duas palmas para cima, as duas para baixo, ou uma de cada.","Desça os cotovelos para o chão e o peito para frente."],erro:"Pegadas rasas na gola, longe do pescoço."},
+ {id:"e3",cat:"estrang",nome:"Do 100 kg mão trocada na gola",pos:"cem",passos:["Abra a gola do lado de longe.","Mão trocada (cruzada) bem funda na gola.","Antebraço atravessado no pescoço.","Gire o corpo ou caia por cima para apertar."],erro:"Soltar o controle do 100 kg para buscar a gola."},
+ {id:"e4",cat:"estrang",nome:"Da guarda básico quadril",pos:"guarda",passos:["Primeira mão funda na gola, depois a segunda cruzada.","Puxe a cabeça dele para baixo com as pernas.","Mova o quadril (fuga de quadril) para fechar o ângulo.","Cotovelos abertos para fora, puxando."],erro:"Puxar só com os braços, sem mexer o quadril."},
+ // Chave de pé
+ {id:"c1",cat:"chavepe",nome:"Botinha reta na guarda",pos:"guarda",passos:["Ele em pé ou de joelhos na sua guarda: pegue o pé dele na axila.","Antebraço por baixo do tendão de Aquiles.","Pés no quadril dele, joelhos apertando a perna.","Arqueie as costas para trás. Não gire para o lado do pé que não está sendo atacado."],erro:"Girar para fora: é proibido na azul pela IBJJF."},
+ {id:"c2",cat:"chavepe",nome:"Botinha reta da 50/50",pos:"cinquenta",passos:["Na 50/50, prenda o pé dele na sua axila.","Antebraço no tendão de Aquiles.","Joelhos apertados, controlando a perna dele.","Estenda as costas para trás, sem torcer o joelho."],erro:"Aplicar torção no calcanhar (chave de calcanhar é proibida)."},
+ // Arm lock
+ {id:"al1",cat:"armlock",nome:"Da guarda",pos:"guarda",passos:["Prenda o braço dele no seu peito.","Pé no quadril e gire o corpo de lado (90°).","Passe a perna por cima do rosto dele.","Joelhos fechados, polegar dele para cima e quadril para cima."],erro:"Deixar o polegar dele virado para baixo."},
+ {id:"al2",cat:"armlock",nome:"Da montada",pos:"montada",passos:["Suba a montada até os braços dele.","Prenda um braço e apoie a mão no peito dele.","Gire e passe a perna por cima da cabeça.","Sente perto do ombro, joelhos fechados, e estenda o quadril."],erro:"Sentar longe do ombro dele."},
+ // Triângulo
+ {id:"t1",cat:"triangulo",nome:"Da guarda",pos:"guarda",passos:["Um braço dele dentro e outro fora das suas pernas.","Perna por cima do pescoço, fechando o triângulo atrás do joelho.","Ajuste o ângulo (gire o corpo) e puxe a cabeça para baixo.","Aperte os joelhos e suba o quadril."],erro:"Os dois braços dele dentro ou os dois fora."},
+ {id:"t2",cat:"triangulo",nome:"Da montada",pos:"montada",passos:["Suba a montada e isole um braço.","Passe a perna por cima do braço e do pescoço.","Feche o triângulo e role de lado se precisar.","Puxe a cabeça e aperte os joelhos."],erro:"Soltar a base na transição e perder a montada."},
+ // Mão de vaca
+ {id:"m1",cat:"maovaca",nome:"Básica da guarda",pos:"guarda",passos:["Ele segura sua gola ou peito com a mão.","Prenda a mão dele no seu peito com as duas mãos.","Tire o ângulo do corpo.","Incline o tronco para frente, dobrando o punho dele."],erro:"Soltar a mão dele do seu peito."},
+ {id:"m2",cat:"maovaca",nome:"Em pé com pegada na gola",pos:"em_pe",passos:["Ele segura a sua gola.","Prenda a mão dele na sua gola com as duas mãos.","Dê um passo para trás, mantendo a mão presa.","Incline o tronco para frente para dobrar o punho."],erro:"Puxar a mão dele para longe do corpo."},
+ // Kimura / Americana
+ {id:"k1",cat:"kimura",nome:"Americana do 100 kg",pos:"cem",passos:["Do 100 kg, prenda o punho dele no chão, palma para cima.","Passe o braço por baixo do braço dele e segure o seu punho.","Cotovelo dele perto do quadril dele.","Arraste a mão dele em direção ao quadril e suba o cotovelo."],erro:"Deixar o cotovelo dele longe do corpo."},
+ {id:"k2",cat:"kimura",nome:"Americana da montada",pos:"montada",passos:["Prenda o punho dele no chão com a mão.","Cotovelo seu ao lado da cabeça dele.","A outra mão passa por baixo do braço e segura o seu punho.","Arraste o punho para baixo e levante o cotovelo dele."],erro:"Não manter o punho dele colado ao chão."},
+ {id:"k3",cat:"kimura",nome:"Kimura da guarda",pos:"guarda",passos:["Ele apoia a mão no chão: segure o punho dele.","Sente e passe o outro braço por cima do ombro dele, segurando seu punho.","Caia de lado e feche a guarda.","Gire o braço dele para as costas."],erro:"Ficar de costas retas no chão."},
+ {id:"k4",cat:"kimura",nome:"Kimura do 100 kg",pos:"cem",passos:["Isole o braço de perto dele.","Segure o punho dele e passe o braço por baixo, segurando seu punho.","Use as pernas para levantar o ombro dele, se precisar.","Gire o braço dele para as costas."],erro:"Soltar o 100 kg e deixar ele girar."},
+ // Omoplata
+ {id:"o1",cat:"omoplata",nome:"Da guarda",pos:"guarda",passos:["Controle a manga e coloque o pé no quadril dele.","Gire o corpo e passe a perna por cima do braço e do ombro.","Sente-se, prendendo a cintura dele para ele não rolar.","Incline para frente, girando o ombro."],erro:"Não segurar a cintura: ele rola e escapa."},
+ // Crucifixo
+ {id:"cr1",cat:"crucifixo",nome:"Da corujinha",pos:"tartaruga",passos:["Ele está na tartaruga (de quatro apoios) e você por cima.","Prenda um braço dele entre as suas pernas.","Prenda o outro braço com o seu braço.","Role e finalize com os braços dele presos (estrangulamento ou chave)."],erro:"Ficar alto em cima dele. Confirme com o sensei o que ele chama de \"corujinha\".",confirmar:true},
+ // Defesa pessoal
+ {id:"d1",cat:"defesa",nome:"Pegadas no pulso",pos:"em_pe",passos:["Não puxe na força.","Gire o pulso na direção do polegar dele (o ponto fraco da pegada).","Use o corpo todo, dobrando o cotovelo.","Saia ou controle o braço dele."],erro:"Puxar para trás contra os quatro dedos."},
+ {id:"d2",cat:"defesa",nome:"Abraço pelas costas",pos:"abraco",passos:["Abaixe o quadril para ganhar base.","Prenda os braços dele contra o seu corpo.","Dê um passo para o lado e gire.","Projete-o ou controle o braço."],erro:"Ficar alto e sem base."},
+ {id:"d3",cat:"defesa",nome:"Pegada no cabelo",pos:"em_pe",passos:["Prenda a mão dele contra a sua cabeça com as duas mãos.","Abaixe o tronco, indo junto com a pegada.","Gire, dobrando o punho dele.","Controle com chave de punho ou saia."],erro:"Puxar a cabeça para trás."},
+ {id:"d4",cat:"defesa",nome:"Estrangulamento na guarda",pos:"guarda",passos:["Ele estrangula com as mãos no seu pescoço.","Prenda os braços dele contra o seu peito, por cima.","Puxe e quebre a postura dele com as pernas.","Saia com armlock ou trave na guarda."],erro:"Tentar empurrar o rosto dele."},
+ {id:"d5",cat:"defesa",nome:"Socos",pos:"em_pe",passos:["Guarda alta e queixo protegido.","Controle a distância: longe ou colado (clinch).","Entre no clinch ou na queda quando ele socar.","Leve para o chão e controle."],erro:"Ficar na meia distância, onde o soco chega."},
+ {id:"d6",cat:"defesa",nome:"Chutes",pos:"em_pe",passos:["Distância e guarda.","Bloqueie ou absorva o chute junto ao corpo.","Prenda a perna dele.","Projete com uma queda e controle no chão."],erro:"Tentar segurar o chute com as mãos esticadas."}
+];
+
+/* Perguntas de teoria: a = resposta certa, w = erradas, ex = explicação */
+const TEO = [
+ // HISTÓRIA
+ {id:"h1",cat:"historia",q:"Onde se desenvolveu o jujutsu que deu origem ao jiu-jitsu?",a:"No Japão, entre os samurais",w:["No Brasil","Na China, entre os monges","Na Coreia"],ex:"O jujutsu é uma arte japonesa de combate dos samurais. Há teorias de origem ainda mais antiga, na Índia. A versão brasileira nasceu depois, no Brasil."},
+ {id:"h2",cat:"historia",q:"O que significa \"jiu-jitsu\"?",a:"Arte suave",w:["Caminho do guerreiro","Mão vazia","Luta no chão"],ex:"\"Jū\" = suave, flexível; \"jutsu\" = arte, técnica."},
+ {id:"h3",cat:"historia",q:"Quem criou o judô Kodokan, em 1882?",a:"Jigoro Kano",w:["Mitsuyo Maeda","Carlos Gracie","Hélio Gracie"],ex:"Jigoro Kano reuniu técnicas de jujutsu e fundou o Kodokan em Tóquio, em 1882."},
+ {id:"h4",cat:"historia",q:"Quem trouxe a arte para o Brasil?",a:"Mitsuyo Maeda, o Conde Koma",w:["Jigoro Kano","Luiz França","Oswaldo Fadda"],ex:"Maeda, aluno do Kodokan, chegou ao Brasil em 1914 e se estabeleceu em Belém do Pará."},
+ {id:"h5",cat:"historia",q:"Em que cidade Maeda se estabeleceu e ensinou Carlos Gracie?",a:"Belém (PA)",w:["Rio de Janeiro (RJ)","São Paulo (SP)","Campo Grande (MS)"],ex:"Carlos Gracie aprendeu com Maeda em Belém e depois levou a arte ao Rio de Janeiro."},
+ {id:"h6",cat:"historia",q:"Luiz França é lembrado por ser:",a:"Aluno de Maeda que ensinou fora da família Gracie",w:["O fundador da IBJJF","Irmão de Carlos Gracie","O criador do judô"],ex:"Luiz França também aprendeu com Maeda. Foi o mestre de Oswaldo Fadda, que espalhou o jiu-jitsu pelos subúrbios do Rio."},
+ {id:"h7",cat:"historia",q:"Carlos Gracie e Luiz França tiveram o mesmo mestre. Quem?",a:"Mitsuyo Maeda",w:["Jigoro Kano","Hélio Gracie","Oswaldo Fadda"],ex:"Os dois aprenderam com o Conde Koma. Por isso o jiu-jitsu brasileiro tem duas grandes linhagens."},
+ {id:"h8",cat:"historia",q:"Quem adaptou as técnicas para usar alavanca em vez de força, por ser franzino?",a:"Hélio Gracie",w:["Carlos Gracie Jr.","Jigoro Kano","Mitsuyo Maeda"],ex:"Hélio adaptou as técnicas para que um lutador mais fraco pudesse vencer um mais forte."},
+ {id:"h9",cat:"historia",q:"\"Sempre assuma que seu oponente será maior, mais forte e mais rápido que você.\" Quem disse?",a:"Hélio Gracie",w:["Rickson Gracie","Jigoro Kano","Carlos Gracie"],ex:"É a frase da folha da prova, do Hélio Gracie."},
+ {id:"h10",cat:"historia",q:"O que é a CBJJ?",a:"Confederação Brasileira de Jiu-Jitsu",w:["Clube Brasileiro de Judô e Jiu-Jitsu","Campeonato Brasileiro de Jiu-Jitsu","Conselho de Faixas Pretas"],ex:"A CBJJ foi fundada em 1994, por iniciativa de Carlos Gracie Jr."},
+ {id:"h11",cat:"historia",q:"O que significa IBJJF?",a:"International Brazilian Jiu-Jitsu Federation",w:["Instituto Brasileiro de Jiu-Jitsu e Faixas","International Black-belt Judo Federation","Instituto Brasileiro de Juízes Federados"],ex:"Federação internacional criada a partir da CBJJ. As regras da prova seguem o livro de regras dela."},
+ {id:"h12",cat:"historia",q:"Qual é o campeonato mais importante da IBJJF?",a:"Mundial (World Championship)",w:["Copa Pantanal","Brasileiro de Equipes","Pan-Americano Kids"],ex:"O Mundial da IBJJF é disputado desde 1996."},
+ {id:"h13",cat:"historia",q:"Qual é o nome da equipe B9?",a:"Barbosa Jiu-Jitsu",w:["Brasil 9 Jiu-Jitsu","Barra 9 Fight","Bonsai 9"],ex:"B9 é a Barbosa Jiu-Jitsu, do mestre Marco Barbosa."},
+ {id:"h14",cat:"historia",q:"Quem é o mestre fundador da B9?",a:"Marco Barbosa, o Barbosinha",w:["Carlos Gracie Jr.","Hélio Gracie","Oswaldo Fadda"],ex:"Barbosinha é faixa preta de judô e de jiu-jitsu e muito reconhecido como formador de campeões."},
+ {id:"h15",cat:"historia",q:"Em que cidade a B9 nasceu?",a:"São Paulo (SP)",w:["Campo Grande (MS)","Rio de Janeiro (RJ)","Belém (PA)"],ex:"A B9 nasceu em São Paulo e hoje tem filiais em outros estados e no exterior."},
+ {id:"h16",cat:"historia",q:"Além do jiu-jitsu, o mestre Barbosinha é faixa preta em:",a:"Judô",w:["Karatê","Muay thai","Luta olímpica"],ex:"Por isso a B9 é conhecida pelas boas quedas."},
+ {id:"h17",cat:"historia",q:"Qual é a federação estadual de jiu-jitsu de Mato Grosso do Sul?",a:"FSMJJ, a Federação Sul-Mato-Grossense de Jiu-Jitsu",w:["FJMS, a Federação de Judô de MS","CBJJ-MS","IBJJF-MS"],ex:"Cuidado: FJMS é a federação de judô. Confirme com o sensei quais federações de MS ele quer que você cite."},
+ {id:"h18",cat:"historia",q:"A B9 segue as regras de qual entidade nas competições?",a:"CBJJ / IBJJF",w:["CBJJD","Federação de judô","UFC"],ex:"Os atletas da B9 competem no circuito CBJJ/IBJJF. A folha da prova também cita CBJJ / IBJJF."},
+ // ÉTICA
+ {id:"et1",cat:"etica",q:"Com que frequência o kimono deve ser lavado?",a:"Depois de todo treino",w:["Uma vez por semana","Só quando estiver com cheiro","Uma vez por mês"],ex:"Kimono suado guarda fungos e bactérias. Lavou, secou, treinou."},
+ {id:"et2",cat:"etica",q:"Como devem estar as unhas das mãos e dos pés?",a:"Cortadas e curtas",w:["Tanto faz","Só as das mãos cortadas","Lixadas, mas compridas"],ex:"Unha comprida machuca o parceiro. A regra da IBJJF também exige unhas cortadas e curtas."},
+ {id:"et3",cat:"etica",q:"Você está com micose ou outra lesão de pele contagiosa. O certo é:",a:"Não treinar até tratar e avisar o professor",w:["Treinar com camiseta por baixo","Treinar só com os amigos","Cobrir com esparadrapo e treinar"],ex:"Lesão de pele passa para o parceiro. Na competição, o fiscal manda para o médico."},
+ {id:"et4",cat:"etica",q:"Cabelo comprido no treino deve estar:",a:"Preso",w:["Solto","Molhado","Com gel"],ex:"Cabelo solto atrapalha o parceiro. A regra da IBJJF também pede cabelo preso."},
+ {id:"et5",cat:"etica",q:"Ao entrar e sair do tatame, o costume é:",a:"Cumprimentar o tatame, o professor e os colegas",w:["Entrar direto sem falar com ninguém","Só cumprimentar quem for treinar com você","Bater palma"],ex:"O cumprimento mostra respeito ao local, ao mestre e aos parceiros."},
+ {id:"et6",cat:"etica",q:"Antes e depois de cada rola, você deve:",a:"Cumprimentar o parceiro",w:["Nada, já começa direto","Só cumprimentar se ganhar","Pedir o placar"],ex:"Cumprimentar antes e depois é a regra de ouro do respeito entre os parceiros."},
+ {id:"et7",cat:"etica",q:"Calçados no tatame:",a:"Nunca. Chinelo fica na beira do tatame",w:["Podem, se estiverem limpos","Só tênis de luta","Só para o professor"],ex:"O calçado leva sujeira para o tatame, onde você encosta o rosto."},
+ {id:"et8",cat:"etica",q:"Andar descalço fora do tatame (banheiro, rua) e voltar:",a:"Errado. Use chinelo fora do tatame",w:["Certo, economiza tempo","Pode, se for rápido","Só no banheiro pode"],ex:"Pé descalço no banheiro traz fungos para o tatame."},
+ {id:"et9",cat:"etica",q:"Seu parceiro bateu (deu os tapinhas). O que fazer?",a:"Soltar imediatamente",w:["Apertar mais um pouco para garantir","Esperar o professor mandar","Soltar só se ele gritar"],ex:"Respeitar o tapinha é o que permite treinar sem lesão."},
+ {id:"et10",cat:"etica",q:"Para desistir (bater) quando não der para usar as mãos:",a:"Bater com o pé ou falar \"bati\"",w:["Esperar o parceiro perceber","Morder","Ficar parado"],ex:"Bater com a mão, com o pé ou avisar falando. Nunca esperar machucar."},
+ {id:"et11",cat:"etica",q:"Precisa sair do tatame no meio da aula:",a:"Pedir permissão ao professor",w:["Sair sem falar","Avisar só o parceiro","Sair e voltar sem avisar"],ex:"A aula é conduzida pelo professor: entrar e sair só com permissão."},
+ {id:"et12",cat:"etica",q:"Com um parceiro mais leve ou iniciante, você deve:",a:"Controlar a força e cuidar dele",w:["Ir com tudo para ganhar","Recusar treinar","Usar só força"],ex:"O parceiro é quem te faz evoluir. Machucar o parceiro é falta de ética."},
+ {id:"et13",cat:"etica",q:"Na rua, o jiu-jitsu deve ser usado:",a:"Só em legítima defesa, evitando a briga",w:["Para mostrar que você é bom","Sempre que alguém provocar","Para resolver discussões"],ex:"O lutador de verdade evita a briga. Humildade dentro e fora do tatame."},
+ {id:"et14",cat:"etica",q:"Falar mal de outra equipe ou academia é:",a:"Falta de ética",w:["Normal, faz parte","Certo, se for verdade","Obrigatório em campeonato"],ex:"Respeito vale também para as outras equipes."},
+ {id:"et15",cat:"etica",q:"Como a faixa deve ser usada no treino?",a:"Bem amarrada, por cima do kimono",w:["Só em campeonato","Dentro da calça","No pescoço"],ex:"A faixa mostra a sua graduação e deve estar sempre amarrada certinha."},
+ // REGRAS
+ {id:"r_p1",cat:"regras",q:"Quantos pontos vale a QUEDA?",a:"2 pontos",w:["3 pontos","4 pontos","1 vantagem"],ex:"Queda, raspagem e joelho na barriga valem 2 pontos.",pose:"queda"},
+ {id:"r_p2",cat:"regras",q:"Quantos pontos vale a RASPAGEM?",a:"2 pontos",w:["3 pontos","4 pontos","1 ponto"],ex:"Queda, raspagem e joelho na barriga valem 2 pontos."},
+ {id:"r_p3",cat:"regras",q:"Quantos pontos vale a PASSAGEM DE GUARDA?",a:"3 pontos",w:["2 pontos","4 pontos","5 pontos"],ex:"A passagem de guarda vale 3 pontos.",pose:"cem"},
+ {id:"r_p4",cat:"regras",q:"Quantos pontos vale a MONTADA?",a:"4 pontos",w:["2 pontos","3 pontos","1 vantagem"],ex:"Montada e pegada pelas costas valem 4 pontos.",pose:"montada"},
+ {id:"r_p5",cat:"regras",q:"Quantos pontos vale a PEGADA NAS COSTAS (com os ganchos)?",a:"4 pontos",w:["2 pontos","3 pontos","Nenhum"],ex:"Pegada pelas costas, com os calcanhares por dentro das coxas, vale 4 pontos.",pose:"costas"},
+ {id:"r_p6",cat:"regras",q:"Quantos pontos vale o JOELHO NA BARRIGA?",a:"2 pontos",w:["3 pontos","4 pontos","Nenhum"],ex:"Joelho na barriga vale 2 pontos, com o outro joelho fora do chão.",pose:"joelho"},
+ {id:"r_p7",cat:"regras",q:"Por quanto tempo a posição precisa ficar estabilizada para valer pontos?",a:"3 segundos",w:["1 segundo","5 segundos","10 segundos"],ex:"Os pontos só são marcados depois de 3 segundos de estabilização."},
+ {id:"r_p8",cat:"regras",q:"Você passa a guarda e vai direto para a montada. Quantos pontos?",a:"7 pontos",w:["4 pontos","3 pontos","5 pontos"],ex:"Os pontos são cumulativos: passagem (3) + montada (4) = 7."},
+ {id:"r_d1",cat:"regras",q:"Empatou em pontos. Qual é o primeiro critério de desempate?",a:"Mais vantagens",w:["Menos punições","Decisão do árbitro","Atleta mais leve"],ex:"Ordem: pontos, depois vantagens, depois menos punições e, por fim, decisão do árbitro."},
+ {id:"r_d2",cat:"regras",q:"Empatou em pontos e vantagens. O que decide?",a:"Menor número de punições",w:["Decisão do árbitro","Quem finalizou mais","Sorteio"],ex:"Depois de pontos e vantagens, vence quem tiver menos punições."},
+ {id:"r_d3",cat:"regras",q:"Empate em pontos, vantagens e punições. Quem decide?",a:"O árbitro",w:["Luta extra de 1 minuto","Sorteio","Os técnicos"],ex:"Com tudo empatado, a decisão é do árbitro."},
+ {id:"r_f1",cat:"regras",q:"O que acontece na 2ª punição?",a:"Vantagem para o adversário",w:["2 pontos para o adversário","Desclassificação","Nada, só é registrada"],ex:"1ª: registrada. 2ª: vantagem ao adversário. 3ª: 2 pontos ao adversário. 4ª: desclassificação."},
+ {id:"r_f2",cat:"regras",q:"O que acontece na 3ª punição?",a:"2 pontos para o adversário",w:["Vantagem para o adversário","Desclassificação","Nada"],ex:"1ª: registrada. 2ª: vantagem. 3ª: 2 pontos ao adversário. 4ª: desclassificação."},
+ {id:"r_f3",cat:"regras",q:"Em qual punição o atleta adulto é desclassificado?",a:"Na 4ª",w:["Na 2ª","Na 3ª","Na 5ª"],ex:"Na 4ª falta, desclassificação."},
+ {id:"r_f4",cat:"regras",q:"Depois de quantos segundos de falta de combatividade o árbitro pune?",a:"20 segundos",w:["10 segundos","30 segundos","60 segundos"],ex:"O árbitro conta 20 segundos seguidos e dá o comando \"Lute\" com a punição."},
+ {id:"r_f5",cat:"regras",q:"Segurar na boca da manga ou da calça do adversário com os dedos para dentro é:",a:"Falta",w:["Permitido","Permitido só na faixa preta","Vantagem"],ex:"É falta: os dedos dentro da manga ou da calça são proibidos."},
+ {id:"r_f6",cat:"regras",q:"Faixa branca pode pular na guarda (puxar pulando)?",a:"Não, é falta para faixa branca",w:["Sim, sempre","Só no absoluto","Só se tiver pegada"],ex:"Para todas as faixas até 15 anos e para a faixa branca de qualquer idade, pular na guarda é falta."},
+ {id:"r_t1",cat:"regras",q:"Quanto tempo dura a luta de faixa AZUL adulto?",a:"6 minutos",w:["5 minutos","7 minutos","10 minutos"],ex:"Adulto: branca 5, azul 6, roxa 7, marrom 8, preta 10 minutos."},
+ {id:"r_t2",cat:"regras",q:"Quanto tempo dura a luta de faixa BRANCA adulto?",a:"5 minutos",w:["4 minutos","6 minutos","3 minutos"],ex:"Adulto: branca 5, azul 6, roxa 7, marrom 8, preta 10 minutos."},
+ {id:"r_t3",cat:"regras",q:"Quanto tempo dura a luta de faixa PRETA adulto?",a:"10 minutos",w:["8 minutos","6 minutos","12 minutos"],ex:"Adulto: branca 5, azul 6, roxa 7, marrom 8, preta 10 minutos."},
+ {id:"r_c1",cat:"regras",q:"A partir de que idade o atleta compete no ADULTO?",a:"18 anos",w:["16 anos","21 anos","30 anos"],ex:"Juvenil: 16 e 17 anos. Adulto: 18 anos ou mais. Master 1: 30 anos ou mais."},
+ {id:"r_c2",cat:"regras",q:"A partir de que idade começa o MASTER 1?",a:"30 anos",w:["35 anos","25 anos","40 anos"],ex:"Master 1 a partir de 30 anos, Master 2 a partir de 36, e assim por diante."},
+ {id:"r_c3",cat:"regras",q:"Qual é a categoria mais leve do adulto masculino?",a:"Galo",w:["Pluma","Pena","Leve"],ex:"Ordem: galo, pluma, pena, leve, médio, meio-pesado, pesado, super-pesado, pesadíssimo. E ainda o absoluto."},
+ {id:"r_c4",cat:"regras",q:"Como se chama a categoria que junta todos os pesos?",a:"Absoluto",w:["Pesadíssimo","Open master","Livre"],ex:"No absoluto lutam atletas de todos os pesos da mesma faixa."},
+ {id:"r_g1",cat:"regras",q:"Qual é a idade mínima para a faixa azul (IBJJF)?",a:"16 anos",w:["14 anos","18 anos","15 anos"],ex:"Azul e roxa: mínimo de 16 anos. Marrom: 18. Preta: 19."},
+ {id:"r_g2",cat:"regras",q:"Quantos graus pode receber em cada faixa colorida?",a:"Até 4 graus",w:["Até 3 graus","Até 5 graus","Até 6 graus"],ex:"Cada faixa (branca, azul, roxa, marrom) pode ter até 4 graus."},
+ {id:"r_g3",cat:"regras",q:"Tempo mínimo na faixa azul antes da roxa:",a:"2 anos",w:["1 ano","6 meses","3 anos"],ex:"Azul: 2 anos. Roxa: 1 ano e meio. Marrom: 1 ano."},
+ {id:"r_g4",cat:"regras",q:"Idade mínima para a faixa preta:",a:"19 anos",w:["18 anos","21 anos","16 anos"],ex:"Preta: 19 anos, com pelo menos 1 ano na marrom."},
+ {id:"r_g5",cat:"regras",q:"A faixa coral (vermelha e preta) corresponde a qual grau?",a:"7º grau",w:["5º grau","9º grau","4º grau"],ex:"7º grau: coral vermelha e preta. 8º: vermelha e branca. 9º e 10º: vermelha."},
+ {id:"r_g6",cat:"regras",q:"De que cor é a ponta das faixas coloridas?",a:"Preta",w:["Branca","Vermelha","Da mesma cor da faixa"],ex:"Faixas coloridas têm ponta preta. A faixa preta tem ponta branca ou vermelha."},
+ {id:"r_g7",cat:"regras",q:"Até que idade se usam as faixas infantis (cinza, amarela, laranja, verde)?",a:"Até 15 anos",w:["Até 12 anos","Até 17 anos","Até 18 anos"],ex:"As faixas infantis vão dos 4 aos 15 anos. A partir dos 16, faixas adultas."},
+ {id:"r_u1",cat:"regras",q:"Quais cores de kimono a IBJJF permite?",a:"Branco, azul royal ou preto",w:["Qualquer cor","Só branco","Branco, azul e vermelho"],ex:"Kimono inteiro de uma cor só: branco, azul royal ou preto."},
+ {id:"r_u2",cat:"regras",q:"Paletó azul com calça branca é permitido?",a:"Não, paletó e calça da mesma cor",w:["Sim","Só no treino de campeonato","Só para faixa preta"],ex:"Não são aceitos paletó e calça de cores diferentes, nem gola de outra cor."},
+ {id:"r_u3",cat:"regras",q:"Homem pode usar camiseta por baixo do kimono na competição?",a:"Não",w:["Sim, se for branca","Sim, de qualquer cor","Só no absoluto"],ex:"Masculino: proibido camisa por baixo. Feminino: obrigatória camisa elástica colada ao corpo."},
+ {id:"r_u4",cat:"regras",q:"Até onde deve chegar a manga, com o braço esticado para frente?",a:"Até 2 cm do punho",w:["Até o cotovelo","Até 10 cm do punho","Tanto faz"],ex:"Com os braços esticados a 90°, a manga deve chegar a no máximo 2 cm da articulação do punho."},
+ {id:"r_u5",cat:"regras",q:"Comprimento mínimo da calça do kimono:",a:"Até 2 cm acima do osso do tornozelo",w:["Até o joelho","Até 10 cm acima do tornozelo","Até a canela"],ex:"Mínimo de 2 cm acima do maléolo (osso do tornozelo)."},
+ {id:"r_u6",cat:"regras",q:"Qual deve ser a largura da faixa?",a:"De 4 a 5 cm",w:["De 2 a 3 cm","De 6 a 8 cm","Qualquer largura"],ex:"Faixa de 4 a 5 cm, duas voltas na cintura, nó duplo, pontas de 20 a 30 cm."},
+ {id:"r_u7",cat:"regras",q:"Kimono rasgado, molhado ou sujo na competição:",a:"Não é aceito",w:["É aceito","Só perde vantagem","É aceito se for o único"],ex:"O uniforme não pode ter remendos, rasgos, estar molhado, sujo ou com mau cheiro."},
+ {id:"r_u8",cat:"regras",q:"Quantas checagens de uniforme o atleta tem para ser aprovado?",a:"3 checagens",w:["1 checagem","2 checagens","Ilimitadas"],ex:"São 3 inspeções. Sem aprovação, o atleta não luta."},
+ {id:"r_u9",cat:"regras",q:"Espessura máxima da gola do kimono:",a:"1,3 cm",w:["3 cm","0,5 cm","2,5 cm"],ex:"Gola com no máximo 1,3 cm de espessura e 5 cm de largura."},
+ {id:"r_o1",cat:"regras",q:"Kimono AZUL contra kimono BRANCO: quem fica à direita do árbitro?",a:"O de kimono azul",w:["O de kimono branco","O primeiro a ser chamado","Quem for mais graduado"],ex:"Ordem: azul fica à direita contra branco e contra preto. Preto fica à direita contra branco."},
+ {id:"r_o2",cat:"regras",q:"Kimono PRETO contra kimono BRANCO: quem fica à direita do árbitro?",a:"O de kimono preto",w:["O de kimono branco","Quem for chamado primeiro","Tanto faz"],ex:"Preto fica à direita contra branco."},
+ {id:"r_o3",cat:"regras",q:"Os dois atletas com kimono da mesma cor. O que acontece?",a:"O primeiro chamado fica à direita, com a faixa verde e amarela",w:["Um troca de kimono","Sorteio","O mais pesado fica à direita"],ex:"O primeiro chamado fica à direita do árbitro e recebe a faixa verde e amarela de identificação."},
+ {id:"r_o4",cat:"regras",q:"Kimono PRETO contra kimono AZUL: quem fica à direita do árbitro?",a:"O de kimono azul",w:["O de kimono preto","Quem for chamado primeiro","O mais graduado"],ex:"Azul fica à direita contra branco e contra preto."},
+ {id:"r_x1",cat:"regras",q:"Na faixa azul adulto (com kimono), CHAVE DE PÉ RETA (botinha) é:",a:"Permitida",w:["Proibida","Permitida só na marrom","Permitida só sem kimono"],ex:"Chave de pé reta é permitida a partir dos 16 anos. Só não pode girar para o lado do pé que não está sendo atacado."},
+ {id:"r_x2",cat:"regras",q:"Na faixa azul adulto, CHAVE DE CALCANHAR é:",a:"Proibida",w:["Permitida","Permitida só no absoluto","Permitida sem kimono"],ex:"Chave de calcanhar é proibida para a faixa azul."},
+ {id:"r_x3",cat:"regras",q:"Na faixa azul adulto (com kimono), CHAVE DE JOELHO (leg lock reto) é:",a:"Proibida",w:["Permitida","Permitida só no Master","Vale vantagem"],ex:"Chave de joelho é liberada só para a marrom e a preta adulto."},
+ {id:"r_x4",cat:"regras",q:"Na faixa azul adulto, MATA-LEÃO NO PÉ (toe hold) é:",a:"Proibido",w:["Permitido","Permitido só na guarda","Permitido sem kimono"],ex:"Mata-leão no pé é liberado só para a marrom e a preta."},
+ {id:"r_x5",cat:"regras",q:"Na faixa azul adulto, BATE-ESTACA é:",a:"Proibido",w:["Permitido","Permitido para sair do triângulo","Vale 2 pontos"],ex:"Bate-estaca é proibido em todas as faixas."},
+ {id:"r_x6",cat:"regras",q:"Na faixa azul adulto, QUEDA-TESOURA (kani basami) é:",a:"Proibida",w:["Permitida","Permitida só no absoluto","Permitida na marrom e azul"],ex:"Queda-tesoura é proibida em todas as faixas."},
+ {id:"r_x7",cat:"regras",q:"Na faixa azul adulto, MÃO DE VACA (chave de punho) é:",a:"Permitida",w:["Proibida","Permitida só na preta","Permitida só em pé"],ex:"Mão de vaca é proibida só para crianças até 15 anos."},
+ {id:"r_x8",cat:"regras",q:"Na faixa azul adulto, CHAVE DE BÍCEPS é:",a:"Proibida",w:["Permitida","Permitida só na guarda","Permitida para os juvenis"],ex:"Chave de bíceps e chave de panturrilha: só marrom e preta."},
+ {id:"r_x9",cat:"regras",q:"Na faixa azul adulto, OMOPLATA é:",a:"Permitida",w:["Proibida","Permitida só sem kimono","Permitida só na marrom"],ex:"Omoplata é proibida só para crianças de 4 a 12 anos."},
+ {id:"r_x10",cat:"regras",q:"Na faixa azul adulto, ESTRANGULAMENTO EZEQUIEL (com a manga) é:",a:"Permitido",w:["Proibido","Permitido só na preta","Permitido só no master"],ex:"O Ezequiel é proibido só até os 15 anos."},
+ {id:"r_x11",cat:"regras",q:"Na faixa azul adulto, CHAVE DE CERVICAL (sem estrangulamento) é:",a:"Proibida",w:["Permitida","Permitida da montada","Permitida na marrom e preta com kimono"],ex:"Chave de cervical é proibida."},
+ {id:"r_x12",cat:"regras",q:"Na chave de pé reta, GIRAR para o lado do pé que NÃO está sendo atacado, na faixa azul, é:",a:"Proibido",w:["Permitido","Vale vantagem","Permitido no absoluto"],ex:"Girar para o lado de fora é proibido para a azul."},
+ // ordem (jogos)
+ {id:"ord1",cat:"regras",tipo:"order",q:"Coloque as faixas ADULTAS na ordem:",itens:["Branca","Azul","Roxa","Marrom","Preta"],ex:"Branca, azul, roxa, marrom, preta. Depois, coral (7º grau), vermelha e branca (8º) e vermelha (9º e 10º)."},
+ {id:"ord2",cat:"regras",tipo:"order",q:"Coloque as faixas INFANTIS na ordem (sem as variações):",itens:["Branca","Cinza","Amarela","Laranja","Verde"],ex:"Cada cor infantil tem três variações: com branco, lisa e com preto. Ex.: cinza e branca, cinza, cinza e preta."},
+ {id:"ord3",cat:"regras",tipo:"order",q:"Ordem dos critérios para decidir a luta:",itens:["Finalização","Pontos","Vantagens","Menos punições","Decisão do árbitro"],ex:"Finalização encerra a luta. Sem ela: pontos, depois vantagens, depois menos punições e, por fim, a decisão do árbitro."},
+ {id:"ord4",cat:"regras",tipo:"order",q:"Ordem das consequências das punições:",itens:["Registro no placar","Vantagem ao adversário","2 pontos ao adversário","Desclassificação"],ex:"1ª: registro. 2ª: vantagem. 3ª: 2 pontos. 4ª: desclassificação."},
+ {id:"ord5",cat:"regras",tipo:"order",q:"Ordene os tempos de luta adulto, do MAIS CURTO ao mais longo:",itens:["Branca: 5 min","Azul: 6 min","Roxa: 7 min","Marrom: 8 min","Preta: 10 min"],ex:"Branca 5, azul 6, roxa 7, marrom 8, preta 10."}
+];
+
+const BELT_COLOR = {Branca:"#FFFFFF",Azul:"#1C5FC9",Roxa:"#6A2C91",Marrom:"#6B3E1F",Preta:"#111111",Cinza:"#8D8D8D",Amarela:"#F2C300",Laranja:"#F07A12",Verde:"#2E8B3A"};
+
+/* ================= MÍDIA (fotos e vídeos reais, Wikimedia Commons) ================= */
+// Vídeos de técnicas: id da técnica -> arquivo em midia/
+const VID = {k1:"americana", al1:"armbar_guarda", al2:"armbar_montada", e4:"estr_guarda", e2:"estr_montada", o1:"omoplata", e1:"mataleao"};
+// Fotos de posição: posição -> arquivo em midia/
+const POSIMG = {guarda:"pos_guarda.jpg", montada:"pos_montada.jpg", cem:"pos_cem.jpg", costas:"pos_costas.jpg", meia:"pos_meia.jpg", borboleta:"pos_borboleta.jpg", joelho:"pos_joelho.jpg", queda:"pos_queda.jpg"};
+const CREDITOS = [
+  {o:"Vídeos de americana, armlock, estrangulamentos, omoplata e mata-leão, e fotos de montada, 100 kg e costas tiradas deles", a:"Ddanielcruzz (técnicas por Ángel Gómez, Top Brother México)", l:"CC BY-SA 4.0", u:"https://commons.wikimedia.org/wiki/User:Ddanielcruzz"},
+  {o:"Foto de guarda fechada", a:"MartialArtsNomad.com", l:"CC BY 2.0", u:"https://commons.wikimedia.org/wiki/File:Brazilian_Jiu-jitsu-Closed_guard.jpg"},
+  {o:"Foto de meia-guarda", a:"parhessiastes", l:"CC BY-SA 2.0", u:"https://commons.wikimedia.org/wiki/File:BJJ-half_guard.jpg"},
+  {o:"Foto de guarda borboleta", a:"Cpl. Jeff Sisto, Marinha dos EUA", l:"domínio público", u:"https://commons.wikimedia.org/wiki/File:Judo10-butterfly_guard.jpg"},
+  {o:"Foto de joelho na barriga", a:"Exército dos EUA", l:"domínio público", u:"https://commons.wikimedia.org/wiki/File:Combatives_knee_mount.tif"},
+  {o:"Foto de queda", a:"Kurt Nordstrom", l:"CC BY 2.0", u:"https://commons.wikimedia.org/wiki/File:White_Throws_Blue_for_Ippon.jpg"}
+];
+const CAT_COR = {aquec:"#8A5A2B",saidas:"#C8261E",quedas:"#111111",raspagens:"#2E8B3A",passagem:"#1C5FC9",estrang:"#6A2C91",chavepe:"#F07A12",armlock:"#0F7C8C",triangulo:"#B0407A",maovaca:"#5B6B2F",kimura:"#7A3E1F",omoplata:"#3C4F9E",crucifixo:"#9E2B25",defesa:"#4A4245"};
+const CAT_SIGLA = {aquec:"AQ",saidas:"SA",quedas:"QU",raspagens:"RA",passagem:"PG",estrang:"ES",chavepe:"CP",armlock:"AL",triangulo:"TR",maovaca:"MV",kimura:"KA",omoplata:"OM",crucifixo:"CR",defesa:"DP"};
+const posImg = pos => POSIMG[pos] ? "midia/"+POSIMG[pos] : null;
+function photoHTML(src,alt){return `<img class="photo" src="${src}" alt="${esc(alt)}" loading="lazy">`;}
+function videoHTML(name,alt){return `<video class="photo" src="midia/${name}.mp4" poster="midia/${name}.jpg" muted loop playsinline autoplay controls aria-label="${esc(alt)}"></video>`;}
+// melhor imagem para uma técnica: vídeo, depois foto da posição
+function tecMedia(t){
+  if(VID[t.id]) return {html:videoHTML(VID[t.id],t.nome), cap:"Vídeo real da técnica"};
+  const img=posImg(t.pos);
+  if(img) return {html:photoHTML(img,POS_NOME[t.pos]), cap:"Posição inicial: "+POS_NOME[t.pos]+". O vídeo da técnica está no botão abaixo."};
+  return null;
+}
+function tecThumb(t){
+  if(VID[t.id]) return `<span class="thumb"><img src="midia/${VID[t.id]}.jpg" alt=""><i class="play">▶</i></span>`;
+  return "";
+}
+const ytURL = t => "https://www.youtube.com/results?search_query="+encodeURIComponent(`${t.nome} ${CAT[t.cat].nome} jiu jitsu técnica`);
+
+/* ================= ESTADO ================= */
+const KEY="rumoazul.v1";
+const S = load();
+function load(){
+  const base={box:{},xp:0,days:[],notes:{},answered:0,correct:0};
+  try{const raw=localStorage.getItem(KEY); if(raw) return Object.assign(base,JSON.parse(raw));}catch(e){}
+  return base;
+}
+function save(){try{localStorage.setItem(KEY,JSON.stringify(S));}catch(e){}}
+function todayISO(d=new Date()){return d.getFullYear()+"-"+String(d.getMonth()+1).padStart(2,"0")+"-"+String(d.getDate()).padStart(2,"0");}
+function markDay(){const t=todayISO(); if(!S.days.includes(t)){S.days.push(t); save();}}
+function streak(){
+  let n=0; const d=new Date();
+  if(!S.days.includes(todayISO(d))) d.setDate(d.getDate()-1);
+  while(S.days.includes(todayISO(d))){n++; d.setDate(d.getDate()-1);}
+  return n;
+}
+function daysLeft(){const t=new Date(); t.setHours(0,0,0,0); return Math.round((EXAM-t)/86400000);}
+const box = id => S.box[id]||0;
+function setBox(id,v){S.box[id]=Math.max(0,Math.min(4,v)); save();}
+
+function itemsOf(cat){
+  const c=CAT[cat];
+  return c.tipo==="tec" ? TEC.filter(t=>t.cat===cat).map(t=>t.id) : TEO.filter(q=>q.cat===cat).map(q=>q.id);
+}
+function mastery(cat){const ids=itemsOf(cat); if(!ids.length) return 0; return ids.reduce((s,id)=>s+box(id),0)/(ids.length*4);}
+function overall(){const ids=[...TEC.map(t=>t.id),...TEO.map(q=>q.id)]; return ids.reduce((s,id)=>s+box(id),0)/(ids.length*4);}
+function graus(){const o=overall(); return o>=.95?5:o>=.8?4:o>=.6?3:o>=.4?2:o>=.2?1:0;}
+
+/* ================= UTIL ================= */
+const $=s=>document.querySelector(s);
+const app=$("#app");
+const esc=s=>String(s).replace(/[&<>"]/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;","\"":"&quot;"}[c]));
+const shuffle=a=>{a=a.slice(); for(let i=a.length-1;i>0;i--){const j=Math.floor(Math.random()*(i+1)); [a[i],a[j]]=[a[j],a[i]];} return a;};
+function pickWeighted(arr,n,idf){
+  const pool=arr.map(x=>({x,w:Math.pow(5-box(idf(x)),2)+Math.random()}));
+  pool.sort((a,b)=>b.w-a.w);
+  return shuffle(pool.slice(0,n).map(p=>p.x));
+}
+function toast(msg){const t=document.createElement("div"); t.className="toast pop"; t.textContent=msg; document.body.appendChild(t); setTimeout(()=>t.remove(),1600);}
+function gain(x){S.xp+=x; markDay(); save();}
+
+function beltSVG(g){
+  // faixa branca com a ponta preta e os graus
+  let stripes=""; for(let i=0;i<Math.min(g,4);i++){stripes+=`<rect x="${226+i*12}" y="14" width="6" height="22" fill="#fff"/>`;}
+  const fill = g>=5 ? "#1C5FC9" : "#FFFFFF";
+  return `<svg viewBox="0 0 300 50" width="100%" style="max-width:300px" aria-label="Faixa com ${Math.min(g,4)} graus">
+    <rect x="2" y="12" width="296" height="26" rx="3" fill="${fill}" stroke="var(--gi-op-line)" stroke-width="2"/>
+    <rect x="216" y="12" width="62" height="26" fill="#111"/>${stripes}
+    <line x1="2" y1="25" x2="216" y2="25" stroke="var(--line)" stroke-width="1" stroke-dasharray="3 4"/>
+  </svg>`;
+}
+
+/* ================= TELAS ================= */
+let route="home";
+function go(r,arg){route=r; document.querySelectorAll(".nav button").forEach(b=>b.setAttribute("aria-current", b.dataset.go===r.split(":")[0]?"page":"false")); render(arg); window.scrollTo(0,0);}
+document.querySelectorAll(".nav button").forEach(b=>b.addEventListener("click",()=>go(b.dataset.go)));
+
+function render(arg){
+  if(route==="home") return home();
+  if(route==="quiz") return quizMenu();
+  if(route==="tec") return tecList(arg);
+  if(route==="sim") return simMenu();
+}
+
+function weakest(n){return CATS.slice().sort((a,b)=>mastery(a.id)-mastery(b.id)).slice(0,n);}
+
+function home(){
+  const dl=daysLeft(), g=graus(), o=Math.round(overall()*100);
+  const foco=weakest(2);
+  const gName = g>=5 ? "Pronto para a azul!" : `Faixa branca, ${g} ${g===1?"grau":"graus"}`;
+  app.innerHTML=`
+  <header class="band">
+    <div class="band-top"><div class="brand"><span class="badge9">B9</span>Rumo à azul</div><span class="exam-tag">Exame 30/11</span></div>
+    <div class="count"><div class="count-num">${Math.max(dl,0)}</div><div class="count-txt">${dl===1?"dia":"dias"} para<br>a faixa azul<small>${dl>0?"Prova de graduação em 30/11/2026":dl===0?"É hoje! Respira e confia no treino.":"Prova realizada."}</small></div></div>
+  </header>
+  <section class="beltcard" aria-label="Seu progresso">
+    <div class="belt-row"><h2>${gName}</h2><span class="belt-meta">${o}% dominado</span></div>
+    ${beltSVG(g)}
+    <div class="stats">
+      <div class="stat"><b>${S.xp}</b><span>XP</span></div>
+      <div class="stat"><b>${streak()}</b><span>dias seguidos</span></div>
+      <div class="stat"><b>${S.answered?Math.round(S.correct/S.answered*100):0}%</b><span>acertos</span></div>
+    </div>
+  </section>
+  <section class="today">
+    <p>Foco de hoje: <b>${foco.map(c=>c.nome).join("</b> e <b>")}</b>, as áreas em que você está mais fraco.</p>
+    <button class="btn btn-blue btn-wide" id="goToday">Treino do dia · 12 perguntas</button>
+  </section>
+  <div class="section-h"><h2>Mapa da prova</h2><span>toque para estudar</span></div>
+  <div class="map">${CATS.map(c=>{const m=mastery(c.id); return `<button class="tile ${m<.25?"weak":""}" data-cat="${c.id}"><div class="tile-top"><b>${c.nome}</b><em>${Math.round(m*100)}%</em></div><div class="bar"><i style="width:${Math.max(m*100,3)}%"></i></div></button>`;}).join("")}</div>
+  <p class="quote">"Sempre assuma que seu oponente será maior, mais forte e mais rápido que você." Hélio Gracie</p>
+  <div class="credits"><b>Créditos das fotos e vídeos</b>${CREDITOS.map(c=>`<span>${esc(c.o)}: ${esc(c.a)}, <a href="${c.u}" target="_blank" rel="noopener">Wikimedia Commons</a>, licença ${esc(c.l)}.</span>`).join("")}</div>`;
+  $("#goToday").onclick=()=>startQuiz("dia");
+  app.querySelectorAll(".tile").forEach(t=>t.onclick=()=>{const c=CAT[t.dataset.cat]; if(c.tipo==="tec") go("tec",c.id); else startQuiz(c.id);});
+}
+
+function quizMenu(){
+  const modes=[
+    {k:"dia",t:"Treino do dia",d:"12 perguntas misturadas, com foco no que você mais erra",c:"var(--red)",i:"12"},
+    {k:"historia",t:"História",d:"Maeda, Gracie, Luiz França, CBJJ, B9",c:"#8A5A2B",i:"H"},
+    {k:"etica",t:"Ética",d:"Higiene, cumprimentos e comportamento",c:"#2E8B3A",i:"É"},
+    {k:"regras",t:"Regras",d:"Pontuação, punições, faixas, uniformes, golpes proibidos",c:"var(--blue)",i:"R"},
+    {k:"placar",t:"Monte o placar",d:"Some os pontos da luta",c:"#111",i:"+"},
+    {k:"posicao",t:"Que posição é essa?",d:"Reconheça a posição pela ilustração",c:"#6A2C91",i:"?"},
+    {k:"tecq",t:"Técnicas",d:"Posição inicial e detalhes de cada técnica",c:"#F07A12",i:"T"}
+  ];
+  app.innerHTML=`<div class="screen-h"><h1>Quiz</h1><p>Cada acerto vale XP. Errou? A pergunta volta mais vezes até você acertar.</p></div>
+  <div class="modes">${modes.map(m=>`<button class="mode" data-k="${m.k}"><span class="mode-ic" style="background:${m.c}">${m.i}</span><span><b>${m.t}</b><span>${m.d}</span></span></button>`).join("")}</div>
+  ${notesCard()}`;
+  app.querySelectorAll(".mode").forEach(b=>b.onclick=()=>startQuiz(b.dataset.k));
+  bindNotes();
+}
+
+function notesCard(){
+  const f=[["msB9","B9 em MS"],["msJJ","Jiu-jitsu em MS"],["msFed","Federações de MS"]];
+  return `<div class="section-h"><h2>Suas anotações</h2><span>itens que o sensei pode perguntar</span></div>
+  <div class="modes">${f.map(([k,l])=>`<label class="mode" style="display:grid;gap:6px" for="n_${k}"><b>${l}</b><textarea id="n_${k}" data-note="${k}" placeholder="Escreva aqui o que você souber ou perguntar ao sensei.">${esc(S.notes[k]||"")}</textarea></label>`).join("")}</div>
+  <p class="note">Não achei informação pública sobre a B9 em MS. A federação estadual de jiu-jitsu é a FSMJJ. Confirme com o sensei.</p>`;
+}
+function bindNotes(){app.querySelectorAll("textarea[data-note]").forEach(t=>t.oninput=()=>{S.notes[t.dataset.note]=t.value; save();});}
+
+/* ---------- geração de perguntas ---------- */
+function qFromTeo(q){
+  if(q.tipo==="order") return {id:q.id,cat:q.cat,tipo:"order",q:q.q,itens:q.itens,ex:q.ex};
+  const opts=shuffle([{label:q.a,ok:true},...q.w.map(w=>({label:w,ok:false}))]);
+  return {id:q.id,cat:q.cat,q:q.q,svg:(q.pose&&posImg(q.pose))?photoHTML(posImg(q.pose),POS_NOME[q.pose]):"",opts,ex:q.ex};
+}
+function qPlacar(){
+  const ev=[["queda",2,"Queda"],["rasp",2,"Raspagem"],["pass",3,"Passagem de guarda"],["jb",2,"Joelho na barriga"],["mont",4,"Montada"],["costas",4,"Pegada nas costas"]];
+  const seqs=[["queda","pass","mont"],["rasp","pass"],["rasp","mont"],["pass","jb"],["queda","pass","costas"],["rasp","pass","mont"],["pass","mont","costas"],["queda","jb","mont"],["rasp","costas"],["queda","rasp"]];
+  const s=seqs[Math.floor(Math.random()*seqs.length)];
+  const items=s.map(k=>ev.find(e=>e[0]===k));
+  const total=items.reduce((a,e)=>a+e[1],0);
+  const adv=Math.random()<.4;
+  const wr=new Set(); while(wr.size<3){const d=[-3,-2,-1,1,2,3][Math.floor(Math.random()*6)]; if(total+d>0) wr.add(total+d);}
+  return {id:"placar",cat:"regras",q:`Você fez, estabilizando 3 segundos em cada: ${items.map(e=>e[2].toLowerCase()).join(", depois ")}.${adv?" Ainda ganhou 1 vantagem.":""} Quantos PONTOS você tem?`,
+    opts:shuffle([{label:`${total} pontos`,ok:true},...[...wr].map(v=>({label:`${v} pontos`,ok:false}))]),
+    ex:items.map(e=>`${e[2]} = ${e[1]}`).join(" + ")+` = ${total}.${adv?" Vantagem não soma ponto, só desempata.":""}`};
+}
+function qPosicao(){
+  const keys=Object.keys(POSIMG);
+  const names=["guarda","montada","cem","costas","meia","borboleta","joelho","cinquenta","tartaruga"];
+  const k=keys[Math.floor(Math.random()*keys.length)];
+  const wr=shuffle(names.filter(x=>x!==k)).slice(0,3);
+  return {id:"pos_"+k,cat:"regras",q:"Que posição é essa?",svg:photoHTML(posImg(k),"Foto de jiu-jitsu"),opts:shuffle([{label:POS_NOME[k],ok:true},...wr.map(w=>({label:POS_NOME[w],ok:false}))]),ex:`É ${POS_NOME[k].toLowerCase()}.`,noBox:true};
+}
+function qTecnica(t){
+  const r=Math.random(), m=tecMedia(t);
+  if(r<.45 && t.pos!=="solo"){
+    const names=["em_pe","guarda","montada","cem","costas","meia","borboleta","joelho","cinquenta","tartaruga","abraco"];
+    const others=shuffle(names.filter(k=>k!==t.pos)).slice(0,3);
+    return {id:t.id,cat:t.cat,q:`Em que posição começa: ${CAT[t.cat].nome} · ${t.nome}?`,
+      opts:shuffle([{label:POS_NOME[t.pos],ok:true},...others.map(o=>({label:POS_NOME[o],ok:false}))]),
+      ex:`${t.nome}: começa em ${POS_NOME[t.pos].toLowerCase()}. ${t.passos[0]}`};
+  }
+  const certo=t.passos[1+Math.floor(Math.random()*(t.passos.length-1))];
+  const outros=shuffle(TEC.filter(x=>x.cat!==t.cat).flatMap(x=>x.passos)).slice(0,3);
+  return {id:t.id,cat:t.cat,q:`Qual destes é um passo de ${CAT[t.cat].nome} · ${t.nome}?`,svg:VID[t.id]?m.html:"",
+    opts:shuffle([{label:certo,ok:true},...outros.map(o=>({label:o,ok:false}))]),ex:"Passos: "+t.passos.join(" ")};
+}
+
+let Q=null;
+function startQuiz(mode){
+  let list=[];
+  const teoCat=c=>pickWeighted(TEO.filter(q=>q.cat===c),10,q=>q.id).map(qFromTeo);
+  if(mode==="dia"){
+    const foco=weakest(3).map(c=>c.id);
+    const teo=pickWeighted(TEO,7,q=>q.id).map(qFromTeo);
+    const tecs=pickWeighted(TEC.filter(t=>foco.includes(t.cat)).concat(TEC),3,t=>t.id).map(qTecnica);
+    list=shuffle([...teo,...tecs,qPlacar(),qPosicao()]);
+  } else if(["historia","etica","regras"].includes(mode)) list=teoCat(mode);
+  else if(mode==="placar") list=Array.from({length:6},qPlacar);
+  else if(mode==="posicao") list=Array.from({length:8},qPosicao);
+  else if(mode==="tecq") list=pickWeighted(TEC,10,t=>t.id).map(qTecnica);
+  else if(CAT[mode]) list=pickWeighted(TEC.filter(t=>t.cat===mode),6,t=>t.id).map(qTecnica);
+  Q={mode,list,i:0,hits:0,xp:0};
+  route="quiz"; showQ();
+}
+
+function showQ(){
+  const q=Q.list[Q.i];
+  if(!q) return quizEnd();
+  const pct=Q.i/Q.list.length*100;
+  const catLbl=q.cat?CAT[q.cat].nome:"";
+  app.innerHTML=`<div class="qtop"><button class="xbtn" id="qx" aria-label="Sair do quiz">✕</button><div class="bar"><i style="width:${pct}%"></i></div><span class="belt-meta">${Q.i+1}/${Q.list.length}</span></div>
+  <div class="qcat">${esc(catLbl)}</div>
+  <div class="qtext">${esc(q.q)}</div>
+  ${q.svg?`<div class="figure">${q.svg}</div>`:""}
+  <div id="qbody"></div><div id="qfb"></div>`;
+  $("#qx").onclick=()=>go("quiz");
+  if(q.tipo==="order") return orderQ(q);
+  const body=$("#qbody");
+  body.innerHTML=`<div class="opts ${q.grid?"grid":""}">${q.opts.map((o,i)=>`<button class="opt" data-i="${i}">${o.svg?o.svg:esc(o.label)}</button>`).join("")}</div>`;
+  body.querySelectorAll(".opt").forEach(b=>b.onclick=()=>{
+    const o=q.opts[+b.dataset.i];
+    body.querySelectorAll(".opt").forEach((x,i)=>{x.disabled=true; if(q.opts[i].ok) x.classList.add("correct");});
+    if(!o.ok) b.classList.add("wrong");
+    answer(q,o.ok, q.grid ? `Resposta: ${q.opts.find(x=>x.ok).label}. ${q.ex}` : q.ex);
+  });
+}
+function orderQ(q){
+  const picked=[]; const body=$("#qbody");
+  const pool=shuffle(q.itens);
+  const draw=()=>{
+    const isBelt=s=>BELT_COLOR[s.split(":")[0]];
+    const chip=(s,on)=>`<button class="chip ${on?"on":""}" data-s="${esc(s)}">${isBelt(s)&&!s.includes(":")?`<span class="belt-chip"><i style="background:${BELT_COLOR[s]}"></i>${esc(s)}</span>`:esc(s)}</button>`;
+    body.innerHTML=`<div class="order-picked" aria-label="Sua ordem">${picked.length?picked.map((s,i)=>`<span class="chip on">${i+1}. ${esc(s)}</span>`).join(""):'<span class="belt-meta" style="padding:8px">Toque nos itens na ordem certa</span>'}</div>
+      <div class="row" style="flex-wrap:wrap">${pool.filter(s=>!picked.includes(s)).map(s=>chip(s,false)).join("")}</div>
+      ${picked.length?'<button class="btn" id="undo" style="margin-top:10px">Desfazer</button>':""}`;
+    body.querySelectorAll(".row .chip").forEach(c=>c.onclick=()=>{picked.push(c.dataset.s); if(picked.length===q.itens.length) finish(); else draw();});
+    const u=$("#undo"); if(u) u.onclick=()=>{picked.pop(); draw();};
+  };
+  const finish=()=>{
+    const ok=picked.every((s,i)=>s===q.itens[i]);
+    body.innerHTML=`<div class="order-picked">${picked.map((s,i)=>`<span class="chip" style="border-color:${s===q.itens[i]?"var(--ok)":"var(--bad)"};border-width:2px">${i+1}. ${esc(s)}</span>`).join("")}</div>`;
+    answer(q,ok,(ok?"":"Ordem certa: "+q.itens.join(" → ")+". ")+q.ex);
+  };
+  draw();
+}
+function answer(q,ok,ex){
+  S.answered++; if(ok){S.correct++; Q.hits++; Q.xp+=10; gain(10);} else {markDay(); save();}
+  if(!q.noBox && q.id!=="placar") setBox(q.id, ok? box(q.id)+1 : 0);
+  const fb=$("#qfb");
+  const msgs=ok?["Oss! Acertou","Isso aí!","Finalizou!","Na técnica!"]:["Quase!","Bateu! Vamos de novo","Não foi dessa vez"];
+  fb.innerHTML=`<div class="feedback ${ok?"ok":"no"} pop"><b>${msgs[Math.floor(Math.random()*msgs.length)]}${ok?" +10 XP":""}</b>${esc(ex||"")}</div>
+  <button class="btn btn-primary btn-wide next" id="nx">${Q.i+1<Q.list.length?"Próxima":"Ver resultado"}</button>`;
+  $("#nx").onclick=()=>{Q.i++; showQ();};
+  $("#nx").scrollIntoView({behavior:"smooth",block:"nearest"});
+}
+function quizEnd(){
+  const n=Q.list.length, p=Math.round(Q.hits/n*100);
+  const bonus = p===100?20:0; if(bonus) gain(bonus);
+  const frase = p>=90?"Nível faixa azul. Oss!":p>=70?"Bom treino! Revise o que errou.":p>=50?"No caminho. Repita amanhã.":"Volta pro drill: repita este quiz.";
+  app.innerHTML=`<div class="result"><div class="qcat">Resultado</div><div class="big">${Q.hits}/${n}</div><h2 style="font-size:26px">${frase}</h2>
+  <p class="belt-meta">+${Q.xp+bonus} XP${bonus?" (bônus de gabarito!)":""}</p>
+  <div class="row" style="width:100%"><button class="btn" id="bk">Voltar</button><button class="btn btn-primary" id="again">Repetir</button></div></div>`;
+  $("#bk").onclick=()=>go("quiz"); $("#again").onclick=()=>startQuiz(Q.mode);
+}
+
+/* ---------- técnicas ---------- */
+let tecFilter="todas";
+function tecList(cat){
+  if(cat) tecFilter=cat;
+  const cats=CATS.filter(c=>c.tipo==="tec");
+  const list=TEC.filter(t=>tecFilter==="todas"||t.cat===tecFilter);
+  const done=TEC.filter(t=>box(t.id)>=4).length;
+  app.innerHTML=`<div class="screen-h"><h1>Técnicas</h1><p>${done} de ${TEC.length} marcadas como dominadas. Toque numa técnica para ver o vídeo e os passos.</p></div>
+  <div class="chips" role="tablist">${[{id:"todas",nome:"Todas"},...cats].map(c=>`<button class="chip ${tecFilter===c.id?"on":""}" data-f="${c.id}">${c.nome}</button>`).join("")}</div>
+  ${tecFilter!=="todas"?`<button class="btn btn-blue btn-wide" id="qcat" style="margin-bottom:10px">Quiz de ${esc(CAT[tecFilter].nome)}</button>`:""}
+  <div class="legend"><span><i style="background:var(--bad)"></i>revisar</span><span><i style="background:var(--gold)"></i>mais ou menos</span><span><i style="background:var(--ok)"></i>domino</span></div>
+  <div class="tlist">${list.map(t=>`<button class="titem" data-id="${t.id}">${tecThumb(t)}<span class="info"><b>${esc(t.nome)}</b><span>${esc(CAT[t.cat].nome)} · ${esc(POS_NOME[t.pos])}${VID[t.id]?" · <b class=\"vtag\">com vídeo</b>":""}</span></span><span class="dot ${lvlClass(t.id)}" aria-label="${lvlName(t.id)}"></span></button>`).join("")}</div>`;
+  app.querySelectorAll(".chips .chip").forEach(c=>c.onclick=()=>{tecFilter=c.dataset.f; tecList();});
+  app.querySelectorAll(".titem").forEach(b=>b.onclick=()=>openTec(b.dataset.id));
+  const qc=$("#qcat"); if(qc) qc.onclick=()=>startQuiz(tecFilter);
+  const on=app.querySelector(".chips .chip.on"); if(on) on.scrollIntoView({inline:"center",block:"nearest"});
+}
+const lvl=id=>{const b=box(id); return S.box[id]===undefined?0:b>=4?3:b>=2?2:1;};
+const lvlClass=id=>["","l1","l2","l3"][lvl(id)];
+const lvlName=id=>["sem avaliação","revisar","mais ou menos","domino"][lvl(id)];
+
+function openTec(id){
+  const t=TEC.find(x=>x.id===id);
+  const bg=document.createElement("div"); bg.className="sheet-bg";
+  bg.innerHTML=`<div class="sheet" role="dialog" aria-modal="true" aria-label="${esc(t.nome)}">
+    <div class="sheet-h"><div><div class="qcat">${esc(CAT[t.cat].nome)}</div><h2>${esc(t.nome)}</h2></div><button class="xbtn" id="sx" aria-label="Fechar">✕</button></div>
+    ${(()=>{const m=tecMedia(t); return m?`<div class="figure" style="margin-top:10px">${m.html}</div><div class="belt-meta" style="margin:-4px 0 10px">${esc(m.cap)}</div>`:`<div class="belt-meta" style="margin:10px 0">Posição inicial: ${esc(POS_NOME[t.pos])}</div>`;})()}
+    <a class="btn btn-wide yt" href="${ytURL(t)}" target="_blank" rel="noopener">▶ Ver vídeos desta técnica no YouTube</a>
+    <div class="sub">Passo a passo</div>
+    <ol class="steps">${t.passos.map(p=>`<li>${esc(p)}</li>`).join("")}</ol>
+    <div class="warn"><b>Erro comum:</b> ${esc(t.erro)}</div>
+    <div class="sub">Como está essa técnica?</div>
+    <div class="rate">
+      <button class="l1" data-v="0">Revisar</button><button class="l2" data-v="2">Mais ou menos</button><button class="l3" data-v="4">Domino</button>
+    </div>
+    <div class="sub">Seu vídeo ou foto do treino</div>
+    <div class="media" id="media"></div>
+    <label class="file" for="f_${t.id}"><input type="file" id="f_${t.id}" accept="image/*,video/*">+ Adicionar vídeo ou foto</label>
+    <p class="note">Peça para um colega filmar você executando no treino. Fica salvo só neste aparelho.</p>
+    <div class="sub">Detalhes do sensei</div>
+    <textarea id="nt_${t.id}" placeholder="Anote o detalhe que o sensei corrigiu.">${esc(S.notes["t_"+t.id]||"")}</textarea>
+    <p class="note">Os passos são uma base geral. Na prova vale o jeito que o sensei ensina.</p>
+  </div>`;
+  document.body.appendChild(bg); document.body.style.overflow="hidden";
+  const close=()=>{bg.remove(); document.body.style.overflow=""; if(route==="tec") tecList();};
+  bg.addEventListener("click",e=>{if(e.target===bg) close();});
+  bg.querySelector("#sx").onclick=close;
+  const rateBtns=bg.querySelectorAll(".rate button");
+  const paint=()=>rateBtns.forEach(b=>b.classList.toggle("on", S.box[id]!==undefined && ((+b.dataset.v===4&&box(id)>=4)||(+b.dataset.v===2&&box(id)>=2&&box(id)<4)||(+b.dataset.v===0&&box(id)<2))));
+  paint();
+  rateBtns.forEach(b=>b.onclick=()=>{setBox(id,+b.dataset.v); gain(5); paint(); toast(b.dataset.v==="4"?"Oss! Técnica dominada":"Anotado. +5 XP");});
+  bg.querySelector(`#nt_${id}`).oninput=e=>{S.notes["t_"+id]=e.target.value; save();};
+  const media=bg.querySelector("#media");
+  showMedia(id,media);
+  bg.querySelector(`#f_${id}`).onchange=async e=>{const f=e.target.files[0]; if(!f) return; await putMedia(id,f); showMedia(id,media); toast("Salvo neste aparelho");};
+}
+
+/* IndexedDB para fotos e vídeos */
+let dbp=null;
+function db(){
+  if(dbp) return dbp;
+  dbp=new Promise((res)=>{try{const r=indexedDB.open("rumoazul",1); r.onupgradeneeded=()=>r.result.createObjectStore("m"); r.onsuccess=()=>res(r.result); r.onerror=()=>res(null);}catch(e){res(null);}});
+  return dbp;
+}
+async function putMedia(id,file){const d=await db(); if(!d){toast("Este navegador não deixou salvar"); return;} return new Promise(r=>{try{const tx=d.transaction("m","readwrite"); tx.objectStore("m").put(file,id); tx.oncomplete=r; tx.onerror=r;}catch(e){r();}});}
+async function getMedia(id){const d=await db(); if(!d) return null; return new Promise(r=>{try{const q=d.transaction("m").objectStore("m").get(id); q.onsuccess=()=>r(q.result||null); q.onerror=()=>r(null);}catch(e){r(null);}});}
+async function delMedia(id){const d=await db(); if(!d) return; return new Promise(r=>{try{const tx=d.transaction("m","readwrite"); tx.objectStore("m").delete(id); tx.oncomplete=r;}catch(e){r();}});}
+async function showMedia(id,el){
+  const f=await getMedia(id);
+  if(!f){el.innerHTML=""; return;}
+  const url=URL.createObjectURL(f);
+  el.innerHTML=(f.type||"").startsWith("video")?`<video src="${url}" controls playsinline></video>`:`<img src="${url}" alt="Sua foto da técnica">`;
+  const b=document.createElement("button"); b.className="btn"; b.textContent="Remover"; b.onclick=async()=>{await delMedia(id); showMedia(id,el);};
+  el.appendChild(b);
+}
+
+/* ---------- simulado ---------- */
+let SIM=null, timerId=null;
+function simMenu(){
+  clearInterval(timerId);
+  app.innerHTML=`<div class="screen-h"><h1>Simulado</h1><p>Como no dia da prova: o sensei chama a técnica e você executa.</p></div>
+  <div class="modes">
+    <button class="mode" id="sRoleta"><span class="mode-ic" style="background:var(--red)">!</span><span><b>O sensei chamou!</b><span>Sorteia uma técnica. Você tem 30 s para executar ou explicar.</span></span></button>
+    <button class="mode" id="sProva"><span class="mode-ic" style="background:var(--blue)">✓</span><span><b>Prova completa</b><span>8 técnicas sorteadas e 12 perguntas de teoria, com nota final</span></span></button>
+  </div>
+  <p class="note" style="margin-top:14px">Dica: faça o simulado com um parceiro no tatame. Ele lê a técnica em voz alta e você executa.</p>`;
+  $("#sRoleta").onclick=()=>{SIM={tipo:"roleta",list:pickWeighted(TEC,99,t=>t.id),i:0,score:0}; simDraw();};
+  $("#sProva").onclick=()=>{SIM={tipo:"prova",list:pickWeighted(TEC,8,t=>t.id),i:0,score:0}; simDraw();};
+}
+function simDraw(){
+  clearInterval(timerId);
+  const t=SIM.list[SIM.i];
+  if(!t || (SIM.tipo==="prova" && SIM.i>=SIM.list.length)) return simTheory();
+  app.innerHTML=`<div class="qtop"><button class="xbtn" id="sx" aria-label="Sair do simulado">✕</button><div class="bar"><i style="width:${SIM.tipo==="prova"?SIM.i/SIM.list.length*100:0}%"></i></div><span class="belt-meta">${SIM.tipo==="prova"?(SIM.i+1)+"/"+SIM.list.length:"Técnica "+(SIM.i+1)}</span></div>
+  <div class="wheel" id="wheel"><div class="sensei">O sensei chamou:</div><div class="cat" id="wc">...</div><div class="name" id="wn">...</div></div>
+  <div id="sbody"></div>`;
+  $("#sx").onclick=()=>go("sim");
+  const wn=$("#wn"), wc=$("#wc"); let k=0;
+  const reduce=window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+  const spin=setInterval(()=>{const r=TEC[Math.floor(Math.random()*TEC.length)]; wn.textContent=r.nome; wc.textContent=CAT[r.cat].nome; if(++k>14||reduce){clearInterval(spin); land();}},70);
+  function land(){
+    wn.textContent=t.nome; wc.textContent=CAT[t.cat].nome; $("#wheel").classList.add("pop");
+    let left=30;
+    $("#sbody").innerHTML=`<div class="timer" id="tm">0:30</div><p class="belt-meta" style="text-align:center;margin:0 0 10px">Execute ou explique em voz alta, sem olhar.</p>
+      <button class="btn btn-primary btn-wide" id="rev">Conferir os passos</button>`;
+    timerId=setInterval(()=>{left--; const el=$("#tm"); if(!el){clearInterval(timerId);return;} el.textContent="0:"+String(Math.max(left,0)).padStart(2,"0"); if(left<=0){clearInterval(timerId); el.textContent="Tempo!";}},1000);
+    $("#rev").onclick=reveal;
+  }
+  function reveal(){
+    clearInterval(timerId);
+    const m=tecMedia(t);
+    $("#sbody").innerHTML=`${m?`<div class="figure" style="margin-top:12px">${m.html}</div>`:""}<a class="btn btn-wide yt" href="${ytURL(t)}" target="_blank" rel="noopener" style="margin:10px 0">▶ Ver no YouTube</a><ol class="steps">${t.passos.map(p=>`<li>${esc(p)}</li>`).join("")}</ol>
+    <div class="warn"><b>Erro comum:</b> ${esc(t.erro)}</div>
+    <div class="sub">Como você foi?</div>
+    <div class="rate"><button class="l1" data-v="0">Travei</button><button class="l2" data-v="1">Quase</button><button class="l3" data-v="2">Executei</button></div>`;
+    app.querySelectorAll(".rate button").forEach(b=>b.onclick=()=>{
+      const v=+b.dataset.v; SIM.score+=v/2;
+      setBox(t.id, v===2?box(t.id)+1:v===1?Math.max(box(t.id),1):0); gain(v*5);
+      SIM.i++; simDraw();
+    });
+  }
+}
+function simTheory(){
+  if(SIM.tipo!=="prova") return go("sim");
+  const tecScore=SIM.score/SIM.list.length;
+  const list=pickWeighted(TEO.filter(q=>q.tipo!=="order"),12,q=>q.id).map(qFromTeo);
+  Q={mode:"prova",list,i:0,hits:0,xp:0,tecScore};
+  showQ();
+  // ao final, mostra a nota combinada
+  const orig=quizEnd;
+  quizEnd=function(){
+    quizEnd=orig;
+    const teo=Q.hits/Q.list.length, nota=Math.round((tecScore*.5+teo*.5)*100)/10;
+    const ok=nota>=7;
+    app.innerHTML=`<div class="result"><div class="qcat">Nota do simulado</div><div class="big" style="color:${ok?"var(--ok)":"var(--red)"}">${nota.toFixed(1)}</div>
+      <h2 style="font-size:26px">${ok?"Aprovado! Oss!":"Ainda não. Bora treinar!"}</h2>
+      <p class="belt-meta">Técnicas: ${Math.round(tecScore*100)}% · Teoria: ${Q.hits}/${Q.list.length}</p>
+      <div class="row" style="width:100%"><button class="btn" id="bk">Voltar</button><button class="btn btn-primary" id="again">Nova prova</button></div></div>`;
+    $("#bk").onclick=()=>go("sim");
+    $("#again").onclick=()=>{SIM={tipo:"prova",list:pickWeighted(TEC,8,t=>t.id),i:0,score:0}; simDraw();};
+  };
+}
+
+go("home");
+</script>
+
+<script>
+if ("serviceWorker" in navigator) {
+  window.addEventListener("load", () => navigator.serviceWorker.register("sw.js").catch(() => {}));
+}
+</script>
+</body>
+</html>
