@@ -54,6 +54,8 @@ h1,h2,h3{font-family:var(--display);text-wrap:balance;margin:0;line-height:1.05;
 .brand{display:flex;align-items:center;gap:10px;font-family:var(--display);font-weight:800;font-size:20px;letter-spacing:.04em;text-transform:uppercase}
 .badge9{width:34px;height:34px;border-radius:50%;background:var(--gold);color:#B00E15;display:grid;place-items:center;font-weight:800;font-size:17px;border:2px solid #fff}
 .exam-tag{font-family:var(--display);font-weight:700;font-size:13px;letter-spacing:.08em;text-transform:uppercase;background:rgba(0,0,0,.18);padding:4px 10px;border-radius:99px;white-space:nowrap}
+.swap{border:2px solid rgba(255,255,255,.7);color:#fff;display:inline-flex;align-items:center;gap:6px;cursor:pointer}
+.swap i{width:14px;height:14px;border-radius:3px;border:1px solid #fff;display:inline-block}
 .count{display:flex;align-items:flex-end;gap:14px;margin-top:14px}
 .count-num{font-family:var(--display);font-weight:800;font-size:76px;line-height:.8;font-variant-numeric:tabular-nums}
 .count-txt{font-family:var(--display);font-weight:700;font-size:20px;line-height:1.05;text-transform:uppercase;padding-bottom:4px}
@@ -691,7 +693,14 @@ function sobre(){
     <h2>Créditos das fotos e vídeos</h2>
     <div class="credits">${CREDITOS.map(c=>`<span>${esc(c.o)}: ${esc(c.a)}, <a href="${c.u}" target="_blank" rel="noopener">Wikimedia Commons</a>, licença ${esc(c.l)}.</span>`).join("")}</div>
   </section>`;
-  $("#trocar").onclick=()=>{try{localStorage.removeItem(FKEY);}catch(e){} location.hash=""; picker();};
+  $("#trocar").onclick=trocarFaixa;
+}
+// abre a escolha de faixa; "Voltar" desiste e fica na faixa atual
+function trocarFaixa(){
+  picker();
+  app.insertAdjacentHTML("beforeend",`<button class="btn btn-wide" id="pickBack" style="margin-top:12px">Voltar para a faixa ${B.nome.toLowerCase()}</button>`);
+  $("#pickBack").onclick=()=>{document.querySelector(".nav").hidden=false; go("home");};
+  window.scrollTo(0,0);
 }
 
 function weakest(n){return CATS.slice().sort((a,b)=>mastery(a.id)-mastery(b.id)).slice(0,n);}
@@ -703,7 +712,7 @@ function home(){
   const gName = g>=5 ? `Pronto para a ${fx}!` : `Faixa ${B.de.toLowerCase()}, ${g} ${g===1?"grau":"graus"}`;
   app.innerHTML=`
   <header class="band">
-    <div class="band-top"><div class="brand"><span class="badge9">B9</span>Rumo à ${fx}</div><span class="exam-tag">Exame 30/11</span></div>
+    <div class="band-top"><div class="brand"><span class="badge9">B9</span>Rumo à ${fx}</div><button class="exam-tag swap" id="swapF" aria-label="Trocar de faixa"><i style="background:${B.cor}"></i>Trocar faixa</button></div>
     <div class="count"><div class="count-num">${Math.max(dl,0)}</div><div class="count-txt">${dl===1?"dia":"dias"} para<br>a faixa ${fx}<small>${dl>0?"Prova de graduação em 30/11/2026":dl===0?"É hoje! Respira e confia no treino.":"Prova realizada."}</small></div></div>
   </header>
   <section class="beltcard" aria-label="Seu progresso">
@@ -723,6 +732,7 @@ function home(){
   <div class="map">${CATS.map(c=>{const m=mastery(c.id); return `<button class="tile ${m<.25?"weak":""}" data-cat="${c.id}"><div class="tile-top"><b>${c.nome}</b><em>${Math.round(m*100)}%</em></div><div class="bar"><i style="width:${Math.max(m*100,3)}%"></i></div></button>`;}).join("")}</div>
   <p class="quote">"Sempre assuma que seu oponente será maior, mais forte e mais rápido que você." Hélio Gracie</p>`;
   $("#goToday").onclick=()=>startQuiz("dia");
+  $("#swapF").onclick=trocarFaixa;
   app.querySelectorAll(".tile").forEach(t=>t.onclick=()=>{const c=CAT[t.dataset.cat]; if(c.tipo==="tec") go("tec",c.id); else startQuiz(c.id);});
 }
 
