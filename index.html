@@ -7,14 +7,14 @@
 <meta name="apple-mobile-web-app-capable" content="yes">
 <meta name="mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
-<meta name="apple-mobile-web-app-title" content="Faixa Azul">
+<meta name="apple-mobile-web-app-title" content="Rumo à Faixa">
 <link rel="manifest" href="manifest.webmanifest">
 <link rel="icon" href="icons/icon-192.png">
 <link rel="apple-touch-icon" href="icons/apple-touch-icon.png">
 <style>:root{color-scheme:light;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}body{margin:0;font:14px system-ui,sans-serif}img{max-width:100%}[hidden]{display:none!important}</style>
 </head>
 <body>
-<title>Rumo à Faixa Azul</title>
+<title>Rumo à Faixa</title>
 <meta name="claude:viewport-fit-sides" content="cover">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Saira+Condensed:wght@600;700;800&family=Inter:wght@400;500;600;700&display=swap">
@@ -225,10 +225,10 @@ textarea{width:100%;min-height:80px;border:1px solid var(--line);background:var(
 /* ================= DATA ================= */
 const EXAM = new Date(2026, 10, 30); // 30/11/2026
 
-const CATS = [
-  {id:"historia",  nome:"História",          tipo:"teoria"},
-  {id:"etica",     nome:"Ética",             tipo:"teoria"},
-  {id:"regras",    nome:"Regras",            tipo:"teoria"},
+const CATS_AZUL = [
+  {id:"historia",  nome:"História",          tipo:"teoria", d:"Maeda, Gracie, Luiz França, CBJJ, B9", c:"#8A5A2B", i:"H"},
+  {id:"etica",     nome:"Ética",             tipo:"teoria", d:"Higiene, cumprimentos e comportamento", c:"#2E8B3A", i:"É"},
+  {id:"regras",    nome:"Regras",            tipo:"teoria", d:"Pontuação, punições, faixas, uniformes, golpes proibidos", c:"var(--blue)", i:"R"},
   {id:"aquec",     nome:"Aquecimento",       tipo:"tec"},
   {id:"saidas",    nome:"Saídas",            tipo:"tec"},
   {id:"quedas",    nome:"Quedas",            tipo:"tec"},
@@ -244,7 +244,6 @@ const CATS = [
   {id:"crucifixo", nome:"Crucifixo",         tipo:"tec"},
   {id:"defesa",    nome:"Defesa pessoal",    tipo:"tec"}
 ];
-const CAT = Object.fromEntries(CATS.map(c => [c.id, c]));
 
 const POS_NOME = {
   em_pe:"Em pé, com pegada", guarda:"Guarda fechada", montada:"Montada", cem:"100 kg",
@@ -254,7 +253,7 @@ const POS_NOME = {
 };
 
 /* Técnicas: pos = posição da ilustração; swap = você (azul) por baixo/por cima invertido */
-const TEC = [
+const TEC_AZUL = [
  // Aquecimento técnico
  {id:"a1",cat:"aquec",nome:"Cambalhotas",pos:"solo",passos:["Agache com as mãos no chão à frente dos pés.","Queixo colado no peito e costas arredondadas.","Role apoiando a nuca e as costas, nunca o topo da cabeça.","Termine sentado ou de pé, em base."],erro:"Apoiar o topo da cabeça no chão."},
  {id:"a2",cat:"aquec",nome:"Emborcadas",pos:"solo",passos:["Deitado de costas, queixo no peito.","Leve as pernas por cima de um dos ombros (não por cima do pescoço).","Passe o corpo para trás apoiando no ombro.","Termine de joelhos ou em base, pronto para continuar."],erro:"Rolar por cima do pescoço. Confirme com o sensei o formato que ele cobra.",confirmar:true},
@@ -327,7 +326,7 @@ const TEC = [
 ];
 
 /* Perguntas de teoria: a = resposta certa, w = erradas, ex = explicação */
-const TEO = [
+const TEO_AZUL = [
  // HISTÓRIA
  {id:"h1",cat:"historia",q:"Onde se desenvolveu o jujutsu que deu origem ao jiu-jitsu?",a:"No Japão, entre os samurais",w:["No Brasil","Na China, entre os monges","Na Coreia"],ex:"O jujutsu é uma arte japonesa de combate dos samurais. Há teorias de origem ainda mais antiga, na Índia. A versão brasileira nasceu depois, no Brasil."},
  {id:"h2",cat:"historia",q:"O que significa \"jiu-jitsu\"?",a:"Arte suave",w:["Caminho do guerreiro","Mão vazia","Luta no chão"],ex:"\"Jū\" = suave, flexível; \"jutsu\" = arte, técnica."},
@@ -430,6 +429,129 @@ const TEO = [
 
 const BELT_COLOR = {Branca:"#FFFFFF",Azul:"#1C5FC9",Roxa:"#6A2C91",Marrom:"#6B3E1F",Preta:"#111111",Cinza:"#8D8D8D",Amarela:"#F2C300",Laranja:"#F07A12",Verde:"#2E8B3A"};
 
+/* ================= FAIXA ROXA =================
+   Base: prova teórica de exemplo da B9 (faixa roxa) e resumo do material do sensei,
+   conferidos com o Livro de Regras IBJJF v6.1 (2024). A prova da roxa é só teórica. */
+const CATS_ROXA = [
+  {id:"regras",    nome:"Regras e arbitragem", tipo:"teoria", d:"Área de segurança, raspagem, faltas, 50/50", c:"var(--blue)", i:"R"},
+  {id:"proibidos", nome:"Golpes proibidos",    tipo:"teoria", d:"O que pode e o que não pode na azul e na roxa", c:"var(--red)", i:"!"},
+  {id:"uniforme",  nome:"Uniforme e higiene",  tipo:"teoria", d:"Medidas do kimono, faixa, higiene", c:"#5B6B2F", i:"U"},
+  {id:"graduacao", nome:"Graduação",           tipo:"teoria", d:"Idades, tempos mínimos e graus", c:"#6A2C91", i:"G"},
+  {id:"etica",     nome:"Ética e conduta",     tipo:"teoria", d:"Comportamento no tatame e liderança", c:"#2E8B3A", i:"É"},
+  {id:"defesa",    nome:"Defesa e socorro",    tipo:"teoria", d:"Defesa pessoal e primeiros socorros", c:"#4A4245", i:"+"},
+  {id:"historia",  nome:"História",            tipo:"teoria", d:"Do Japão ao UFC, Gracie e B9", c:"#8A5A2B", i:"H"}
+];
+const reuse = (ids, cat) => ids.map(id => { const q = TEO_AZUL.find(x => x.id === id); return cat ? {...q, cat} : q; });
+const TEO_ROXA = [
+ // REGRAS E ARBITRAGEM (situações como as da prova)
+ {id:"x_r1",cat:"regras",q:"Um faixa-azul aplica um single leg e o oponente cai na área de segurança. O atleta estabiliza por cima por 3 segundos completos. O que diz a regra?",a:"O árbitro espera os 3 segundos, dá os 2 pontos da queda e reinicia no centro, na mesma posição",w:["O árbitro para a luta assim que tocam a área de segurança, sem pontos nem vantagens","O atleta ganha só uma vantagem e a luta volta em pé","O oponente é punido por sair dos limites do tatame"],ex:"Regra 4.1.3: se a queda começou com os dois pés dentro da área de luta e terminou estabilizada, valem os 2 pontos. Depois, a luta recomeça no centro na mesma posição."},
+ {id:"x_r2",cat:"regras",q:"Um faixa-azul encaixa um armlock justo. Para não bater, o adversário foge correndo de propósito para fora da área de segurança. Qual é a decisão do árbitro?",a:"Desclassificar quem fugiu (falta gravíssima) e declarar o atacante vencedor",w:["Parar a luta, dar 2 pontos ao atacante e reiniciar em pé","Dar vantagem ao atacante e voltar em pé, sem punição","Voltar os dois no centro na mesma posição do armlock"],ex:"Regra 6.2.3 B: fugir de propósito da área de combate para não desistir de uma finalização é falta gravíssima, com desclassificação."},
+ {id:"x_r3",cat:"regras",q:"Um faixa-azul puxa para a guarda, inverte a posição a partir da meia-guarda, mas o oponente cai de quatro apoios. Para ganhar os 2 pontos da raspagem, o que ele precisa fazer?",a:"Controlar as costas, mantendo pelo menos um joelho do oponente no chão por 3 segundos, sem precisar dos ganchos",w:["Colocar obrigatoriamente os dois ganchos nas coxas","Esperar o oponente deitar de costas, senão ganha só vantagem","Colocar o joelho na barriga do oponente em quatro apoios"],ex:"Regra 4.6.2: na raspagem que termina com o adversário em quatro apoios, basta controlar as costas com pelo menos um joelho dele no chão por 3 segundos. Gancho não é obrigatório."},
+ {id:"x_r4",cat:"regras",q:"A faixa de um competidor desamarra durante a luta. Ele pode usar a faixa solta para dar uma volta no pescoço do adversário e estrangular?",a:"Não. Usar a própria faixa ou a do adversário desamarrada para ajudar no estrangulamento é falta grave",w:["Sim, se terminar o estrangulamento em menos de 10 segundos","Sim, a faixa faz parte do uniforme e vale para qualquer finalização","Só se o árbitro já tiver dado uma advertência para amarrar o uniforme"],ex:"Regra 6.2.2 S: usar a faixa desamarrada (sua ou dele) como auxílio em estrangulamento ou em qualquer situação de luta é falta grave."},
+ {id:"x_r5",cat:"regras",q:"Você encaixa um triângulo e os dois rolam para a área de segurança. O que o árbitro faz?",a:"Não para a luta enquanto a finalização estiver encaixada",w:["Para e reinicia os dois em pé","Para e dá 2 pontos para você","Para e reinicia no centro na mesma posição"],ex:"Regra 1.3.7: com a finalização encaixada na área de segurança, o árbitro não interrompe o combate."},
+ {id:"x_r6",cat:"regras",q:"Você ataca um armlock e é o SEU movimento que leva os dois para fora da área. O árbitro para a luta e:",a:"Dá só a vantagem pela quase finalização e reinicia em pé",w:["Dá 2 pontos para você","Desclassifica o adversário","Pune você por sair da área"],ex:"Regra 1.3.7: se a saída foi causada por quem ataca, não há 2 pontos. Fica só a vantagem, se o golpe ameaçou de verdade."},
+ {id:"x_r7",cat:"regras",q:"O adversário vai passar sua guarda e você foge de propósito para fora da área de luta. O que acontece?",a:"Você recebe uma punição e o adversário ganha 2 pontos",w:["Desclassificação imediata","Nada, a luta recomeça em pé","O adversário ganha só uma vantagem"],ex:"Regra 6.2.2 M: fugir para evitar pontos do adversário é falta grave. Nesse caso, o árbitro dá 2 pontos ao adversário e marca uma punição para quem fugiu."},
+ {id:"x_r8",cat:"regras",q:"Na guarda 50/50, você segura a lapela ou a faixa do adversário. Quanto tempo tem para progredir antes de ser punido?",a:"20 segundos",w:["10 segundos","30 segundos","1 minuto"],ex:"Atualização de 2024 (regra 6.2.1 F): pegou lapela ou faixa na 50/50, tem 20 segundos para progredir. Senão, punição por falta de combatividade."},
+ {id:"x_r9",cat:"regras",q:"Os dois atletas puxam para a guarda ao mesmo tempo. O que o árbitro faz?",a:"Conta 20 segundos; se ninguém ficar por cima ou atacar, pune os dois e reinicia em pé",w:["Dá vantagem para quem puxou primeiro","Pune os dois na hora","Deixa a luta seguir sem limite de tempo"],ex:"Regra 6.2.1 C: puxada dupla abre contagem de 20 segundos. Sem progressão, punição para os dois e reinício em pé."},
+ {id:"x_r10",cat:"regras",q:"Você derruba o adversário, cai na guarda dele e logo em seguida ele te raspa. Como fica o placar?",a:"Você ganha vantagem pela queda e ele ganha 2 pontos da raspagem",w:["Você 2 pontos e ele 2 pontos","Ninguém pontua","Você 2 pontos e ele uma vantagem"],ex:"Regra 4.1.8: queda seguida de raspagem imediata vale vantagem para quem derrubou e 2 pontos para quem raspou."},
+ {id:"x_r11",cat:"regras",q:"Faixa azul ou roxa: os dois estão sentados com as pernas cruzadas em posição legal, e um deles se levanta, deixando o de baixo em cruzada de perna (pé preso). O árbitro:",a:"Interrompe e reinicia com o de baixo sentado e o outro em pé, a uma distância para novas pegadas",w:["Desclassifica o atleta de baixo","Dá 2 pontos para quem levantou","Deixa a luta seguir normalmente"],ex:"Livro de regras, cruzada de perna (até a faixa roxa): ao levantar, o pé que pisa no chão passa a contar como preso. O árbitro para e reposiciona os atletas. Confirme com o sensei se ele cobra outro detalhe."},
+ {id:"x_r12",cat:"regras",q:"Colocar a mão ou o pé na parte da frente do rosto do adversário é:",a:"Falta grave",w:["Permitido","Vale vantagem para quem sofreu","Falta só na faixa preta"],ex:"Regra 6.2.2 O: mão ou pé no rosto do adversário é falta grave."},
+ {id:"x_r13",cat:"regras",q:"Queda suplex que leva o adversário de cabeça ou de pescoço ao chão:",a:"Falta gravíssima: desclassificação",w:["Vale 2 pontos","Permitida a partir da roxa","Só punição no placar"],ex:"Regra 6.2.3 L: o suplex continua permitido, desde que não leve o adversário de cabeça ou pescoço ao solo."},
+ {id:"x_r14",cat:"regras",q:"Tapar o nariz ou a boca do adversário com a mão:",a:"Falta gravíssima: desclassificação",w:["Permitido para sair da montada","Falta grave, só punição","Permitido se for rápido"],ex:"Regra 6.2.3 J."},
+ {id:"x_r15",cat:"regras",q:"Comemorar a vitória dançando ou ridicularizando o adversário antes de o árbitro proclamar o resultado:",a:"Falta grave",w:["Permitido depois do tapinha","Só falta na faixa preta","Não tem punição"],ex:"Regra 6.2.2 X: atitudes de ridicularização, danças ou exibição de superioridade são falta grave."},
+ {id:"x_r16",cat:"regras",q:"Quanto tempo dura a luta de faixa ROXA adulto?",a:"7 minutos",w:["6 minutos","8 minutos","10 minutos"],ex:"Adulto: branca 5, azul 6, roxa 7, marrom 8, preta 10 minutos."},
+ {id:"x_r17",cat:"regras",q:"Um atleta é desclassificado por motivo disciplinar na categoria com kimono. O que acontece no sem kimono (No-Gi) do mesmo evento?",a:"Ele também é retirado do sem kimono",w:["Pode lutar normalmente no sem kimono","Luta, mas começa com uma punição","Precisa trocar de equipe"],ex:"Atualização de 2024: desclassificação disciplinar no kimono tira o atleta também do sem kimono."},
+ {id:"x_r18",cat:"regras",q:"A chave já avançou (ou as medalhas foram entregues) e alguém pede para mudar o resultado de uma luta. Pode?",a:"Não. O resultado não pode mais ser alterado",w:["Sim, se o vídeo mostrar erro","Sim, até o fim do dia","Só se os técnicos concordarem"],ex:"Atualização de 2024: depois que a chave avança ou as medalhas são entregues, o resultado é definitivo."},
+ {id:"x_r19",cat:"regras",q:"Pela atualização de 2024 da IBJJF, em que categoria de gênero o atleta deve se inscrever?",a:"Na do sexo biológico atribuído no nascimento",w:["Na que preferir","Na do peso mais próximo","Na que o técnico escolher"],ex:"É o que diz a atualização de 2024 das regras da IBJJF."},
+ // GOLPES PROIBIDOS (azul e roxa adulto com kimono têm a mesma tabela)
+ {id:"x_p1",cat:"proibidos",q:"Qual destas finalizações é PERMITIDA para a faixa azul e a roxa adulto em torneios da IBJJF?",a:"Mão de vaca",w:["Chave de panturrilha","Chave de bíceps","Chave de calcanhar com torção"],ex:"Mão de vaca é proibida só até 15 anos. Chave de bíceps e de panturrilha só a partir da marrom. Chave de calcanhar é proibida com kimono."},
+ {id:"x_p2",cat:"proibidos",q:"Na faixa ROXA adulto com kimono, CHAVE DE JOELHO RETA (knee bar) é:",a:"Proibida",w:["Permitida","Permitida só no absoluto","Vale vantagem"],ex:"Chave de joelho reta é liberada só para marrom e preta adulto."},
+ {id:"x_p3",cat:"proibidos",q:"Na faixa ROXA adulto, MATA-LEÃO NO PÉ (toe hold) é:",a:"Proibido",w:["Permitido","Permitido só na guarda","Permitido no master"],ex:"Mata-leão no pé: só marrom e preta. E mesmo nelas é proibido forçar para o lado de fora do pé."},
+ {id:"x_p4",cat:"proibidos",q:"Na faixa ROXA adulto, CHAVE DE CALCANHAR é:",a:"Proibida",w:["Permitida","Permitida a partir do 2º grau","Permitida sem pontuação"],ex:"Chave de calcanhar é proibida com kimono em todas as faixas."},
+ {id:"x_p5",cat:"proibidos",q:"Na faixa ROXA adulto, CHAVE DE PÉ RETA (botinha) é:",a:"Permitida, sem girar para o lado do pé que não está sendo atacado",w:["Proibida","Permitida girando para qualquer lado","Permitida só em pé"],ex:"Botinha reta é permitida a partir dos 16 anos. Girar para fora (lado do pé livre) é proibido na azul e na roxa."},
+ {id:"x_p6",cat:"proibidos",q:"Na faixa ROXA adulto, CHAVE DE BÍCEPS e CHAVE DE PANTURRILHA são:",a:"Proibidas",w:["Permitidas","Permitida só a de bíceps","Permitidas só no sem kimono"],ex:"As duas só são liberadas para marrom e preta."},
+ {id:"x_p7",cat:"proibidos",q:"A partir de que faixa (adulto com kimono) a chave de bíceps e a chave de joelho reta são liberadas?",a:"Marrom",w:["Roxa","Preta","Azul"],ex:"Marrom e preta adulto podem usar chave de bíceps, de panturrilha, de joelho reta e mata-leão no pé."},
+ {id:"x_p8",cat:"proibidos",q:"CRUZADA DE PERNA (reaping) na faixa roxa adulto com kimono:",a:"Proibida",w:["Permitida","Permitida só na guarda 50/50","Permitida se não houver chave"],ex:"A cruzada de perna é golpe proibido para a azul e a roxa. Confira no livro a descrição: coxa por trás da perna e panturrilha passando pela frente do corpo, acima do joelho, com o pé preso."},
+ {id:"x_p9",cat:"proibidos",q:"Qual destes é proibido em TODAS as faixas?",a:"Bate-estaca",w:["Omoplata","Estrangulamento Ezequiel","Mão de vaca"],ex:"Bate-estaca, chave de cervical, queda-tesoura e chave de calcanhar (com kimono) são proibidos para todos."},
+ {id:"x_p10",cat:"proibidos",q:"QUEDA-TESOURA (kani basami) na faixa roxa:",a:"Proibida",w:["Permitida","Permitida só no sem kimono","Vale vantagem"],ex:"Queda-tesoura é proibida em todas as faixas."},
+ {id:"x_p11",cat:"proibidos",q:"CHAVE DE CERVICAL (sem estrangulamento) na faixa roxa:",a:"Proibida",w:["Permitida","Permitida da pegada nas costas","Permitida no absoluto"],ex:"Chave de cervical é proibida."},
+ {id:"x_p12",cat:"proibidos",q:"O atleta aplica um golpe proibido para a categoria dele. Qual é a consequência?",a:"Desclassificação (falta gravíssima)",w:["Punição no placar","Perde 2 pontos","Só advertência verbal"],ex:"Regra 6.2.3 M: aplicar golpe proibido para a categoria é falta gravíssima."},
+ {id:"x_p13",cat:"proibidos",q:"TORCER OS DEDOS do adversário para trás:",a:"Proibido",w:["Permitido na roxa","Permitido para quebrar pegada","Vale vantagem"],ex:"Torcer os dedos para trás está na tabela de golpes proibidos."},
+ {id:"x_p14",cat:"proibidos",q:"OMOPLATA e ESTRANGULAMENTO EZEQUIEL na faixa roxa adulto:",a:"Permitidos",w:["Proibidos","Só a omoplata é permitida","Só o Ezequiel é permitido"],ex:"Omoplata é proibida só até 12 anos e o Ezequiel só até 15 anos."},
+ // UNIFORME E HIGIENE
+ {id:"x_u1",cat:"uniforme",q:"Com os braços esticados para a frente, qual a distância máxima entre a borda da manga do paletó e o punho?",a:"2 cm da articulação do punho",w:["15 cm do punho","O paletó deve cobrir as mãos","Livre, se o paletó fechar na cintura"],ex:"Regra IBJJF 8.1.7: no máximo 2 cm do punho, com os braços a 90°. Atenção: na prova de exemplo da B9 o gabarito marcou 5 cm. Confirme com o sensei qual resposta ele espera."},
+ {id:"x_u2",cat:"uniforme",q:"Um atleta chega para lutar ou treinar com o kimono sujo, com mau cheiro forte ou manchas de sangue antigas. O que vale?",a:"Ele precisa trocar por um kimono limpo no prazo; se não trocar, é desclassificado",w:["Luta normalmente, o uniforme não muda a luta","O adversário ganha 2 pontos e a luta segue","Recebe só advertência e lava para o dia seguinte"],ex:"Regra 8.1.6: o uniforme não pode estar sujo nem com mau cheiro. Sem troca no prazo, falta gravíssima (6.2.3 A)."},
+ {id:"x_u3",cat:"uniforme",q:"O atleta passa creme, óleo ou gel no corpo antes da luta:",a:"Falta gravíssima: desclassificação",w:["Permitido se for hidratante","Só punição","Permitido no sem kimono"],ex:"Regra 6.2.3 F: qualquer substância escorregadia no corpo é falta gravíssima."},
+ {id:"x_u4",cat:"uniforme",q:"Depois do nó da faixa, quanto cada ponta deve medir?",a:"Entre 20 e 30 cm",w:["Entre 5 e 10 cm","Entre 40 e 50 cm","Tanto faz"],ex:"Faixa de 4 a 5 cm de largura, duas voltas, nó duplo e pontas de 20 a 30 cm."},
+ {id:"x_u5",cat:"uniforme",q:"Qual é a folga mínima da manga do kimono em toda a sua extensão?",a:"7 cm",w:["2 cm","15 cm","Não existe medida"],ex:"Regra 8.1.11: folga mínima de 7 cm da manga em toda a extensão."},
+ {id:"x_u6",cat:"uniforme",q:"Atleta homem sem roupa de baixo, percebido pelo árbitro:",a:"Falta gravíssima: desclassificação",w:["Permitido","Só advertência","Punição no placar"],ex:"Regra 6.2.3 E."},
+ {id:"x_u7",cat:"uniforme",q:"Quanto tempo o atleta tem para arrumar o paletó e a faixa antes de ser punido?",a:"20 segundos",w:["10 segundos","1 minuto","Não há limite"],ex:"Regra 6.2.2 T: 20 segundos para paletó e faixa, 20 para a faixa de identificação e 20 para amarrar a calça."},
+ // GRADUAÇÃO
+ {id:"x_g1",cat:"graduacao",q:"Qual é o tempo mínimo na faixa azul para chegar à roxa (IBJJF)?",a:"2 anos",w:["1 ano","3 anos","4 anos"],ex:"Azul: 2 anos. Roxa: 1 ano e meio. Marrom: 1 ano."},
+ {id:"x_g2",cat:"graduacao",q:"Qual é a idade mínima para a faixa roxa?",a:"16 anos",w:["14 anos","18 anos","15 anos"],ex:"Azul e roxa: 16 anos. Marrom: 18. Preta: 19."},
+ {id:"x_g3",cat:"graduacao",q:"Quanto tempo, no mínimo, o adulto fica na faixa roxa antes de ir para a marrom?",a:"1 ano e meio",w:["1 ano","2 anos","3 anos"],ex:"Roxa: mínimo de 1 ano e meio."},
+ {id:"x_g4",cat:"graduacao",q:"Qual é a idade mínima para a faixa marrom?",a:"18 anos",w:["16 anos","17 anos","19 anos"],ex:"Marrom: 18 anos. Preta: 19."},
+ {id:"x_g5",cat:"graduacao",q:"Como se divide a faixa roxa?",a:"Faixa lisa e mais 4 graus",w:["Faixa lisa e mais 3 graus","Só faixa lisa","Faixa lisa e mais 6 graus"],ex:"Cada faixa colorida tem a faixa lisa e até 4 graus."},
+ {id:"x_g6",cat:"graduacao",q:"Quem deve aprovar o cadastro de um faixa roxa na IBJJF?",a:"Um professor faixa preta cadastrado na IBJJF",w:["Qualquer faixa marrom","O próprio atleta","O presidente da federação estadual"],ex:"A graduação é dada e registrada por professor faixa preta cadastrado."},
+ {id:"x_g7",cat:"graduacao",q:"Qual é a idade mínima para a faixa preta?",a:"19 anos",w:["18 anos","21 anos","25 anos"],ex:"Preta: 19 anos, com pelo menos 1 ano na marrom."},
+ // ÉTICA E CONDUTA
+ {id:"x_e1",cat:"etica",q:"Um faixa-azul perde o controle depois de ser finalizado, empurra o colega e começa uma briga de verdade na academia. Qual deve ser a postura da liderança e dos mais experientes?",a:"Intervir na hora, separar, proteger os dois e aplicar medida disciplinar (suspensão ou expulsão)",w:["Deixar a briga continuar para resolver a rivalidade","Apoiar o aluno da casa se o outro for visitante","Esperar o treino acabar e conversar, sem punição, para não perder o aluno"],ex:"O tatame é lugar de evolução e respeito. Violência é intolerável."},
+ {id:"x_e2",cat:"etica",q:"Como faixa roxa, qual é a sua postura com os alunos mais novos?",a:"Ser exemplo: ajudar, controlar a força e corrigir com respeito",w:["Finalizar todos para mostrar a graduação","Treinar só com os mais graduados","Corrigir o professor na frente da turma"],ex:"Quanto mais alta a faixa, maior a responsabilidade de dar exemplo."},
+ {id:"x_e3",cat:"etica",q:"Durante a luta, você discorda do árbitro e reclama com gestos. Isso é:",a:"Falta grave",w:["Permitido","Direito do atleta","Só uma advertência verbal"],ex:"Regra 6.2.2 J: contestar decisão do árbitro com fala ou gestos durante a luta é falta grave."},
+ {id:"x_e4",cat:"etica",q:"O professor pede para você conduzir o aquecimento da turma. Você:",a:"Conduz com seriedade e segue o padrão da academia",w:["Aproveita para treinar só o que você gosta","Recusa, porque não é sua função","Faz rápido para ir logo para o rola"],ex:"Faixas mais graduadas ajudam o professor e dão o exemplo."},
+ ...reuse(["et2","et3","et4","et9","et12","et13","et14"]),
+ // DEFESA PESSOAL E PRIMEIROS SOCORROS
+ {id:"x_d1",cat:"defesa",q:"Na rua, o agressor te derruba, estabiliza na montada e começa a socar o seu rosto. Qual é a sequência certa?",a:"Queixo no peito e antebraços protegendo a cabeça, colar o quadril e o tronco nele, prender um braço e o pé do mesmo lado e fazer a barrigada (upa)",w:["Empurrar o peito dele com os braços esticados e chutar por baixo","Fechar os olhos, cobrir o rosto e virar de costas na hora","Socar de volta por baixo, sem travar a postura dele"],ex:"Colar no agressor tira o espaço do soco. Braço e pé do mesmo lado presos permitem a barrigada para inverter."},
+ {id:"x_d2",cat:"defesa",q:"Na aula, um colega cai de mau jeito e sofre uma luxação evidente no cotovelo. Qual é o socorro imediato?",a:"Parar o treino ao redor, acalmar o colega, manter o braço na posição mais confortável, improvisar uma tipoia com paletó ou faixa e levar ao atendimento médico",w:["Puxar o braço com força para colocar no lugar","Mandar voltar a lutar para o braço voltar sozinho","Passar pomada e mandar fazer flexões"],ex:"Nunca tente colocar a articulação no lugar. Imobilize e leve ao médico."},
+ {id:"x_d3",cat:"defesa",q:"Seu parceiro apaga num estrangulamento. O que fazer?",a:"Soltar na hora, deixar deitado de lado, observar a respiração e chamar o professor; se não acordar logo, ligar 192 (SAMU)",w:["Jogar água gelada e mandar voltar a treinar","Levantar de pé rápido e sacudir","Continuar apertando até ele bater"],ex:"Depois de apagar, a pessoa deve descansar e ser observada. Sem melhora rápida, socorro médico."},
+ {id:"x_d4",cat:"defesa",q:"Um colega cai de cabeça e reclama de dor no pescoço e formigamento nos braços. O que fazer?",a:"Não mexer nele, manter a cabeça parada e chamar o SAMU (192)",w:["Ajudar a levantar e sentar","Massagear o pescoço","Mandar ele girar a cabeça para testar"],ex:"Suspeita de lesão na coluna: não movimente a pessoa. Chame socorro."},
+ {id:"x_d5",cat:"defesa",q:"O nariz do parceiro começa a sangrar no treino. Como ajudar?",a:"Sentar, inclinar a cabeça um pouco para a frente e apertar a parte mole do nariz por alguns minutos; limpar o tatame",w:["Inclinar a cabeça para trás","Continuar o rola com o kimono sujo","Deitar de costas com a cabeça para trás"],ex:"Cabeça para a frente evita engolir sangue. Sangue no tatame e no kimono deve ser limpo antes de continuar."},
+ {id:"x_d6",cat:"defesa",q:"Alguém te provoca na rua e quer briga. Qual é a primeira atitude de um faixa roxa?",a:"Evitar o confronto e sair, se puder; usar a técnica só para se defender",w:["Aceitar para mostrar a graduação","Partir para cima antes dele","Chamar os colegas da academia"],ex:"O jiu-jitsu é para defesa. Humildade e controle fazem parte da graduação."},
+ {id:"x_d7",cat:"defesa",q:"Você é abraçado pelas costas, por cima dos braços. O que fazer primeiro?",a:"Baixar o quadril para ganhar base e prender os braços dele no seu corpo",w:["Ficar na ponta dos pés","Tentar dar cabeçada para trás sem base","Esticar os braços para frente"],ex:"Com base baixa ele não te levanta. Depois, passo para o lado e giro para projetar ou controlar."},
+ {id:"x_d8",cat:"defesa",q:"Na rua, você está com o agressor na sua guarda e ele tenta te socar. Qual é o plano?",a:"Puxar com as pernas para colar e quebrar a postura dele, controlando os braços",w:["Abrir a guarda e deixar distância","Ficar com as costas retas no chão, parado","Empurrar o rosto dele com os pés"],ex:"Colado, o soco perde força. Com a postura quebrada, você controla e busca a raspagem ou a finalização."},
+ {id:"x_d9",cat:"defesa",q:"Um agressor aplica um mata-leão em pé, por trás. Qual é a reação certa?",a:"Queixo para baixo, duas mãos no braço que estrangula, puxar para baixo e baixar o quadril",w:["Puxar o cabelo dele","Ficar parado esperando soltar","Usar uma mão só no braço dele"],ex:"Proteja o pescoço com as duas mãos, ganhe base e saia para o lado do braço."},
+ // HISTÓRIA
+ {id:"x_h1",cat:"historia",q:"Em que ano Mitsuyo Maeda, o Conde Koma, chegou ao Brasil?",a:"1914",w:["1882","1925","1993"],ex:"Maeda chegou em 1914 e se fixou em Belém do Pará."},
+ {id:"x_h2",cat:"historia",q:"Qual evento de 1993 mostrou a eficiência do jiu-jitsu brasileiro ao mundo?",a:"O UFC 1",w:["O primeiro Mundial da IBJJF","A fundação da CBJJ","As Olimpíadas de Barcelona"],ex:"No UFC 1, em 1993, Royce Gracie venceu lutadores de outros estilos por finalização."},
+ {id:"x_h3",cat:"historia",q:"Quem venceu o UFC 1 usando o jiu-jitsu?",a:"Royce Gracie",w:["Rickson Gracie","Hélio Gracie","Royler Gracie"],ex:"Royce, filho de Hélio, venceu o torneio finalizando adversários maiores."},
+ {id:"x_h4",cat:"historia",q:"O jiu-jitsu brasileiro vem do jujutsu japonês, filtrado e transformado por qual arte?",a:"Judô Kodokan, de Jigoro Kano",w:["Karatê de Okinawa","Sumô","Aikido"],ex:"Maeda era aluno do Kodokan de Jigoro Kano."},
+ {id:"x_h5",cat:"historia",q:"Como Royce venceu as lutas do UFC 1?",a:"Por finalização, contra lutadores de outros estilos",w:["Por nocaute com socos","Por pontos","Por desclassificação dos adversários"],ex:"As finalizações contra lutadores maiores provaram a eficiência da alavanca sobre a força."},
+ ...reuse(["h1","h2","h3","h4","h5","h7","h8","h9","h10","h11","h12","h13","h14","h16"]),
+ // reaproveitadas da azul (valem também para a roxa)
+ ...reuse(["r_p1","r_p2","r_p3","r_p4","r_p5","r_p6","r_p7","r_p8","r_d1","r_d2","r_d3","r_f1","r_f2","r_f3","r_f4","r_f5","r_t1"]),
+ ...reuse(["r_u1","r_u2","r_u3","r_u5","r_u6","r_u8","r_u9"],"uniforme"),
+ ...reuse(["r_g2","r_g5","r_g6"],"graduacao"),
+ {...TEO_AZUL.find(x=>x.id==="ord1"),cat:"graduacao"},
+ ...reuse(["ord3","ord4","ord5"]),
+ {id:"x_ord1",cat:"historia",tipo:"order",q:"Coloque na ordem em que aconteceu:",itens:["Jigoro Kano funda o Kodokan","Maeda chega ao Brasil","Royce Gracie vence o UFC 1","Fundação da CBJJ"],ex:"Kodokan em 1882, Maeda no Brasil em 1914, UFC 1 em 1993 e CBJJ em 1994."}
+];
+
+/* ================= FAIXAS ================= */
+const BELTS = {
+  azul:   {id:"azul",   nome:"Azul",   de:"Branca", cor:"#1C5FC9", deCor:"#FFFFFF", key:"rumoazul.v1",      pronto:true, cats:CATS_AZUL, tec:TEC_AZUL, teo:TEO_AZUL, notas:true,
+           desc:"Teoria e as técnicas da lista do sensei, com vídeos"},
+  roxa:   {id:"roxa",   nome:"Roxa",   de:"Azul",   cor:"#6A2C91", deCor:"#1C5FC9", key:"rumoazul.roxa.v1", pronto:true, cats:CATS_ROXA, tec:[],       teo:TEO_ROXA,
+           desc:"Prova teórica: regras, golpes proibidos, ética, socorro e história"},
+  marrom: {id:"marrom", nome:"Marrom", de:"Roxa",   cor:"#6B3E1F", deCor:"#6A2C91", pronto:false,
+           desc:"Em breve: aguardando a lista do sensei"}
+};
+const FKEY = "rumoazul.faixa";
+function faixaSalva(){
+  const h = (location.hash.match(/faixa=(\w+)/)||[])[1];
+  let f = h || null;
+  try { f = f || localStorage.getItem(FKEY); if(!f && localStorage.getItem("rumoazul.v1")) f = "azul"; } catch(e) {}
+  return BELTS[f] && BELTS[f].pronto ? f : null;
+}
+function escolherFaixa(id){
+  try { localStorage.setItem(FKEY, id); } catch(e) {}
+  location.hash = "faixa=" + id;
+  location.reload();
+}
+const FAIXA = faixaSalva();
+const B = BELTS[FAIXA || "azul"];
+const CATS = B.cats, TEC = B.tec, TEO = B.teo;
+const CAT = Object.fromEntries([...CATS, ...CATS_AZUL].map(c => [c.id, c]).reverse());
+
 /* ================= MÍDIA (fotos e vídeos reais, Wikimedia Commons) ================= */
 // Vídeos de técnicas: id da técnica -> arquivo em midia/
 const VID = {k1:"americana", k3:"kimura_guarda", al1:"armbar_guarda", al2:"armbar_montada", t1:"triangulo", r5:"tesoura", e4:"estr_guarda", e2:"estr_montada", o1:"omoplata", e1:"mataleao"};
@@ -462,7 +584,7 @@ function tecThumb(t){
 const ytURL = t => "https://www.youtube.com/results?search_query="+encodeURIComponent(`${t.nome} ${CAT[t.cat].nome} jiu jitsu técnica`);
 
 /* ================= ESTADO ================= */
-const KEY="rumoazul.v1";
+const KEY=B.key;
 const S = load();
 function load(){
   const base={box:{},xp:0,days:[],notes:{},answered:0,correct:0};
@@ -504,9 +626,9 @@ function toast(msg){const t=document.createElement("div"); t.className="toast po
 function gain(x){S.xp+=x; markDay(); save();}
 
 function beltSVG(g){
-  // faixa branca com a ponta preta e os graus
+  // faixa atual com a ponta preta e os graus; com 5 "graus" vira a próxima faixa
   let stripes=""; for(let i=0;i<Math.min(g,4);i++){stripes+=`<rect x="${226+i*12}" y="14" width="6" height="22" fill="#fff"/>`;}
-  const fill = g>=5 ? "#1C5FC9" : "#FFFFFF";
+  const fill = g>=5 ? B.cor : B.deCor;
   return `<svg viewBox="0 0 300 50" width="100%" style="max-width:300px" aria-label="Faixa com ${Math.min(g,4)} graus">
     <rect x="2" y="12" width="296" height="26" rx="3" fill="${fill}" stroke="var(--gi-op-line)" stroke-width="2"/>
     <rect x="216" y="12" width="62" height="26" fill="#111"/>${stripes}
@@ -527,12 +649,30 @@ function render(arg){
   if(route==="sobre") return sobre();
 }
 
+function picker(){
+  document.querySelector(".nav").hidden=true;
+  app.innerHTML=`<header class="band" style="padding-bottom:22px">
+    <div class="band-top"><div class="brand"><span class="badge9">B9</span>Rumo à faixa</div><span class="exam-tag">Exame 30/11</span></div>
+    <h1 style="font-size:40px;margin-top:16px;text-transform:uppercase">Qual faixa você vai buscar?</h1>
+  </header>
+  <div class="modes" style="margin-top:16px">${Object.values(BELTS).map(b=>`<button class="mode pickb" data-f="${b.id}" ${b.pronto?"":"disabled style=\"opacity:.55\""}>
+    <span class="mode-ic" style="background:${b.cor};border:2px solid var(--line)"></span>
+    <span><b>Faixa ${b.nome.toLowerCase()}</b><span>Saindo da ${b.de.toLowerCase()}. ${esc(b.desc)}</span></span></button>`).join("")}</div>
+  <p class="note" style="margin-top:12px">Dá para trocar depois, na aba Sobre. O progresso de cada faixa fica guardado separado.</p>`;
+  app.querySelectorAll(".pickb:not([disabled])").forEach(b=>b.onclick=()=>escolherFaixa(b.dataset.f));
+}
+
 function sobre(){
-  app.innerHTML=`<div class="screen-h"><h1>Sobre</h1><p>Rumo à Faixa Azul</p></div>
+  app.innerHTML=`<div class="screen-h"><h1>Sobre</h1><p>Rumo à Faixa · B9</p></div>
   <section class="about">
     <h2>Quem fez</h2>
-    <p>App desenvolvido por <b>Hiago Barbosa Burman</b> para ajudar nos estudos para o exame de faixa azul da B9, do mestre Barbosinha.</p>
-    <p>O conteúdo segue a lista que o sensei passou para a prova. Os passos de cada técnica são uma base geral: na prova vale o jeito que o sensei ensina.</p>
+    <p>App desenvolvido por <b>Hiago Barbosa Burman</b> para ajudar nos estudos para os exames de graduação da B9, do mestre Barbosinha.</p>
+    <p>O conteúdo segue o material que o sensei passou para cada prova. Os passos de cada técnica são uma base geral: na prova vale o jeito que o sensei ensina.</p>
+  </section>
+  <section class="about">
+    <h2>Sua faixa</h2>
+    <p>Você está estudando para a <b>faixa ${B.nome.toLowerCase()}</b>.</p>
+    <button class="btn btn-wide" id="trocar">Trocar de faixa</button>
   </section>
   <section class="about">
     <h2>Como usar</h2>
@@ -545,11 +685,13 @@ function sobre(){
   <section class="about">
     <h2>Fontes</h2>
     <p>Regras, pontos, punições e faixas: Livro de Regras da IBJJF, versão 6.1 (2024).</p>
+    <p>Faixa azul: folha de conteúdo da prova passada pelo sensei. Faixa roxa: prova teórica de exemplo da B9 e resumo do material do sensei.</p>
   </section>
   <section class="about">
     <h2>Créditos das fotos e vídeos</h2>
     <div class="credits">${CREDITOS.map(c=>`<span>${esc(c.o)}: ${esc(c.a)}, <a href="${c.u}" target="_blank" rel="noopener">Wikimedia Commons</a>, licença ${esc(c.l)}.</span>`).join("")}</div>
   </section>`;
+  $("#trocar").onclick=()=>{try{localStorage.removeItem(FKEY);}catch(e){} location.hash=""; picker();};
 }
 
 function weakest(n){return CATS.slice().sort((a,b)=>mastery(a.id)-mastery(b.id)).slice(0,n);}
@@ -557,11 +699,12 @@ function weakest(n){return CATS.slice().sort((a,b)=>mastery(a.id)-mastery(b.id))
 function home(){
   const dl=daysLeft(), g=graus(), o=Math.round(overall()*100);
   const foco=weakest(2);
-  const gName = g>=5 ? "Pronto para a azul!" : `Faixa branca, ${g} ${g===1?"grau":"graus"}`;
+  const fx=B.nome.toLowerCase();
+  const gName = g>=5 ? `Pronto para a ${fx}!` : `Faixa ${B.de.toLowerCase()}, ${g} ${g===1?"grau":"graus"}`;
   app.innerHTML=`
   <header class="band">
-    <div class="band-top"><div class="brand"><span class="badge9">B9</span>Rumo à azul</div><span class="exam-tag">Exame 30/11</span></div>
-    <div class="count"><div class="count-num">${Math.max(dl,0)}</div><div class="count-txt">${dl===1?"dia":"dias"} para<br>a faixa azul<small>${dl>0?"Prova de graduação em 30/11/2026":dl===0?"É hoje! Respira e confia no treino.":"Prova realizada."}</small></div></div>
+    <div class="band-top"><div class="brand"><span class="badge9">B9</span>Rumo à ${fx}</div><span class="exam-tag">Exame 30/11</span></div>
+    <div class="count"><div class="count-num">${Math.max(dl,0)}</div><div class="count-txt">${dl===1?"dia":"dias"} para<br>a faixa ${fx}<small>${dl>0?"Prova de graduação em 30/11/2026":dl===0?"É hoje! Respira e confia no treino.":"Prova realizada."}</small></div></div>
   </header>
   <section class="beltcard" aria-label="Seu progresso">
     <div class="belt-row"><h2>${gName}</h2><span class="belt-meta">${o}% dominado</span></div>
@@ -586,17 +729,15 @@ function home(){
 function quizMenu(){
   const modes=[
     {k:"dia",t:"Treino do dia",d:"12 perguntas misturadas, com foco no que você mais erra",c:"var(--red)",i:"12"},
-    {k:"historia",t:"História",d:"Maeda, Gracie, Luiz França, CBJJ, B9",c:"#8A5A2B",i:"H"},
-    {k:"etica",t:"Ética",d:"Higiene, cumprimentos e comportamento",c:"#2E8B3A",i:"É"},
-    {k:"regras",t:"Regras",d:"Pontuação, punições, faixas, uniformes, golpes proibidos",c:"var(--blue)",i:"R"},
+    ...CATS.filter(c=>c.tipo==="teoria").map(c=>({k:c.id,t:c.nome,d:c.d,c:c.c,i:c.i})),
     {k:"placar",t:"Monte o placar",d:"Some os pontos da luta",c:"#111",i:"+"},
-    {k:"video",t:"Que técnica é essa?",d:"Assista ao vídeo e diga qual técnica da prova é",c:"#0F7C8C",i:"▶"},
+    ...(TEC.some(t=>VID[t.id])?[{k:"video",t:"Que técnica é essa?",d:"Assista ao vídeo e diga qual técnica da prova é",c:"#0F7C8C",i:"▶"}]:[]),
     {k:"posicao",t:"Que posição é essa?",d:"Reconheça a posição pela foto",c:"#6A2C91",i:"?"},
-    {k:"tecq",t:"Técnicas",d:"Ordem dos passos, erros comuns e de onde sai cada técnica",c:"#F07A12",i:"T"}
+    ...(TEC.length?[{k:"tecq",t:"Técnicas",d:"Ordem dos passos, erros comuns e de onde sai cada técnica",c:"#F07A12",i:"T"}]:[])
   ];
   app.innerHTML=`<div class="screen-h"><h1>Quiz</h1><p>Cada acerto vale XP. Errou? A pergunta volta mais vezes até você acertar.</p></div>
   <div class="modes">${modes.map(m=>`<button class="mode" data-k="${m.k}"><span class="mode-ic" style="background:${m.c}">${m.i}</span><span><b>${m.t}</b><span>${m.d}</span></span></button>`).join("")}</div>
-  ${notesCard()}`;
+  ${B.notas?notesCard():""}`;
   app.querySelectorAll(".mode").forEach(b=>b.onclick=()=>startQuiz(b.dataset.k));
   bindNotes();
 }
@@ -676,10 +817,10 @@ function startQuiz(mode){
   const teoCat=c=>pickWeighted(TEO.filter(q=>q.cat===c),10,q=>q.id).map(qFromTeo);
   if(mode==="dia"){
     const foco=weakest(3).map(c=>c.id);
-    const teo=pickWeighted(TEO,7,q=>q.id).map(qFromTeo);
     const tecs=pickWeighted(TEC.filter(t=>foco.includes(t.cat)).concat(TEC),3,t=>t.id).map(qTecnica);
+    const teo=pickWeighted(TEO,10-tecs.length,q=>q.id).map(qFromTeo);
     list=shuffle([...teo,...tecs,qPlacar(),qPosicao()]);
-  } else if(["historia","etica","regras"].includes(mode)) list=teoCat(mode);
+  } else if(CATS.some(c=>c.id===mode&&c.tipo==="teoria")) list=teoCat(mode);
   else if(mode==="placar") list=Array.from({length:6},qPlacar);
   else if(mode==="posicao") list=Array.from({length:8},qPosicao);
   else if(mode==="video") list=pickWeighted(TEC.filter(t=>VID[t.id]),10,t=>t.id).map(qVideo);
@@ -742,9 +883,10 @@ function answer(q,ok,ex){
   $("#nx").scrollIntoView({behavior:"smooth",block:"nearest"});
 }
 function quizEnd(){
+  if(Q.onEnd) return Q.onEnd();
   const n=Q.list.length, p=Math.round(Q.hits/n*100);
   const bonus = p===100?20:0; if(bonus) gain(bonus);
-  const frase = p>=90?"Nível faixa azul. Oss!":p>=70?"Bom treino! Revise o que errou.":p>=50?"No caminho. Repita amanhã.":"Volta pro drill: repita este quiz.";
+  const frase = p>=90?`Nível faixa ${B.nome.toLowerCase()}. Oss!`:p>=70?"Bom treino! Revise o que errou.":p>=50?"No caminho. Repita amanhã.":"Volta pro drill: repita este quiz.";
   app.innerHTML=`<div class="result"><div class="qcat">Resultado</div><div class="big">${Q.hits}/${n}</div><h2 style="font-size:26px">${frase}</h2>
   <p class="belt-meta">+${Q.xp+bonus} XP${bonus?" (bônus de gabarito!)":""}</p>
   <div class="row" style="width:100%"><button class="btn" id="bk">Voltar</button><button class="btn btn-primary" id="again">Repetir</button></div></div>`;
@@ -754,6 +896,14 @@ function quizEnd(){
 /* ---------- técnicas ---------- */
 let tecFilter="todas";
 function tecList(cat){
+  if(!TEC.length){
+    app.innerHTML=`<div class="screen-h"><h1>Técnicas</h1><p>A prova de exemplo da faixa ${B.nome.toLowerCase()} da B9 é só teórica.</p></div>
+    <section class="about"><p>Quando o sensei passar a lista de técnicas da ${B.nome.toLowerCase()}, ela entra aqui, com vídeos e passo a passo.</p>
+    <p>Enquanto isso, a parte prática que cai na prova teórica (defesa pessoal e primeiros socorros) está no Quiz.</p>
+    <button class="btn btn-blue btn-wide" id="goDef">Quiz de defesa e socorro</button></section>`;
+    const gd=$("#goDef"); if(gd) gd.onclick=()=>startQuiz(CAT.defesa&&CATS.some(c=>c.id==="defesa")?"defesa":"dia");
+    return;
+  }
   if(cat) tecFilter=cat;
   const cats=CATS.filter(c=>c.tipo==="tec");
   const list=TEC.filter(t=>tecFilter==="todas"||t.cat===tecFilter);
@@ -831,14 +981,34 @@ async function showMedia(id,el){
 let SIM=null, timerId=null;
 function simMenu(){
   clearInterval(timerId);
-  app.innerHTML=`<div class="screen-h"><h1>Simulado</h1><p>Como no dia da prova: o sensei chama a técnica e você executa.</p></div>
+  const temTec=TEC.length>0;
+  app.innerHTML=`<div class="screen-h"><h1>Simulado</h1><p>${temTec?"Como no dia da prova: o sensei chama a técnica e você executa.":"Como no dia da prova: questões de situação, uma alternativa certa, nota de 0 a 10."}</p></div>
   <div class="modes">
-    <button class="mode" id="sRoleta"><span class="mode-ic" style="background:var(--red)">!</span><span><b>O sensei chamou!</b><span>Sorteia uma técnica. Você tem 30 s para executar ou explicar.</span></span></button>
-    <button class="mode" id="sProva"><span class="mode-ic" style="background:var(--blue)">✓</span><span><b>Prova completa</b><span>8 técnicas sorteadas e 12 perguntas de teoria, com nota final</span></span></button>
+    ${temTec?`<button class="mode" id="sRoleta"><span class="mode-ic" style="background:var(--red)">!</span><span><b>O sensei chamou!</b><span>Sorteia uma técnica. Você tem 30 s para executar ou explicar.</span></span></button>
+    <button class="mode" id="sProva"><span class="mode-ic" style="background:var(--blue)">✓</span><span><b>Prova completa</b><span>8 técnicas sorteadas e 12 perguntas de teoria, com nota final</span></span></button>`:""}
+    <button class="mode" id="sTeo"><span class="mode-ic" style="background:${B.cor}">10</span><span><b>Prova teórica</b><span>11 questões sorteadas, como na prova escrita da B9, com nota de 0 a 10</span></span></button>
   </div>
-  <p class="note" style="margin-top:14px">Dica: faça o simulado com um parceiro no tatame. Ele lê a técnica em voz alta e você executa.</p>`;
-  $("#sRoleta").onclick=()=>{SIM={tipo:"roleta",list:pickWeighted(TEC,99,t=>t.id),i:0,score:0}; simDraw();};
-  $("#sProva").onclick=()=>{SIM={tipo:"prova",list:pickWeighted(TEC,8,t=>t.id),i:0,score:0}; simDraw();};
+  <p class="note" style="margin-top:14px">${temTec?"Dica: faça o simulado com um parceiro no tatame. Ele lê a técnica em voz alta e você executa.":"Dica: responda sem consultar e só depois leia as explicações. Na prova não tem segunda chance."}</p>`;
+  if(temTec){
+    $("#sRoleta").onclick=()=>{SIM={tipo:"roleta",list:pickWeighted(TEC,99,t=>t.id),i:0,score:0}; simDraw();};
+    $("#sProva").onclick=()=>{SIM={tipo:"prova",list:pickWeighted(TEC,8,t=>t.id),i:0,score:0}; simDraw();};
+  }
+  $("#sTeo").onclick=provaTeorica;
+}
+function provaTeorica(){
+  clearInterval(timerId);
+  const list=pickWeighted(TEO.filter(q=>q.tipo!=="order"),11,q=>q.id).map(qFromTeo);
+  Q={mode:"provateo",list,i:0,hits:0,xp:0};
+  route="quiz"; showQ();
+  Q.onEnd=function(){
+    const nota=Math.round(Q.hits/Q.list.length*100)/10, ok=nota>=7;
+    app.innerHTML=`<div class="result"><div class="qcat">Nota da prova teórica</div><div class="big" style="color:${ok?"var(--ok)":"var(--red)"}">${nota.toFixed(1)}</div>
+      <h2 style="font-size:26px">${ok?"Aprovado! Oss!":"Ainda não. Bora estudar!"}</h2>
+      <p class="belt-meta">${Q.hits} de ${Q.list.length} certas · +${Q.xp} XP</p>
+      <div class="row" style="width:100%"><button class="btn" id="bk">Voltar</button><button class="btn btn-primary" id="again">Nova prova</button></div></div>`;
+    $("#bk").onclick=()=>go("sim");
+    $("#again").onclick=provaTeorica;
+  };
 }
 function simDraw(){
   clearInterval(timerId);
@@ -880,9 +1050,7 @@ function simTheory(){
   Q={mode:"prova",list,i:0,hits:0,xp:0,tecScore};
   showQ();
   // ao final, mostra a nota combinada
-  const orig=quizEnd;
-  quizEnd=function(){
-    quizEnd=orig;
+  Q.onEnd=function(){
     const teo=Q.hits/Q.list.length, nota=Math.round((tecScore*.5+teo*.5)*100)/10;
     const ok=nota>=7;
     app.innerHTML=`<div class="result"><div class="qcat">Nota do simulado</div><div class="big" style="color:${ok?"var(--ok)":"var(--red)"}">${nota.toFixed(1)}</div>
@@ -894,7 +1062,8 @@ function simTheory(){
   };
 }
 
-go("home");
+document.title = "Rumo à Faixa " + B.nome;
+if(FAIXA) go("home"); else picker();
 </script>
 
 <script>

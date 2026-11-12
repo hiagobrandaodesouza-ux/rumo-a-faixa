@@ -1,7 +1,7 @@
 {
-  "name": "Rumo à Faixa Azul",
-  "short_name": "Faixa Azul",
-  "description": "Revisão para o exame de faixa azul da B9.",
+  "name": "Rumo à Faixa · B9",
+  "short_name": "Rumo à Faixa",
+  "description": "Revisão para os exames de graduação da B9: faixa azul, roxa e marrom.",
   "start_url": "./",
   "scope": "./",
   "display": "standalone",

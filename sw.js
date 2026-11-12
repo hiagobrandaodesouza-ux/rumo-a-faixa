@@ -1,4 +1,4 @@
-const VERSION = "rumoazul-f58bd8125b";
+const VERSION = "rumoazul-5b52872ea7";
 const PRECACHE = ["./", "icons/apple-touch-icon.png", "icons/icon-192.png", "icons/icon-512.png", "icons/maskable-192.png", "icons/maskable-512.png", "index.html", "manifest.webmanifest", "midia/americana.jpg", "midia/americana.mp4", "midia/armbar_guarda.jpg", "midia/armbar_guarda.mp4", "midia/armbar_montada.jpg", "midia/armbar_montada.mp4", "midia/estr_guarda.jpg", "midia/estr_guarda.mp4", "midia/estr_montada.jpg", "midia/estr_montada.mp4", "midia/kimura_guarda.jpg", "midia/kimura_guarda.mp4", "midia/mataleao.jpg", "midia/mataleao.mp4", "midia/omoplata.jpg", "midia/omoplata.mp4", "midia/pos_borboleta.jpg", "midia/pos_cem.jpg", "midia/pos_costas.jpg", "midia/pos_guarda.jpg", "midia/pos_joelho.jpg", "midia/pos_meia.jpg", "midia/pos_montada.jpg", "midia/pos_queda.jpg", "midia/tesoura.jpg", "midia/tesoura.mp4", "midia/triangulo.jpg", "midia/triangulo.mp4"];
 self.addEventListener("install", e => {
   e.waitUntil(caches.open(VERSION).then(c => c.addAll(PRECACHE)).then(() => self.skipWaiting()));
