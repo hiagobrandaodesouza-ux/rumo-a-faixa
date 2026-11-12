@@ -1,4 +1,4 @@
-const VERSION = "rumoazul-1bf9590665";
+const VERSION = "rumoazul-db44826357";
 const PRECACHE = ["./", "icons/apple-touch-icon.png", "icons/icon-192.png", "icons/icon-512.png", "icons/maskable-192.png", "icons/maskable-512.png", "index.html", "manifest.webmanifest", "midia/americana.jpg", "midia/americana.mp4", "midia/armbar_guarda.jpg", "midia/armbar_guarda.mp4", "midia/armbar_montada.jpg", "midia/armbar_montada.mp4", "midia/estr_guarda.jpg", "midia/estr_guarda.mp4", "midia/estr_montada.jpg", "midia/estr_montada.mp4", "midia/kimura_guarda.jpg", "midia/kimura_guarda.mp4", "midia/mataleao.jpg", "midia/mataleao.mp4", "midia/omoplata.jpg", "midia/omoplata.mp4", "midia/pos_borboleta.jpg", "midia/pos_cem.jpg", "midia/pos_costas.jpg", "midia/pos_guarda.jpg", "midia/pos_joelho.jpg", "midia/pos_meia.jpg", "midia/pos_montada.jpg", "midia/pos_queda.jpg", "midia/tesoura.jpg", "midia/tesoura.mp4", "midia/triangulo.jpg", "midia/triangulo.mp4"];
 self.addEventListener("install", e => {
   e.waitUntil(caches.open(VERSION).then(c => c.addAll(PRECACHE)).then(() => self.skipWaiting()));
@@ -32,6 +32,21 @@ self.addEventListener("fetch", e => {
     return;
   }
   if (url.origin !== location.origin) return;
+  // a página do app: busca a versão nova na internet primeiro; sem internet, usa a guardada
+  if (req.mode === "navigate") {
+    e.respondWith((async () => {
+      const cache = await caches.open(VERSION);
+      try {
+        const ctrl = new AbortController();
+        const t = setTimeout(() => ctrl.abort(), 4000);
+        const r = await fetch(req, { cache: "no-store", signal: ctrl.signal });
+        clearTimeout(t);
+        if (r.ok) { cache.put("./", r.clone()); return r; }
+      } catch (err) {}
+      return (await cache.match("./")) || (await cache.match("index.html")) || Response.error();
+    })());
+    return;
+  }
   e.respondWith((async () => {
     const cache = await caches.open(VERSION);
     const hit = await cache.match(req, { ignoreSearch: true }) || (req.mode === "navigate" ? await cache.match("./") : null);

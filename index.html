@@ -54,6 +54,12 @@ h1,h2,h3{font-family:var(--display);text-wrap:balance;margin:0;line-height:1.05;
 .brand{display:flex;align-items:center;gap:10px;font-family:var(--display);font-weight:800;font-size:20px;letter-spacing:.04em;text-transform:uppercase}
 .badge9{width:34px;height:34px;border-radius:50%;background:var(--gold);color:#B00E15;display:grid;place-items:center;font-weight:800;font-size:17px;border:2px solid #fff}
 .exam-tag{font-family:var(--display);font-weight:700;font-size:13px;letter-spacing:.08em;text-transform:uppercase;background:rgba(0,0,0,.18);padding:4px 10px;border-radius:99px;white-space:nowrap}
+.nome-in{width:100%;border:2px solid var(--line);background:var(--surface);color:var(--ink);border-radius:12px;padding:12px 14px;font:inherit;font-size:18px}
+.hello{font-family:var(--display);font-weight:800;font-size:26px;text-transform:uppercase;margin-top:12px;line-height:1}
+.frase{background:var(--surface);border:1px solid var(--line);border-left:4px solid var(--gold);border-radius:12px;padding:12px 14px;margin-top:16px;display:grid;gap:6px}
+.frase .fi{font-size:13px;color:var(--muted);font-weight:600}
+.frase blockquote{margin:0;font-size:17px;font-weight:600;font-style:italic;line-height:1.35}
+.frase cite{font-style:normal;font-size:13px;color:var(--muted)}
 .swap{border:2px solid rgba(255,255,255,.7);color:#fff;display:inline-flex;align-items:center;gap:6px;cursor:pointer}
 .swap i{width:14px;height:14px;border-radius:3px;border:1px solid #fff;display:inline-block}
 .count{display:flex;align-items:flex-end;gap:14px;margin-top:14px}
@@ -550,6 +556,30 @@ function escolherFaixa(id){
   location.reload();
 }
 const FAIXA = faixaSalva();
+
+/* ================= NOME E FRASES ================= */
+const NKEY = "rumoazul.nome";
+let NOME = ""; try { NOME = localStorage.getItem(NKEY) || ""; } catch(e) {}
+function salvarNome(n){
+  n = n.trim().replace(/\s+/g," ").slice(0,30);
+  n = n.charAt(0).toUpperCase() + n.slice(1);
+  NOME = n; try { localStorage.setItem(NKEY, n); } catch(e) {}
+}
+// frases de grandes lutadores e mestres; "intro" conversa com a pessoa pelo nome
+const FRASES = [
+  {t:"Sempre assuma que seu oponente será maior, mais forte e mais rápido que você.", a:"Hélio Gracie", intro:n=>`${n}, técnica antes da força:`},
+  {t:"Não é importante ser melhor do que os outros, mas ser melhor do que ontem.", a:"Jigoro Kano, criador do judô", intro:n=>`${n}, sua luta de hoje é contra você mesmo:`},
+  {t:"Máxima eficiência com o mínimo de esforço.", a:"Jigoro Kano, princípio do judô Kodokan", intro:n=>`${n}, lembre do princípio que deu origem a tudo:`},
+  {t:"Bem-estar e benefício mútuos.", a:"Jigoro Kano, princípio do judô Kodokan", intro:n=>`${n}, cuide do seu parceiro de treino:`},
+  {t:"Odiei cada minuto de treino, mas dizia: não desista. Sofra agora e viva o resto da vida como um campeão.", a:"Muhammad Ali", intro:n=>`${n}, para os dias em que bate a preguiça:`},
+  {t:"Flutue como uma borboleta, ferroe como uma abelha.", a:"Muhammad Ali", intro:n=>`${n}, leveza e precisão:`},
+  {t:"Seja água, meu amigo.", a:"Bruce Lee", intro:n=>`${n}, adapte-se ao que a luta pedir:`},
+  {t:"Não temo o homem que praticou 10 mil chutes uma vez, mas o homem que praticou um chute 10 mil vezes.", a:"Bruce Lee", intro:n=>`${n}, repetição é o segredo do drill:`},
+  {t:"Todo mundo tem um plano até levar o primeiro soco.", a:"Mike Tyson", intro:n=>`${n}, treine para quando o plano der errado:`},
+  {t:"Hoje é a vitória sobre quem você foi ontem.", a:"Miyamoto Musashi, mestre samurai", intro:n=>`${n}, um treino de cada vez:`}
+];
+const FRASE = FRASES[Math.floor(Math.random()*FRASES.length)]; // sorteada a cada vez que o app abre
+const nm = () => NOME || "atleta";
 const B = BELTS[FAIXA || "azul"];
 const CATS = B.cats, TEC = B.tec, TEO = B.teo;
 const CAT = Object.fromEntries([...CATS, ...CATS_AZUL].map(c => [c.id, c]).reverse());
@@ -651,11 +681,27 @@ function render(arg){
   if(route==="sobre") return sobre();
 }
 
+function nameScreen(depois){
+  document.querySelector(".nav").hidden=true;
+  app.innerHTML=`<header class="band" style="padding-bottom:22px">
+    <div class="band-top"><div class="brand"><span class="badge9">B9</span>Rumo à faixa</div></div>
+    <h1 style="font-size:40px;margin-top:16px;text-transform:uppercase">Oss! Como você quer ser chamado?</h1>
+  </header>
+  <form id="nf" class="about" style="margin-top:16px;display:grid;gap:10px">
+    <label for="nomeIn"><b>Seu nome</b></label>
+    <input id="nomeIn" class="nome-in" autocomplete="given-name" maxlength="30" placeholder="Ex.: Hiago" value="${esc(NOME)}" required>
+    <button class="btn btn-primary btn-wide" type="submit">Continuar</button>
+  </form>
+  <p class="note">Fica salvo só neste aparelho.</p>`;
+  const inp=$("#nomeIn"); setTimeout(()=>inp.focus(),50);
+  $("#nf").onsubmit=e=>{e.preventDefault(); if(!inp.value.trim()) return inp.focus(); salvarNome(inp.value); depois();};
+}
+
 function picker(){
   document.querySelector(".nav").hidden=true;
   app.innerHTML=`<header class="band" style="padding-bottom:22px">
     <div class="band-top"><div class="brand"><span class="badge9">B9</span>Rumo à faixa</div><span class="exam-tag">Exame 30/11</span></div>
-    <h1 style="font-size:40px;margin-top:16px;text-transform:uppercase">Qual faixa você vai buscar?</h1>
+    <h1 style="font-size:40px;margin-top:16px;text-transform:uppercase">${esc(nm())}, qual faixa você vai buscar?</h1>
   </header>
   <div class="modes" style="margin-top:16px">${Object.values(BELTS).map(b=>`<button class="mode pickb" data-f="${b.id}" ${b.pronto?"":"disabled style=\"opacity:.55\""}>
     <span class="mode-ic" style="background:${b.cor};border:2px solid var(--line)"></span>
@@ -672,9 +718,9 @@ function sobre(){
     <p>O conteúdo segue o material que o sensei passou para cada prova. Os passos de cada técnica são uma base geral: na prova vale o jeito que o sensei ensina.</p>
   </section>
   <section class="about">
-    <h2>Sua faixa</h2>
-    <p>Você está estudando para a <b>faixa ${B.nome.toLowerCase()}</b>.</p>
-    <button class="btn btn-wide" id="trocar">Trocar de faixa</button>
+    <h2>${esc(nm())}</h2>
+    <p>${esc(nm())}, você está estudando para a <b>faixa ${B.nome.toLowerCase()}</b>.</p>
+    <div class="row"><button class="btn" id="trocar">Trocar de faixa</button><button class="btn" id="trocarNome">Mudar nome</button></div>
   </section>
   <section class="about">
     <h2>Como usar</h2>
@@ -694,6 +740,7 @@ function sobre(){
     <div class="credits">${CREDITOS.map(c=>`<span>${esc(c.o)}: ${esc(c.a)}, <a href="${c.u}" target="_blank" rel="noopener">Wikimedia Commons</a>, licença ${esc(c.l)}.</span>`).join("")}</div>
   </section>`;
   $("#trocar").onclick=trocarFaixa;
+  $("#trocarNome").onclick=()=>nameScreen(()=>{document.querySelector(".nav").hidden=false; go("sobre");});
 }
 // abre a escolha de faixa; "Voltar" desiste e fica na faixa atual
 function trocarFaixa(){
@@ -713,6 +760,7 @@ function home(){
   app.innerHTML=`
   <header class="band">
     <div class="band-top"><div class="brand"><span class="badge9">B9</span>Rumo à ${fx}</div><button class="exam-tag swap" id="swapF" aria-label="Trocar de faixa"><i style="background:${B.cor}"></i>Trocar faixa</button></div>
+    <div class="hello">Oss, ${esc(nm())}!</div>
     <div class="count"><div class="count-num">${Math.max(dl,0)}</div><div class="count-txt">${dl===1?"dia":"dias"} para<br>a faixa ${fx}<small>${dl>0?"Prova de graduação em 30/11/2026":dl===0?"É hoje! Respira e confia no treino.":"Prova realizada."}</small></div></div>
   </header>
   <section class="beltcard" aria-label="Seu progresso">
@@ -724,13 +772,17 @@ function home(){
       <div class="stat"><b>${S.answered?Math.round(S.correct/S.answered*100):0}%</b><span>acertos</span></div>
     </div>
   </section>
+  <figure class="frase" style="margin-left:0;margin-right:0;margin-bottom:0">
+    <span class="fi">${esc(FRASE.intro(nm()))}</span>
+    <blockquote>"${esc(FRASE.t)}"</blockquote>
+    <cite>${esc(FRASE.a)}</cite>
+  </figure>
   <section class="today">
-    <p>Foco de hoje: <b>${foco.map(c=>c.nome).join("</b> e <b>")}</b>, as áreas em que você está mais fraco.</p>
+    <p>${esc(nm())}, o foco de hoje é <b>${foco.map(c=>c.nome).join("</b> e <b>")}</b>, onde você está mais fraco.</p>
     <button class="btn btn-blue btn-wide" id="goToday">Treino do dia · 12 perguntas</button>
   </section>
   <div class="section-h"><h2>Mapa da prova</h2><span>toque para estudar</span></div>
-  <div class="map">${CATS.map(c=>{const m=mastery(c.id); return `<button class="tile ${m<.25?"weak":""}" data-cat="${c.id}"><div class="tile-top"><b>${c.nome}</b><em>${Math.round(m*100)}%</em></div><div class="bar"><i style="width:${Math.max(m*100,3)}%"></i></div></button>`;}).join("")}</div>
-  <p class="quote">"Sempre assuma que seu oponente será maior, mais forte e mais rápido que você." Hélio Gracie</p>`;
+  <div class="map">${CATS.map(c=>{const m=mastery(c.id); return `<button class="tile ${m<.25?"weak":""}" data-cat="${c.id}"><div class="tile-top"><b>${c.nome}</b><em>${Math.round(m*100)}%</em></div><div class="bar"><i style="width:${Math.max(m*100,3)}%"></i></div></button>`;}).join("")}</div>`;
   $("#goToday").onclick=()=>startQuiz("dia");
   $("#swapF").onclick=trocarFaixa;
   app.querySelectorAll(".tile").forEach(t=>t.onclick=()=>{const c=CAT[t.dataset.cat]; if(c.tipo==="tec") go("tec",c.id); else startQuiz(c.id);});
@@ -886,8 +938,9 @@ function answer(q,ok,ex){
   S.answered++; if(ok){S.correct++; Q.hits++; Q.xp+=10; gain(10);} else {markDay(); save();}
   if(!q.noBox && q.id!=="placar") setBox(q.id, ok? box(q.id)+1 : 0);
   const fb=$("#qfb");
-  const msgs=ok?["Oss! Acertou","Isso aí!","Finalizou!","Na técnica!"]:["Quase!","Bateu! Vamos de novo","Não foi dessa vez"];
-  fb.innerHTML=`<div class="feedback ${ok?"ok":"no"} pop"><b>${msgs[Math.floor(Math.random()*msgs.length)]}${ok?" +10 XP":""}</b>${esc(ex||"")}</div>
+  const n=nm();
+  const msgs=ok?[`Oss, ${n}! Acertou`,`Isso aí, ${n}!`,`Finalizou, ${n}!`,`Na técnica, ${n}!`]:[`Quase, ${n}!`,`Bateu, ${n}! Vamos de novo`,`Não foi dessa vez, ${n}`];
+  fb.innerHTML=`<div class="feedback ${ok?"ok":"no"} pop"><b>${esc(msgs[Math.floor(Math.random()*msgs.length)])}${ok?" +10 XP":""}</b>${esc(ex||"")}</div>
   <button class="btn btn-primary btn-wide next" id="nx">${Q.i+1<Q.list.length?"Próxima":"Ver resultado"}</button>`;
   $("#nx").onclick=()=>{Q.i++; showQ();};
   $("#nx").scrollIntoView({behavior:"smooth",block:"nearest"});
@@ -896,7 +949,7 @@ function quizEnd(){
   if(Q.onEnd) return Q.onEnd();
   const n=Q.list.length, p=Math.round(Q.hits/n*100);
   const bonus = p===100?20:0; if(bonus) gain(bonus);
-  const frase = p>=90?`Nível faixa ${B.nome.toLowerCase()}. Oss!`:p>=70?"Bom treino! Revise o que errou.":p>=50?"No caminho. Repita amanhã.":"Volta pro drill: repita este quiz.";
+  const nn=esc(nm()); const frase = p>=90?`Nível faixa ${B.nome.toLowerCase()}, ${nn}. Oss!`:p>=70?`Bom treino, ${nn}! Revise o que errou.`:p>=50?`No caminho, ${nn}. Repita amanhã.`:`${nn}, volta pro drill: repita este quiz.`;
   app.innerHTML=`<div class="result"><div class="qcat">Resultado</div><div class="big">${Q.hits}/${n}</div><h2 style="font-size:26px">${frase}</h2>
   <p class="belt-meta">+${Q.xp+bonus} XP${bonus?" (bônus de gabarito!)":""}</p>
   <div class="row" style="width:100%"><button class="btn" id="bk">Voltar</button><button class="btn btn-primary" id="again">Repetir</button></div></div>`;
@@ -1013,7 +1066,7 @@ function provaTeorica(){
   Q.onEnd=function(){
     const nota=Math.round(Q.hits/Q.list.length*100)/10, ok=nota>=7;
     app.innerHTML=`<div class="result"><div class="qcat">Nota da prova teórica</div><div class="big" style="color:${ok?"var(--ok)":"var(--red)"}">${nota.toFixed(1)}</div>
-      <h2 style="font-size:26px">${ok?"Aprovado! Oss!":"Ainda não. Bora estudar!"}</h2>
+      <h2 style="font-size:26px">${ok?`Aprovado, ${esc(nm())}! Oss!`:`Ainda não, ${esc(nm())}. Bora estudar!`}</h2>
       <p class="belt-meta">${Q.hits} de ${Q.list.length} certas · +${Q.xp} XP</p>
       <div class="row" style="width:100%"><button class="btn" id="bk">Voltar</button><button class="btn btn-primary" id="again">Nova prova</button></div></div>`;
     $("#bk").onclick=()=>go("sim");
@@ -1064,7 +1117,7 @@ function simTheory(){
     const teo=Q.hits/Q.list.length, nota=Math.round((tecScore*.5+teo*.5)*100)/10;
     const ok=nota>=7;
     app.innerHTML=`<div class="result"><div class="qcat">Nota do simulado</div><div class="big" style="color:${ok?"var(--ok)":"var(--red)"}">${nota.toFixed(1)}</div>
-      <h2 style="font-size:26px">${ok?"Aprovado! Oss!":"Ainda não. Bora treinar!"}</h2>
+      <h2 style="font-size:26px">${ok?`Aprovado, ${esc(nm())}! Oss!`:`Ainda não, ${esc(nm())}. Bora treinar!`}</h2>
       <p class="belt-meta">Técnicas: ${Math.round(tecScore*100)}% · Teoria: ${Q.hits}/${Q.list.length}</p>
       <div class="row" style="width:100%"><button class="btn" id="bk">Voltar</button><button class="btn btn-primary" id="again">Nova prova</button></div></div>`;
     $("#bk").onclick=()=>go("sim");
@@ -1073,12 +1126,22 @@ function simTheory(){
 }
 
 document.title = "Rumo à Faixa " + B.nome;
-if(FAIXA) go("home"); else picker();
+function iniciar(){ if(FAIXA){document.querySelector(".nav").hidden=false; go("home");} else picker(); }
+if(NOME) iniciar(); else nameScreen(iniciar);
 </script>
 
 <script>
 if ("serviceWorker" in navigator) {
-  window.addEventListener("load", () => navigator.serviceWorker.register("sw.js").catch(() => {}));
+  // quando chega uma versão nova do app, recarrega uma vez para mostrá-la
+  const tinha = !!navigator.serviceWorker.controller;
+  let recarregou = false;
+  navigator.serviceWorker.addEventListener("controllerchange", () => {
+    if (tinha && !recarregou) { recarregou = true; location.reload(); }
+  });
+  window.addEventListener("load", () => {
+    navigator.serviceWorker.register("sw.js", { updateViaCache: "none" })
+      .then(reg => reg.update()).catch(() => {});
+  });
 }
 </script>
 </body>
