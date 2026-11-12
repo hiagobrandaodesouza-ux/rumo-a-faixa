@@ -95,7 +95,7 @@ h1,h2,h3{font-family:var(--display);text-wrap:balance;margin:0;line-height:1.05;
 
 /* nav */
 .nav{position:fixed;left:0;right:0;bottom:0;z-index:20;background:var(--surface);border-top:1px solid var(--line);padding:6px max(10px,env(safe-area-inset-right,0px)) calc(6px + env(safe-area-inset-bottom,0px)) max(10px,env(safe-area-inset-left,0px))}
-.nav-in{max-width:560px;margin:0 auto;display:grid;grid-template-columns:repeat(4,1fr);gap:4px}
+.nav-in{max-width:560px;margin:0 auto;display:grid;grid-template-columns:repeat(5,1fr);gap:4px}
 .nav button{border:0;background:none;padding:6px 2px;border-radius:10px;display:grid;justify-items:center;gap:2px;font-size:11px;font-weight:600;color:var(--muted)}
 .nav button svg{width:24px;height:24px}
 .nav button[aria-current="page"]{color:var(--red);background:var(--surface-2)}
@@ -124,6 +124,14 @@ h1,h2,h3{font-family:var(--display);text-wrap:balance;margin:0;line-height:1.05;
 .sig{display:grid;place-items:center;aspect-ratio:16/10;border-radius:8px;color:#fff;font-family:var(--display);font-weight:800;font-size:22px;letter-spacing:.04em}
 .credits{font-size:12px;color:var(--muted);margin-top:18px;display:grid;gap:4px}
 .credits a{color:var(--muted)}
+.about{background:var(--surface);border:1px solid var(--line);border-radius:14px;padding:14px 16px;margin-bottom:12px;font-size:15px;line-height:1.5}
+.about h2{font-family:var(--display);font-size:20px;margin:0 0 6px;text-transform:uppercase}
+.about p{margin:0 0 8px}
+.about ul{margin:0;padding-left:18px;display:grid;gap:4px}
+.about .credits{margin-top:0}
+.order-long .order-picked{display:grid}
+.order-long .order-picked .chip,.order-long .row .chip{border-radius:12px;text-align:left;width:100%;font-weight:500;line-height:1.35}
+.order-long .row{flex-direction:column;align-items:stretch;gap:6px}
 .opts{display:grid;gap:8px}
 .opts.grid{grid-template-columns:repeat(2,minmax(0,1fr))}
 .opt{border:2px solid var(--line);background:var(--surface);border-radius:12px;padding:12px 14px;text-align:left;font-weight:600;min-width:0}
@@ -208,6 +216,7 @@ textarea{width:100%;min-height:80px;border:1px solid var(--line);background:var(
     <button data-go="quiz"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9"/><path d="M9.5 9.5a2.5 2.5 0 1 1 3.5 2.3c-.6.3-1 .9-1 1.6v.6"/><circle cx="12" cy="17.2" r=".6" fill="currentColor"/></svg>Quiz</button>
     <button data-go="tec"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="4" y="3" width="13" height="17" rx="2"/><path d="M8 3v17M20 7v13"/></svg>Técnicas</button>
     <button data-go="sim"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="13" r="8"/><path d="M12 9v4l2.5 2.5M9 2h6"/></svg>Simulado</button>
+    <button data-go="sobre"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9"/><path d="M12 11v6"/><circle cx="12" cy="7.6" r=".6" fill="currentColor"/></svg>Sobre</button>
   </div>
 </nav>
 
@@ -423,11 +432,11 @@ const BELT_COLOR = {Branca:"#FFFFFF",Azul:"#1C5FC9",Roxa:"#6A2C91",Marrom:"#6B3E
 
 /* ================= MÍDIA (fotos e vídeos reais, Wikimedia Commons) ================= */
 // Vídeos de técnicas: id da técnica -> arquivo em midia/
-const VID = {k1:"americana", al1:"armbar_guarda", al2:"armbar_montada", e4:"estr_guarda", e2:"estr_montada", o1:"omoplata", e1:"mataleao"};
+const VID = {k1:"americana", k3:"kimura_guarda", al1:"armbar_guarda", al2:"armbar_montada", t1:"triangulo", r5:"tesoura", e4:"estr_guarda", e2:"estr_montada", o1:"omoplata", e1:"mataleao"};
 // Fotos de posição: posição -> arquivo em midia/
 const POSIMG = {guarda:"pos_guarda.jpg", montada:"pos_montada.jpg", cem:"pos_cem.jpg", costas:"pos_costas.jpg", meia:"pos_meia.jpg", borboleta:"pos_borboleta.jpg", joelho:"pos_joelho.jpg", queda:"pos_queda.jpg"};
 const CREDITOS = [
-  {o:"Vídeos de americana, armlock, estrangulamentos, omoplata e mata-leão, e fotos de montada, 100 kg e costas tiradas deles", a:"Ddanielcruzz (técnicas por Ángel Gómez, Top Brother México)", l:"CC BY-SA 4.0", u:"https://commons.wikimedia.org/wiki/User:Ddanielcruzz"},
+  {o:"Vídeos de americana, kimura, armlock, triângulo, raspagem de tesoura, estrangulamentos, omoplata e mata-leão, e fotos de montada, 100 kg e costas tiradas deles", a:"Ddanielcruzz (técnicas por Ángel Gómez, Top Brother México)", l:"CC BY-SA 4.0", u:"https://commons.wikimedia.org/wiki/User:Ddanielcruzz"},
   {o:"Foto de guarda fechada", a:"MartialArtsNomad.com", l:"CC BY 2.0", u:"https://commons.wikimedia.org/wiki/File:Brazilian_Jiu-jitsu-Closed_guard.jpg"},
   {o:"Foto de meia-guarda", a:"parhessiastes", l:"CC BY-SA 2.0", u:"https://commons.wikimedia.org/wiki/File:BJJ-half_guard.jpg"},
   {o:"Foto de guarda borboleta", a:"Cpl. Jeff Sisto, Marinha dos EUA", l:"domínio público", u:"https://commons.wikimedia.org/wiki/File:Judo10-butterfly_guard.jpg"},
@@ -515,6 +524,32 @@ function render(arg){
   if(route==="quiz") return quizMenu();
   if(route==="tec") return tecList(arg);
   if(route==="sim") return simMenu();
+  if(route==="sobre") return sobre();
+}
+
+function sobre(){
+  app.innerHTML=`<div class="screen-h"><h1>Sobre</h1><p>Rumo à Faixa Azul</p></div>
+  <section class="about">
+    <h2>Quem fez</h2>
+    <p>App desenvolvido por <b>Hiago Barbosa Burman</b> para ajudar nos estudos para o exame de faixa azul da B9, do mestre Barbosinha.</p>
+    <p>O conteúdo segue a lista que o sensei passou para a prova. Os passos de cada técnica são uma base geral: na prova vale o jeito que o sensei ensina.</p>
+  </section>
+  <section class="about">
+    <h2>Como usar</h2>
+    <ul>
+      <li>Abra pelo navegador e adicione à tela inicial para usar como app.</li>
+      <li>Depois da primeira abertura, funciona sem internet, inclusive os vídeos.</li>
+      <li>O seu progresso, as anotações e os vídeos que você anexar ficam salvos só neste aparelho.</li>
+    </ul>
+  </section>
+  <section class="about">
+    <h2>Fontes</h2>
+    <p>Regras, pontos, punições e faixas: Livro de Regras da IBJJF, versão 6.1 (2024).</p>
+  </section>
+  <section class="about">
+    <h2>Créditos das fotos e vídeos</h2>
+    <div class="credits">${CREDITOS.map(c=>`<span>${esc(c.o)}: ${esc(c.a)}, <a href="${c.u}" target="_blank" rel="noopener">Wikimedia Commons</a>, licença ${esc(c.l)}.</span>`).join("")}</div>
+  </section>`;
 }
 
 function weakest(n){return CATS.slice().sort((a,b)=>mastery(a.id)-mastery(b.id)).slice(0,n);}
@@ -543,8 +578,7 @@ function home(){
   </section>
   <div class="section-h"><h2>Mapa da prova</h2><span>toque para estudar</span></div>
   <div class="map">${CATS.map(c=>{const m=mastery(c.id); return `<button class="tile ${m<.25?"weak":""}" data-cat="${c.id}"><div class="tile-top"><b>${c.nome}</b><em>${Math.round(m*100)}%</em></div><div class="bar"><i style="width:${Math.max(m*100,3)}%"></i></div></button>`;}).join("")}</div>
-  <p class="quote">"Sempre assuma que seu oponente será maior, mais forte e mais rápido que você." Hélio Gracie</p>
-  <div class="credits"><b>Créditos das fotos e vídeos</b>${CREDITOS.map(c=>`<span>${esc(c.o)}: ${esc(c.a)}, <a href="${c.u}" target="_blank" rel="noopener">Wikimedia Commons</a>, licença ${esc(c.l)}.</span>`).join("")}</div>`;
+  <p class="quote">"Sempre assuma que seu oponente será maior, mais forte e mais rápido que você." Hélio Gracie</p>`;
   $("#goToday").onclick=()=>startQuiz("dia");
   app.querySelectorAll(".tile").forEach(t=>t.onclick=()=>{const c=CAT[t.dataset.cat]; if(c.tipo==="tec") go("tec",c.id); else startQuiz(c.id);});
 }
@@ -556,8 +590,9 @@ function quizMenu(){
     {k:"etica",t:"Ética",d:"Higiene, cumprimentos e comportamento",c:"#2E8B3A",i:"É"},
     {k:"regras",t:"Regras",d:"Pontuação, punições, faixas, uniformes, golpes proibidos",c:"var(--blue)",i:"R"},
     {k:"placar",t:"Monte o placar",d:"Some os pontos da luta",c:"#111",i:"+"},
-    {k:"posicao",t:"Que posição é essa?",d:"Reconheça a posição pela ilustração",c:"#6A2C91",i:"?"},
-    {k:"tecq",t:"Técnicas",d:"Posição inicial e detalhes de cada técnica",c:"#F07A12",i:"T"}
+    {k:"video",t:"Que técnica é essa?",d:"Assista ao vídeo e diga qual técnica da prova é",c:"#0F7C8C",i:"▶"},
+    {k:"posicao",t:"Que posição é essa?",d:"Reconheça a posição pela foto",c:"#6A2C91",i:"?"},
+    {k:"tecq",t:"Técnicas",d:"Ordem dos passos, erros comuns e de onde sai cada técnica",c:"#F07A12",i:"T"}
   ];
   app.innerHTML=`<div class="screen-h"><h1>Quiz</h1><p>Cada acerto vale XP. Errou? A pergunta volta mais vezes até você acertar.</p></div>
   <div class="modes">${modes.map(m=>`<button class="mode" data-k="${m.k}"><span class="mode-ic" style="background:${m.c}">${m.i}</span><span><b>${m.t}</b><span>${m.d}</span></span></button>`).join("")}</div>
@@ -599,19 +634,40 @@ function qPosicao(){
   const wr=shuffle(names.filter(x=>x!==k)).slice(0,3);
   return {id:"pos_"+k,cat:"regras",q:"Que posição é essa?",svg:photoHTML(posImg(k),"Foto de jiu-jitsu"),opts:shuffle([{label:POS_NOME[k],ok:true},...wr.map(w=>({label:POS_NOME[w],ok:false}))]),ex:`É ${POS_NOME[k].toLowerCase()}.`,noBox:true};
 }
+// nome completo da técnica, como o sensei chama na prova
+const fullName = t => `${CAT[t.cat].nome}: ${t.nome}`;
+const semConfirme = s => s.replace(/\s*Confirme com o sensei.*$/,"");
+// 1) assiste ao vídeo e diz qual técnica é
+function qVideo(t){
+  const outros=shuffle(TEC.filter(x=>VID[x.id]&&x.id!==t.id)).slice(0,3);
+  return {id:t.id,cat:t.cat,hideCat:true,q:"Assista ao vídeo. Que técnica da prova é essa?",svg:videoHTML(VID[t.id],"Vídeo de técnica"),
+    opts:shuffle([{label:fullName(t),ok:true},...outros.map(o=>({label:fullName(o),ok:false}))]),
+    ex:`É ${fullName(t)}. ${t.passos[0]}`};
+}
+// 2) coloca os passos na ordem
+function qOrdem(t){
+  return {id:t.id,cat:t.cat,tipo:"order",long:true,q:`Coloque os passos na ordem: ${fullName(t)}`,
+    svg:VID[t.id]?videoHTML(VID[t.id],t.nome):"",itens:t.passos,ex:`Erro comum: ${t.erro}`};
+}
+// 3) reconhece o erro comum
+function qErro(t){
+  const outros=shuffle(TEC.filter(x=>x.cat!==t.cat)).slice(0,3).map(x=>semConfirme(x.erro));
+  return {id:t.id,cat:t.cat,q:`Qual é o erro mais comum em ${fullName(t)}?`,svg:VID[t.id]?videoHTML(VID[t.id],t.nome):"",
+    opts:shuffle([{label:semConfirme(t.erro),ok:true},...outros.map(o=>({label:o,ok:false}))]),
+    ex:"Passos certos: "+t.passos.join(" ")};
+}
+// 4) olha a foto da posição e escolhe a técnica que começa nela
+function qDeOnde(t){
+  const outros=shuffle(TEC.filter(x=>x.pos!==t.pos&&x.pos!=="solo")).slice(0,3);
+  return {id:t.id,cat:t.cat,hideCat:true,q:"Olhe a posição da foto. Qual destas técnicas da prova começa nela?",svg:photoHTML(posImg(t.pos),"Foto de posição de jiu-jitsu"),
+    opts:shuffle([{label:fullName(t),ok:true},...outros.map(o=>({label:fullName(o),ok:false}))]),
+    ex:`A foto mostra ${POS_NOME[t.pos].toLowerCase()}. Daqui sai ${fullName(t)}. ${t.passos[0]}`};
+}
 function qTecnica(t){
-  const r=Math.random(), m=tecMedia(t);
-  if(r<.45 && t.pos!=="solo"){
-    const names=["em_pe","guarda","montada","cem","costas","meia","borboleta","joelho","cinquenta","tartaruga","abraco"];
-    const others=shuffle(names.filter(k=>k!==t.pos)).slice(0,3);
-    return {id:t.id,cat:t.cat,q:`Em que posição começa: ${CAT[t.cat].nome} · ${t.nome}?`,
-      opts:shuffle([{label:POS_NOME[t.pos],ok:true},...others.map(o=>({label:POS_NOME[o],ok:false}))]),
-      ex:`${t.nome}: começa em ${POS_NOME[t.pos].toLowerCase()}. ${t.passos[0]}`};
-  }
-  const certo=t.passos[1+Math.floor(Math.random()*(t.passos.length-1))];
-  const outros=shuffle(TEC.filter(x=>x.cat!==t.cat).flatMap(x=>x.passos)).slice(0,3);
-  return {id:t.id,cat:t.cat,q:`Qual destes é um passo de ${CAT[t.cat].nome} · ${t.nome}?`,svg:VID[t.id]?m.html:"",
-    opts:shuffle([{label:certo,ok:true},...outros.map(o=>({label:o,ok:false}))]),ex:"Passos: "+t.passos.join(" ")};
+  const tipos=[qOrdem,qErro];
+  if(VID[t.id]) tipos.push(qVideo,qVideo);
+  if(posImg(t.pos) && t.pos!=="queda") tipos.push(qDeOnde);
+  return tipos[Math.floor(Math.random()*tipos.length)](t);
 }
 
 let Q=null;
@@ -626,6 +682,7 @@ function startQuiz(mode){
   } else if(["historia","etica","regras"].includes(mode)) list=teoCat(mode);
   else if(mode==="placar") list=Array.from({length:6},qPlacar);
   else if(mode==="posicao") list=Array.from({length:8},qPosicao);
+  else if(mode==="video") list=pickWeighted(TEC.filter(t=>VID[t.id]),10,t=>t.id).map(qVideo);
   else if(mode==="tecq") list=pickWeighted(TEC,10,t=>t.id).map(qTecnica);
   else if(CAT[mode]) list=pickWeighted(TEC.filter(t=>t.cat===mode),6,t=>t.id).map(qTecnica);
   Q={mode,list,i:0,hits:0,xp:0};
@@ -636,7 +693,7 @@ function showQ(){
   const q=Q.list[Q.i];
   if(!q) return quizEnd();
   const pct=Q.i/Q.list.length*100;
-  const catLbl=q.cat?CAT[q.cat].nome:"";
+  const catLbl=q.hideCat?"Técnicas":q.cat?CAT[q.cat].nome:"";
   app.innerHTML=`<div class="qtop"><button class="xbtn" id="qx" aria-label="Sair do quiz">✕</button><div class="bar"><i style="width:${pct}%"></i></div><span class="belt-meta">${Q.i+1}/${Q.list.length}</span></div>
   <div class="qcat">${esc(catLbl)}</div>
   <div class="qtext">${esc(q.q)}</div>
@@ -655,7 +712,9 @@ function showQ(){
 }
 function orderQ(q){
   const picked=[]; const body=$("#qbody");
-  const pool=shuffle(q.itens);
+  body.classList.toggle("order-long",!!q.long);
+  let pool=shuffle(q.itens);
+  while(q.itens.length>1 && pool.every((s,i)=>s===q.itens[i])) pool=shuffle(q.itens);
   const draw=()=>{
     const isBelt=s=>BELT_COLOR[s.split(":")[0]];
     const chip=(s,on)=>`<button class="chip ${on?"on":""}" data-s="${esc(s)}">${isBelt(s)&&!s.includes(":")?`<span class="belt-chip"><i style="background:${BELT_COLOR[s]}"></i>${esc(s)}</span>`:esc(s)}</button>`;
