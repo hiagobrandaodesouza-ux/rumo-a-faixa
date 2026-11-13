@@ -225,6 +225,77 @@ textarea{width:100%;min-height:80px;border:1px solid var(--line);background:var(
 @keyframes pop{0%{transform:scale(.9)}60%{transform:scale(1.05)}100%{transform:scale(1)}}
 .pop{animation:pop .3s ease-out}
 @media (prefers-reduced-motion:reduce){*{animation:none!important;transition:none!important}}
+
+/* apostila */
+.ap-bar{position:sticky;top:0;z-index:5;display:flex;gap:8px;padding:10px 0;background:var(--bg);flex-wrap:wrap}
+.ap-bar .btn{flex:1;text-align:center;text-decoration:none;color:inherit;font-size:14px}
+.ap-bar .btn-primary{color:#fff}
+.ap{display:grid;gap:14px;padding-bottom:30px}
+.apcover{background:var(--fx);color:#fff;border-radius:16px;padding:22px 18px;display:grid;gap:10px}
+.apcover h1{font-size:40px;text-transform:uppercase}
+.apcover p{margin:0;opacity:.9}
+.apbelt{width:100%;max-width:300px}
+.aps{background:var(--surface);border:1px solid var(--line);border-radius:14px;padding:14px 16px}
+.aps h2{font-size:22px;text-transform:uppercase;margin-bottom:10px;border-bottom:3px solid var(--red);padding-bottom:4px}
+.aps h3{font-size:17px;margin:12px 0 6px}
+.aps ul{margin:8px 0 0;padding-left:18px;display:grid;gap:4px}
+.apn{font-size:13px;color:var(--muted);margin:8px 0 0}
+.apmap{display:flex;flex-wrap:wrap;gap:6px}
+.apmap span{background:var(--surface-2);border-radius:99px;padding:4px 10px;font-weight:600;font-size:13px}
+.apgrid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:8px}
+.appt{display:grid;gap:6px;border:1px solid var(--line);border-radius:10px;overflow:hidden}
+.appt img{width:100%;aspect-ratio:16/10;object-fit:cover;display:block}
+.appt div{padding:0 8px 8px;display:grid}
+.appt b{font-family:var(--display);font-size:22px;color:var(--red)}
+.appt span{font-weight:700}
+.appt small{color:var(--muted);font-size:12px}
+.apsteps{display:grid;grid-template-columns:repeat(4,1fr);gap:6px}
+.apsteps div{background:var(--surface-2);border-radius:10px;padding:8px;font-size:13px;display:grid;gap:2px}
+.apsteps b{font-family:var(--display);font-size:24px}
+.apt{width:100%;border-collapse:collapse;font-size:13px}
+.apt th,.apt td{border-bottom:1px solid var(--line);padding:6px 4px;text-align:left;vertical-align:top}
+.apt td small{display:block;color:var(--muted);font-size:11px}
+.apt td.ok{color:var(--ok);font-weight:700;white-space:nowrap}
+.apt td.no{color:var(--bad);font-weight:700;white-space:nowrap}
+.apt .hl{background:var(--blue-soft)}
+.apbelts{display:grid;grid-template-columns:repeat(5,minmax(0,1fr));gap:6px}
+.apbelts div{display:grid;gap:2px;font-size:11px;background:var(--surface-2);border-radius:8px;padding:6px}
+.apbelts div.hl{outline:2px solid var(--red)}
+.apbelts b{font-size:13px}
+.aptecs{display:grid;gap:10px}
+.aptec{display:grid;grid-template-columns:120px 1fr;gap:10px;border-top:1px solid var(--line);padding-top:10px}
+.aptec>img{width:120px;aspect-ratio:4/3;object-fit:cover;border-radius:8px}
+.aptec>div:only-child{grid-column:1/-1}
+.aptec h3{margin:0 0 4px;font-size:16px}
+.apc{display:block;font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:.05em;color:var(--red)}
+.aptec ol{margin:4px 0;padding-left:18px;font-size:13px}
+.apk{margin:0;background:#FFF6D6;color:#3A2A00;border-radius:8px;padding:4px 8px;font-size:13px}
+.ape{margin:0;font-size:12px;color:var(--bad)}
+.apq{margin:0;display:grid;gap:2px;font-size:13px}
+.apq dt{font-weight:600}
+.apq dd{margin:0 0 6px;color:var(--ok);font-weight:700}
+.aphist{list-style:none;padding:0;margin:0;display:grid;gap:6px}
+.aphist li{display:grid;grid-template-columns:64px 1fr;gap:8px;font-size:14px}
+.aphist b{font-family:var(--display);font-size:18px;color:var(--red)}
+@media (max-width:520px){.apsteps{grid-template-columns:repeat(2,1fr)}.apbelts{grid-template-columns:repeat(3,minmax(0,1fr))}.aptec{grid-template-columns:90px 1fr}.aptec>img{width:90px}}
+@media print{
+  @page{size:A4;margin:12mm}
+  :root{--bg:#fff;--surface:#fff;--surface-2:#F1EEEE;--ink:#111;--muted:#555;--line:#ddd;color-scheme:light}
+  body{background:#fff;-webkit-print-color-adjust:exact;print-color-adjust:exact;font-size:12px}
+  body::before,.nav,.noprint,.toast{display:none!important}
+  .wrap{max-width:none;padding:0}
+  .aps{border:0;padding:0;break-inside:auto}
+  .aps.brk{break-before:page}
+  .aptec,.appt,.apbelts div,.apsteps div,.apt tr,.apq dt,.apq dd{break-inside:avoid}
+  .apq dt{break-after:avoid}
+  .aps h2,.aps h3{break-after:avoid-page;page-break-after:avoid}
+  .apcover{min-height:240mm;align-content:center;break-after:page}
+  .apcover h1{font-size:54px}
+  .apgrid{grid-template-columns:repeat(3,1fr)}
+  .apsteps{grid-template-columns:repeat(4,1fr)}
+  .apbelts{grid-template-columns:repeat(5,1fr)}
+  .aptecs{grid-template-columns:1fr 1fr;column-gap:16px}
+}
 </style>
 
 <div class="wrap" id="app"></div>
@@ -834,6 +905,7 @@ function render(arg){
   if(route==="tec") return tecList(arg);
   if(route==="sim") return simMenu();
   if(route==="sobre") return sobre();
+  if(route==="apostila") return apostila();
 }
 
 function nameScreen(depois){
@@ -886,6 +958,11 @@ function sobre(){
     </ul>
   </section>
   <section class="about">
+    <h2>Apostila</h2>
+    <p>Resumo da faixa ${B.nome.toLowerCase()} para estudar ou imprimir.</p>
+    <button class="btn btn-wide" id="sobreAp">📘 Abrir apostila resumo</button>
+  </section>
+  <section class="about">
     <h2>Fontes</h2>
     <p>Regras, pontos, punições e faixas: Livro de Regras da IBJJF, versão 6.1 (2024).</p>
     <p>Faixa azul: folha de conteúdo da prova passada pelo sensei. Faixa roxa: prova teórica de exemplo da B9 e resumo do material do sensei. Faixa marrom: apostila "Da Faixa Roxa à Faixa Marrom" (fichas, núcleo mínimo, sistemas e regras).</p>
@@ -895,6 +972,7 @@ function sobre(){
     <div class="credits">${CREDITOS.map(c=>`<span>${esc(c.o)}: ${esc(c.a)}, <a href="${c.u}" target="_blank" rel="noopener">Wikimedia Commons</a>, licença ${esc(c.l)}.</span>`).join("")}</div>
   </section>`;
   $("#trocar").onclick=trocarFaixa;
+  $("#sobreAp").onclick=()=>go("apostila");
   $("#trocarNome").onclick=()=>nameScreen(()=>{document.querySelector(".nav").hidden=false; go("sobre");});
 }
 // abre a escolha de faixa; "Voltar" desiste e fica na faixa atual
@@ -935,6 +1013,7 @@ function home(){
   <section class="today">
     <p>${esc(nm())}, o foco de hoje é <b>${foco.map(c=>c.nome).join("</b> e <b>")}</b>, onde você está mais fraco.</p>
     <button class="btn btn-blue btn-wide" id="goToday">Treino do dia · 12 perguntas</button>
+    <button class="btn btn-wide" id="goAp">📘 Apostila resumo da faixa ${fx}</button>
   </section>
   ${B.nucleo?`<section class="nucleo"><h3>Núcleo mínimo</h3><p class="belt-meta" style="margin:0 0 8px">${esc(nm())}, comece por estas seis: juntas já formam um jogo completo.</p>
     <div class="seq">${["m_r2","m_p2","m_c1","m_f1"].map((id,i)=>`${i?"<span>→</span>":""}<button data-t="${id}">${esc(TEC.find(t=>t.id===id).nome.replace("Passagem corte de joelho (knee cut)","Knee cut").replace("Da lateral para a montada","Lateral → montada").replace("Armbar da montada","Armbar"))}</button>`).join("")}</div>
@@ -943,6 +1022,7 @@ function home(){
   <div class="map">${CATS.map(c=>{const m=mastery(c.id); return `<button class="tile ${m<.25?"weak":""}" data-cat="${c.id}"><div class="tile-top"><b>${c.nome}</b><em>${Math.round(m*100)}%</em></div><div class="bar"><i style="width:${Math.max(m*100,3)}%"></i></div></button>`;}).join("")}</div>`;
   $("#goToday").onclick=()=>startQuiz("dia");
   $("#swapF").onclick=trocarFaixa;
+  $("#goAp").onclick=()=>go("apostila");
   app.querySelectorAll(".nucleo button[data-t]").forEach(b=>b.onclick=()=>openTec(b.dataset.t));
   app.querySelectorAll(".tile").forEach(t=>t.onclick=()=>{const c=CAT[t.dataset.cat]; if(c.tipo==="tec") go("tec",c.id); else startQuiz(c.id);});
 }
@@ -1295,8 +1375,110 @@ function simTheory(){
 }
 
 document.title = "Rumo à Faixa " + B.nome;
+/* ================= APOSTILA RESUMO =================
+   Montada a partir dos mesmos dados do app (técnicas, perguntas, fotos e vídeos).
+   Abre no celular e pode ser impressa ou salva em PDF. */
+const AP_PONTOS=[
+  {n:"Queda",p:2,img:"pos_queda.jpg",d:"Derrubar e estabilizar por cima 3 s."},
+  {n:"Raspagem",p:2,img:"tesoura.jpg",d:"Por baixo na guarda ou meia-guarda, inverter e ficar por cima 3 s."},
+  {n:"Joelho na barriga",p:2,img:"pos_joelho.jpg",d:"Joelho na barriga, o outro pé no chão, sem o joelho de trás no solo."},
+  {n:"Passagem de guarda",p:3,img:"pos_cem.jpg",d:"Passar as pernas e estabilizar no 100 kg ou norte-sul."},
+  {n:"Montada",p:4,img:"pos_montada.jpg",d:"Sentado sobre o tronco, joelhos no chão."},
+  {n:"Pegada nas costas",p:4,img:"pos_costas.jpg",d:"Nas costas, com os dois ganchos por dentro das coxas."}
+];
+// [golpe, azul e roxa, marrom e preta] — adulto com kimono (Livro de Regras IBJJF v6.1)
+const AP_GOLPES=[
+  ["Chave de pé reta (botinha)","ok","ok",""],
+  ["Na botinha, girar para o lado do pé livre","no","ok",""],
+  ["Mão de vaca (chave de punho)","ok","ok",""],
+  ["Omoplata","ok","ok",""],
+  ["Estrangulamento Ezequiel (com a manga)","ok","ok",""],
+  ["Chave de bíceps","no","ok",""],
+  ["Chave de panturrilha","no","ok",""],
+  ["Chave de joelho reta (knee bar)","no","ok",""],
+  ["Mata-leão no pé (toe hold)","no","ok","Sem forçar o pé para o lado de fora."],
+  ["Chave de calcanhar","no","no","Sem kimono, adulto marrom e preta: liberada."],
+  ["Chave que torça o joelho","no","no","Sem kimono, adulto marrom e preta: liberada."],
+  ["Cruzada de perna (reaping)","no","no","Exceção só no sem kimono adulto marrom e preta."],
+  ["Bate-estaca","no","no","Proibido para todos."],
+  ["Chave de cervical","no","no","Proibida para todos."],
+  ["Queda-tesoura","no","no","Proibida para todos."],
+  ["Torcer os dedos para trás","no","no","Proibido para todos."],
+  ["Suplex jogando de cabeça ou pescoço","no","no","Proibido para todos."]
+];
+const AP_BELTS=[["Branca","#FFFFFF","—","—"],["Azul","#1C5FC9","16 anos","2 anos"],["Roxa","#6A2C91","16 anos","1 ano e meio"],["Marrom","#6B3E1F","18 anos","1 ano"],["Preta","#111111","19 anos","—"]];
+const AP_HIST=[
+  ["1882","Jigoro Kano funda o judô Kodokan, em Tóquio, a partir do jujutsu japonês."],
+  ["1914","Mitsuyo Maeda, o Conde Koma, aluno do Kodokan, chega ao Brasil e se fixa em Belém (PA)."],
+  ["Belém","Carlos Gracie e Luiz França aprendem com Maeda: daí saem as duas grandes linhagens."],
+  ["Rio","Hélio Gracie adapta as técnicas para usar alavanca em vez de força. Luiz França forma Oswaldo Fadda."],
+  ["1993","Royce Gracie vence o UFC 1 por finalização, contra lutadores de outros estilos."],
+  ["1994","Fundação da CBJJ. Depois vem a IBJJF, que organiza o Mundial (desde 1996)."],
+  ["B9","Barbosa Jiu-Jitsu, do mestre Marco Barbosa, o Barbosinha, faixa preta de judô e de jiu-jitsu. Nasceu em São Paulo."]
+];
+const AP_ETICA=["Kimono lavado depois de todo treino; unhas curtas; cabelo preso.","Com micose ou lesão de pele, não treine: trate e avise o professor.","Cumprimente o tatame, o professor e o parceiro antes e depois do rola.","Chinelo fora do tatame, nunca calçado dentro dele.","Bateu, soltou. Sem as mãos, bata com o pé ou fale \"bati\".","Saia do tatame só com permissão do professor.","Cuide do parceiro mais leve ou iniciante: controle a força.","Na rua, só legítima defesa. Não fale mal de outras equipes."];
+const AP_EXTRA={
+  roxa:[
+    {t:"Arbitragem em situações (cai na prova)",itens:["Queda que começa dentro e termina na área de segurança, estabilizada 3 s: valem os 2 pontos e a luta volta no centro, na mesma posição.","Fugir de propósito da área para não bater numa finalização: falta gravíssima, desclassificação.","Fugir da área para evitar pontos: punição e 2 pontos para o adversário.","Raspagem em que ele cai de quatro apoios: controle as costas com pelo menos um joelho dele no chão por 3 s. Gancho não é obrigatório.","Faixa desamarrada usada para estrangular: falta grave.","Finalização encaixada na área de segurança: o árbitro não para. Se quem ataca leva para fora: só vantagem.","50/50 segurando lapela ou faixa: 20 s para progredir (regra de 2024).","Os dois puxam para a guarda: 20 s; sem progressão, punição para os dois.","Derrubou e logo sofreu raspagem: vantagem para você, 2 pontos para ele."]},
+    {t:"Faltas",itens:["Graves (seguem a sequência de punições): fugir da luta, dedos dentro da manga ou da calça, mão ou pé no rosto, contestar o árbitro, faixa desamarrada no estrangulamento, comemorar ridicularizando.","Gravíssimas (desclassificação direta): golpe proibido, fugir de finalização, tapar nariz ou boca, suplex de cabeça, creme ou óleo no corpo, kimono inutilizado sem troca, sem roupa de baixo."]},
+    {t:"Defesa pessoal e primeiros socorros",itens:["Montada na rua com socos: queixo no peito, antebraços protegendo a cabeça, cole o quadril e o tronco nele, prenda braço e pé do mesmo lado e faça a barrigada (upa).","Luxação: não puxe para o lugar. Imobilize (tipoia com faixa ou paletó) e leve ao médico.","Apagou no estrangulamento: solte, deite de lado, observe a respiração; sem melhora rápida, 192.","Dor no pescoço e formigamento depois de cair de cabeça: não mexa, chame o SAMU (192).","Sangue no nariz: cabeça um pouco para a frente e aperte a parte mole do nariz.","Provocação na rua: evite o confronto; técnica só para se defender."]},
+    {t:"Atualizações de 2024",itens:["50/50 com lapela ou faixa: 20 s para progredir.","Desclassificação disciplinar no kimono tira o atleta também do sem kimono.","Inscrição na categoria do sexo biológico atribuído no nascimento.","Resultado não muda depois que a chave avança ou as medalhas são entregues."]}
+  ],
+  marrom:[
+    {t:"Núcleo mínimo",itens:["Raspagem (tesoura ou borboleta) → knee cut → lateral → montada → armbar.","Perdeu a posição? Upa. Em pé: base, pegadas e uma queda.","Critério: autonomia e maturidade. Um jogo simples e conectado vale mais que um repertório grande e instável."]},
+    {t:"Sistemas: se eu tenho… e se ele reagir…",itens:["Guarda fechada: quebrar postura → tesoura. Se postar o braço: triângulo ou armbar.","Borboleta: desequilibrar → raspagem. Se tirar o peso: subida ou guarda X.","Meia-guarda: frames → underhook. Se bloquear a subida: borboleta ou joelho escudo.","Passagem em pé: torreando. Se recompor as pernas: knee cut ou leg drag.","Controle lateral: estabilizar quadril e ombro. Se girar para dentro: norte-sul ou costas.","Montada por baixo: ponte com bloqueio. Se abrir a base: cotovelo-joelho e meia-guarda."]},
+    {t:"Estratégia: decisões maduras",itens:["Ganhando por 2: atividade, base e controle, sem defesa passiva.","Perdendo por passagem: primeiro escapar ou recuperar a guarda.","Adversário pesado: frames, ângulos e mobilidade, não força.","Adversário veloz: dispute distância, pegadas e conexão.","Ataque defendido: vá para a resposta preparada, não force o mesmo golpe.","Antes de agir: qual é o apoio dele? Que controle preservo se falhar? Isso me expõe?"]},
+    {t:"Segurança e maturidade",itens:["Risco na cervical ou no joelho: interrompa, não force, bata se precisar.","Chaves com extensão progressiva; solte ao primeiro sinal.","Proteja os iniciantes, aceite o tap e receba correções.","Regras de 2027 (anunciadas pela IBJJF): não valem para a prova de 30/11/2026. Antes de competir em 2027, confira no site oficial."]}
+  ]
+};
+function apFoto(src,cap){return `<figure class="apf"><img src="midia/${src}" alt="${esc(cap)}" loading="eager"><figcaption>${esc(cap)}</figcaption></figure>`;}
+function apTecImg(t){
+  if(VID[t.id]) return `<img src="midia/${VID[t.id]}.jpg" alt="" loading="eager">`;
+  if(POSIMG[t.pos]) return `<img src="midia/${POSIMG[t.pos]}" alt="" loading="eager">`;
+  return "";
+}
+function apostila(){
+  const fx=B.nome.toLowerCase(), col=B.id==="marrom"?2:1;
+  const teoCats=CATS.filter(c=>c.tipo==="teoria"&&c.id!=="historia");
+  const basico=/^(r_(p|d|f|t|u|g|x)\d|ord\d|et\d|x_(p|u|g|r|d)\d|m_(rg|g|s)\d)/;
+  const digest=c=>TEO.filter(q=>q.cat===c&&q.tipo!=="order"&&!basico.test(q.id));
+  const sec=(t,html,quebra)=>`<section class="aps${quebra?" brk":""}"><h2>${t}</h2>${html}</section>`;
+  const li=a=>`<ul>${a.map(x=>`<li>${esc(x)}</li>`).join("")}</ul>`;
+  let h=`<div class="ap-bar noprint"><button class="btn" id="apBack">← Voltar</button><button class="btn btn-primary" id="apPrint">Imprimir / salvar PDF</button><a class="btn" href="apostilas/apostila-${B.id}.pdf" target="_blank" rel="noopener">Baixar PDF</a></div>
+  <div class="ap">
+  <header class="apcover" style="--fx:${B.cor}">
+    <div class="brand"><span class="badge9">B9</span>Rumo à Faixa</div>
+    <h1>Apostila resumo<br>Faixa ${fx}</h1>
+    <p>Exame de graduação · 30/11/2026 · Barbosa Jiu-Jitsu (B9)</p>
+    <svg viewBox="0 0 300 40" class="apbelt"><rect x="2" y="8" width="296" height="24" rx="3" fill="${B.cor}" stroke="#fff" stroke-width="2"/><rect x="216" y="8" width="62" height="24" fill="#111"/></svg>
+  </header>
+  ${sec("O que cai na prova",`<div class="apmap">${CATS.map(c=>`<span>${esc(c.nome)}</span>`).join("")}</div><p class="apn">Este resumo segue o material do sensei e o Livro de Regras da IBJJF (v6.1, 2024). Na prova vale o jeito que o sensei ensina.</p>`)}
+  ${sec("Pontuação",`<div class="apgrid">${AP_PONTOS.map(p=>`<div class="appt"><img src="midia/${p.img}" alt="" loading="eager"><div><b>${p.p} pontos</b><span>${esc(p.n)}</span><small>${esc(p.d)}</small></div></div>`).join("")}</div>
+   ${li(["Só pontua depois de 3 segundos de estabilização.","Os pontos somam: passagem (3) + montada (4) = 7.","Vantagem: quase pontuar ou quase finalizar. Não soma ponto, só desempata.","Desempate: pontos → vantagens → menos punições → decisão do árbitro."])}`)}
+  ${sec("Punições",`<div class="apsteps">${["1ª: só registro","2ª: vantagem ao adversário","3ª: 2 pontos ao adversário","4ª: desclassificação"].map((s,i)=>`<div><b>${i+1}</b>${esc(s.split(": ")[1])}</div>`).join("")}</div>
+   ${li(["Falta de combatividade: 20 s sem buscar evoluir.","Falta gravíssima (golpe proibido, fugir de finalização, óleo no corpo…): desclassificação direta."])}`)}
+  ${sec("Golpes permitidos e proibidos",`<p class="apn">Adulto com kimono. A coluna da sua faixa está destacada.</p>
+   <table class="apt"><thead><tr><th>Golpe</th><th class="${col===1?"hl":""}">Azul e roxa</th><th class="${col===2?"hl":""}">Marrom e preta</th></tr></thead><tbody>
+   ${AP_GOLPES.map(g=>`<tr><td>${esc(g[0])}${g[3]?`<small>${esc(g[3])}</small>`:""}</td>${[1,2].map(i=>`<td class="${g[i]} ${col===i?"hl":""}">${g[i]==="ok"?"✓ Pode":"✕ Proibido"}</td>`).join("")}</tr>`).join("")}</tbody></table>
+   <p class="apn">Pular na guarda é falta para a faixa branca e para quem tem até 15 anos. Golpe proibido para a categoria = falta gravíssima.</p>`,true)}
+  ${sec("Tempo de luta e graduação",`<div class="apbelts">${AP_BELTS.map(b=>`<div class="${b[0]===B.nome?"hl":""}"><svg viewBox="0 0 120 22"><rect x="1" y="3" width="118" height="16" rx="2" fill="${b[1]}" stroke="#555"/><rect x="84" y="3" width="24" height="16" fill="${b[0]==="Preta"?"#C8261E":"#111"}"/></svg><b>${b[0]}</b><span>Idade mín.: ${b[2]}</span><span>Tempo mín.: ${b[3]}</span><span>Luta: ${{Branca:5,Azul:6,Roxa:7,Marrom:8,Preta:10}[b[0]]} min</span></div>`).join("")}</div>
+   ${li(["Cada faixa colorida: faixa lisa + até 4 graus. Ponta preta (a preta tem ponta branca ou vermelha).","Coral vermelha e preta: 7º grau. Vermelha e branca: 8º. Vermelha: 9º e 10º.","Infantil (4 a 15 anos): cinza, amarela, laranja e verde.","A graduação é dada por professor faixa preta; a avaliação técnica é do professor e da academia."])}`)}
+  ${sec("Uniforme",li(["Kimono inteiro branco, azul royal ou preto (paletó e calça da mesma cor).","Manga até 2 cm do punho, braços esticados à frente.","Calça até 2 cm acima do osso do tornozelo.","Gola: até 1,3 cm de espessura e 5 cm de largura. Folga da manga: mínimo 7 cm.","Faixa de 4 a 5 cm, duas voltas, nó duplo, pontas de 20 a 30 cm.","Limpo, seco, sem rasgos e sem mau cheiro. São 3 checagens para aprovar.","Homem: sem camiseta por baixo. Mulher: camisa elástica colada por baixo."])+(B.id==="roxa"?`<p class="apn">Atenção: na prova de exemplo da roxa o gabarito marcou 5 cm para a manga; a regra oficial diz 2 cm. Confirme com o sensei.</p>`:""))}
+  ${(AP_EXTRA[B.id]||[]).map(s=>sec(esc(s.t),li(s.itens))).join("")}
+  ${TEC.length?CATS.filter(c=>c.tipo==="tec").map((c,i)=>{const ts=TEC.filter(t=>t.cat===c.id); if(!ts.length) return ""; return sec("Técnicas · "+esc(c.nome),`<div class="aptecs">${ts.map(t=>`<article class="aptec">${apTecImg(t)}<div><small class="apc">${esc(CAT[t.cat].nome)}</small><h3>${esc(t.nome)}${t.nucleo?' <span class="ntag">★ núcleo</span>':""}</h3>${t.chave?`<p class="apk">🔑 ${esc(t.chave)}</p>`:""}<ol>${t.passos.map(p=>`<li>${esc(p)}</li>`).join("")}</ol><p class="ape">Erro comum: ${esc(t.erro)}</p></div></article>`).join("")}</div>`,i===0);}).join(""):""}
+  ${sec("Pontos principais da teoria",teoCats.map(c=>{const qs=digest(c.id); if(!qs.length) return ""; return `<h3>${esc(c.nome)}</h3><dl class="apq">${qs.map(q=>`<dt>${esc(q.q)}</dt><dd>${esc(q.a)}</dd>`).join("")}</dl>`;}).join(""),true)}
+  ${sec("História",`<ol class="aphist">${AP_HIST.map(x=>`<li><b>${x[0]}</b>${esc(x[1])}</li>`).join("")}</ol>`)}
+  ${sec("Ética no tatame",li(AP_ETICA))}
+  <section class="aps"><h2>Créditos</h2><p class="apn">Desenvolvido por Hiago Barbosa Burman. Regras: Livro de Regras IBJJF v6.1 (2024). Fotos e vídeos: Wikimedia Commons.</p><div class="credits">${CREDITOS.map(c=>`<span>${esc(c.o)}: ${esc(c.a)}, licença ${esc(c.l)}.</span>`).join("")}</div></section>
+  </div>`;
+  app.innerHTML=h; document.querySelector(".nav").hidden=true; document.body.classList.add("apmode");
+  const back=$("#apBack"); if(back) back.onclick=()=>{document.body.classList.remove("apmode"); document.querySelector(".nav").hidden=false; go("home");};
+  const pr=$("#apPrint"); if(pr) pr.onclick=()=>window.print();
+  window.scrollTo(0,0);
+}
+
 function iniciar(){ if(FAIXA){document.querySelector(".nav").hidden=false; go("home");} else picker(); }
-if(NOME) iniciar(); else nameScreen(iniciar);
+if(/ap=1/.test(location.hash) && FAIXA) apostila(); else if(NOME) iniciar(); else nameScreen(iniciar);
 </script>
 
 <script>
