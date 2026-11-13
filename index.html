@@ -170,6 +170,16 @@ h1,h2,h3{font-family:var(--display);text-wrap:balance;margin:0;line-height:1.05;
 .titem .thumb{width:84px;flex:none;border-radius:8px;position:relative}
 .play{position:absolute;inset:0;display:grid;place-items:center;color:#fff;font-style:normal;font-size:20px;text-shadow:0 1px 4px rgba(0,0,0,.6)}
 .titem .vtag{display:inline;font-size:12px;color:var(--red)}
+.ntag{display:inline-block;font-size:11px;font-weight:700;color:#fff;background:#6B3E1F;border-radius:99px;padding:1px 7px;margin-left:4px;vertical-align:1px}
+.chave{background:#FFF6D6;color:#3A2A00;border-radius:10px;padding:10px 12px;font-size:14px;margin-top:12px}
+:root[data-theme="dark"] .chave{background:#3A3010;color:#FFE9A8}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]) .chave{background:#3A3010;color:#FFE9A8}}
+.chave b{display:block;font-family:var(--display);text-transform:uppercase;letter-spacing:.04em}
+.info2{font-size:14px;margin-top:8px;display:grid;gap:4px}
+.nucleo{background:var(--surface);border:1px solid var(--line);border-radius:14px;padding:12px 14px;margin-top:16px}
+.nucleo h3{font-size:18px;text-transform:uppercase;margin-bottom:8px}
+.nucleo .seq{display:flex;flex-wrap:wrap;gap:6px;align-items:center}
+.nucleo .seq button{border:1px solid var(--line);background:var(--surface-2);border-radius:99px;padding:6px 10px;font-weight:700;font-size:13px}
 .titem{min-height:58px}
 .titem .thumb svg{display:block;width:100%;height:auto}
 .titem b{display:block;font-size:15px;line-height:1.25}
@@ -534,14 +544,159 @@ const TEO_ROXA = [
  {id:"x_ord1",cat:"historia",tipo:"order",q:"Coloque na ordem em que aconteceu:",itens:["Jigoro Kano funda o Kodokan","Maeda chega ao Brasil","Royce Gracie vence o UFC 1","Fundação da CBJJ"],ex:"Kodokan em 1882, Maeda no Brasil em 1914, UFC 1 em 1993 e CBJJ em 1994."}
 ];
 
+/* ================= FAIXA MARROM =================
+   Base: apostila "Da Faixa Roxa à Faixa Marrom" (fichas, núcleo mínimo, matriz, sistemas,
+   estratégia, regras e flashcards), conferida com o Livro de Regras IBJJF v6.1. */
+const CATS_MARROM = [
+  {id:"estrategia", nome:"Sistemas e estratégia", tipo:"teoria", d:"Conectar técnicas, plano B e decisões maduras", c:"#6B3E1F", i:"S"},
+  {id:"regras",     nome:"Regras e golpes",       tipo:"teoria", d:"Pontuação e o que muda na marrom", c:"var(--blue)", i:"R"},
+  {id:"graduacao",  nome:"Graduação",             tipo:"teoria", d:"Idades, tempos e quem gradua", c:"#6A2C91", i:"G"},
+  {id:"etica",      nome:"Maturidade e segurança",tipo:"teoria", d:"Responsabilidade do praticante avançado", c:"#2E8B3A", i:"É"},
+  {id:"historia",   nome:"História",              tipo:"teoria", d:"Do Japão ao UFC, Gracie e B9", c:"#8A5A2B", i:"H"},
+  {id:"quedas",     nome:"Quedas e jogo em pé",   tipo:"tec"},
+  {id:"raspagens",  nome:"Guardas e raspagens",   tipo:"tec"},
+  {id:"passagem",   nome:"Passagens",             tipo:"tec"},
+  {id:"controle",   nome:"Controles",             tipo:"tec"},
+  {id:"escapes",    nome:"Escapes e defesas",     tipo:"tec"},
+  {id:"finaliz",    nome:"Finalizações",          tipo:"tec"}
+];
+const tecAzul = (id, extra) => ({...TEC_AZUL.find(t => t.id === id), ...extra});
+const TEC_MARROM = [
+ // QUEDAS E JOGO EM PÉ (a apostila pede base e duas entradas bem feitas)
+ {id:"m_q0",cat:"quedas",nome:"Base, pegadas e quebra de pegada",pos:"queda",nucleo:true,chave:"Sem base, nada em pé funciona: pegada, desequilíbrio e só então a entrada.",
+  passos:["Base com joelhos flexionados e deslocamento sem cruzar os pés.","Conquiste a sua pegada (gola e manga) e quebre a dele antes que ele firme.","Desequilibre na direção da queda escolhida.","Entre protegendo a cervical: cabeça alta, sem oferecer o pescoço."],
+  erro:"Entrar na queda sem desequilibrar e com a cabeça baixa, oferecendo a cervical."},
+ tecAzul("q2",{chave:"Baixe o nível com as pernas, não com as costas."}),
+ tecAzul("q1",{nome:"Double leg (morote-gari)",chave:"Passo de penetração fundo: o ombro empurra enquanto as mãos puxam."}),
+ {id:"m_q1",cat:"quedas",nome:"Varrida de pé (de-ashi-barai)",pos:"queda",chave:"O tempo é tudo: varra o pé no instante em que ele passa o peso.",
+  passos:["Pegada na gola e na manga, deslocando junto com ele.","Sinta o momento em que ele vai apoiar o peso no pé.","Varra o pé dele com a sola do seu pé, na direção do passo.","Puxe a manga para cima e acompanhe a queda até estabilizar."],
+  erro:"Chutar a canela em vez de varrer o pé no tempo certo."},
+ tecAzul("q3",{chave:"Desequilibre para trás antes de ceifar."}),
+ tecAzul("q5",{chave:"O ceifar é por dentro, em semicírculo, empurrando o tronco para trás."}),
+ {id:"m_q2",cat:"quedas",nome:"Defesa de queda: sprawl",pos:"queda",chave:"Quadril para trás e para baixo: tire as pernas do alcance dele.",
+  passos:["Leia a entrada: ele baixa o nível.","Jogue as pernas para trás e afunde o quadril no ombro dele.","Controle a cabeça ou o braço sem perder a base.","Contra-ataque: costas, passagem ou volte para a guarda, se for o caso."],
+  erro:"Ficar de pé com as pernas paradas e o quadril alto."},
+ // GUARDAS E RASPAGENS
+ {id:"m_r1",cat:"raspagens",nome:"Raspagem tesoura",pos:"guarda",chave:"Tire o apoio antes de girar: raspagem é desequilíbrio, não força de perna.",
+  passos:["Crie conexão com gola e manga e quebre parcialmente a postura.","Gire o quadril: uma canela na linha do tronco, a outra perna perto da base dele.","Leve o tronco dele para o lado sem apoio.","Sincronize puxada, ação das pernas e subida para estabilizar por cima."],
+  erro:"Tentar só com as pernas. Corrija com ângulo do quadril e pegadas ativas.",defesa:"Recuar o tronco ou abrir a base.",conexoes:"Tesoura → hip bump ou triângulo, se os braços reagirem."},
+ {id:"m_r2",cat:"raspagens",nome:"Raspagem borboleta",pos:"borboleta",nucleo:true,chave:"Controle um braço e leve o peso dele ao gancho; só então eleve.",
+  passos:["Conecte o tronco e controle pelo menos um braço para ele não apoiar a mão.","Desequilibre para um lado, trazendo o peso dele para você.","Use o gancho do lado certo para elevar, direcionando os ombros.","Acompanhe o giro e estabilize por cima."],
+  erro:"Tentar levantar o parceiro afastado. Traga o peso dele para o gancho.",defesa:"Abrir a base, tirar o gancho, criar distância.",conexoes:"Borboleta → guarda X ou subida em single leg."},
+ {id:"m_r3",cat:"raspagens",nome:"Meia-guarda: underhook e subida (dogfight)",pos:"meia",chave:"Fique de lado, nunca achatado; underhook e quadril sobem juntos.",
+  passos:["Fique de lado, sem ficar achatado, com frames protegendo rosto e pescoço.","Conquiste o underhook com segurança, preservando a cabeça.","Aproxime o quadril e suba apoiando cotovelo e mão, sem expor as costas.","Dispute a base para chegar por cima ou mude de guarda conforme a reação."],
+  erro:"Ficar de costas no chão. Reconstrua os frames e gire de lado antes de subir.",defesa:"Crossface, whizzer e recuo do quadril.",conexoes:"Meia-guarda → dogfight → single leg; se defender → guarda borboleta."},
+ {id:"m_r4",cat:"raspagens",nome:"Raspagem hip bump",pos:"guarda",chave:"Ataque quando ele fica com a postura alta: sente e empurre com o quadril.",
+  passos:["Abra a guarda quando ele subir a postura.","Sente apoiando uma mão no chão atrás de você.","Passe o outro braço por cima do ombro dele e empurre o quadril para cima e para o lado.","Role por cima e estabilize na montada."],
+  erro:"Fazer com as costas no chão, sem sentar.",defesa:"Ele trava o braço no chão ou recua.",conexoes:"Hip bump → kimura (se ele apoiar a mão) ou guilhotina."},
+ // PASSAGENS
+ {id:"m_p1",cat:"passagem",nome:"Passagem torreando",pos:"guarda",swap:true,chave:"As mãos movem as pernas dele, seus pés movem você, ao mesmo tempo.",
+  passos:["Controle as pernas ou as calças dele mantendo a postura.","Leve as pernas dele para um lado e desloque os seus pés para o outro.","Passe da linha dos joelhos sem deixar a guarda se recompor.","Controle quadril e ombros no chão e estabilize."],
+  erro:"Lançar as pernas sem deslocar os pés. Coordene o corpo com as mãos.",defesa:"Reposição de joelhos, frames e inversão.",conexoes:"Torreando → leg drag → knee cut."},
+ {id:"m_p2",cat:"passagem",nome:"Passagem corte de joelho (knee cut)",pos:"meia",swap:true,nucleo:true,chave:"Mate o underhook dele primeiro; o joelho corta depois.",
+  passos:["Controle tronco e ombro e tire a chance de underhook dele.","Oriente quadril e joelho para cruzar a linha da coxa dele.","Proteja a sua perna presa e ajuste a pressão conforme a reação.","Livre a perna e estabilize o controle lateral."],
+  erro:"Deixar o underhook dele livre. Trabalhe controle de braço e ombro antes de avançar.",defesa:"Joelho escudo, underhook e reposição.",conexoes:"Knee cut → leg drag ou passagem por pressão."},
+ {id:"m_p3",cat:"passagem",nome:"Passagem por pressão (over-under)",pos:"guarda",swap:true,chave:"Pressão e direção do quadril matam a amplitude da guarda.",
+  passos:["Controle as pernas de forma assimétrica (uma por cima, outra por baixo), preservando o seu pescoço.","Distribua o peso e oriente o quadril para limitar a rotação dele.","Avance aos poucos, sem abrir espaço para joelho ou canela entrar.","Passe as pernas e firme o controle lateral."],
+  erro:"Forçar a cervical e avançar sem controlar o quadril.",defesa:"Frames, underhook, recomposição de joelho.",conexoes:"Over-under → knee cut → controle lateral."},
+ // CONTROLES
+ {id:"m_c1",cat:"controle",nome:"Da lateral para a montada",pos:"cem",nucleo:true,chave:"Estabilize antes de progredir: o controle não pode sumir quando ele gira.",
+  passos:["Estabilize o 100 kg controlando quadril e ombro dele.","Bloqueie o quadril para ele não repor o joelho.","Deslize o joelho por cima da barriga dele, mantendo o peso no peito.","Passe a perna, encaixe a montada e estabilize 3 segundos."],
+  erro:"Subir para a montada sem controlar o quadril: ele repõe a guarda."},
+ {id:"m_c2",cat:"controle",nome:"Controle das costas",pos:"costas",chave:"Priorize reter (tronco + quadril); finalização só com controle firme.",
+  passos:["Feche a conexão de tronco sem pressionar a garganta de forma indevida.","Mantenha cabeça e ombros alinhados ao movimento dele.","Controle o quadril e acompanhe a rotação para ele não fugir.","Só comece a finalização com controle firme."],
+  erro:"Cruzar os pés sem critério ou soltar o controle para buscar a finalização.",defesa:"Tirar ganchos, girar para o lado seguro, controlar o braço que ataca.",conexoes:"Costas → estrangulamento ou transição para a montada."},
+ // ESCAPES E DEFESAS
+ {id:"m_e1",cat:"escapes",nome:"Escape da montada: ponte (upa)",pos:"montada",swap:true,nucleo:true,chave:"Dois apoios bloqueados + ponte na direção = ele perde a base.",
+  passos:["Escolha um lado para a reversão.","Controle o braço e a perna daquele lado para ele não apoiar.","Aproxime os pés do quadril e faça a ponte na direção.","Acompanhe o giro até estabilizar por cima ou recuperar posição segura."],
+  erro:"Esticar os braços e empurrar. Cotovelos protegidos e use o quadril.",defesa:"Abrir a base, subir a montada, soltar o braço.",conexoes:"Ponte → cotovelo-joelho → meia-guarda."},
+ {id:"m_e2",cat:"escapes",nome:"Escape da montada: cotovelo-joelho",pos:"montada",swap:true,chave:"Reponha o joelho para recriar a barreira entre os quadris.",
+  passos:["Crie um pequeno espaço com uma ponte controlada.","Use antebraço e cotovelo como estrutura no quadril dele.","Desloque o quadril para fora e coloque o joelho por dentro.","Recupere a meia-guarda e depois a guarda."],
+  erro:"Ficar reto e empurrar com os braços esticados. Crie ângulo e o espaço mínimo.",defesa:"Montada alta e controle dos braços.",conexoes:"Cotovelo-joelho → meia-guarda com joelho escudo."},
+ tecAzul("s3",{cat:"escapes",nome:"Escape do 100 kg e reposição de guarda",chave:"Frames primeiro, quadril depois: o joelho entra no espaço que você criou."}),
+ tecAzul("s4",{cat:"escapes",nome:"Defesa das costas travando o braço",chave:"Pescoço primeiro: só depois pense nos ganchos."}),
+ // FINALIZAÇÕES
+ {id:"m_f1",cat:"finaliz",nome:"Armbar da montada",pos:"montada",nucleo:true,chave:"Controle ombro e linha do cotovelo antes de estender; a extensão é progressiva.",
+  passos:["Isole o braço sem perder a conexão com o tronco dele.","Crie ângulo e posicione as pernas para limitar a rotação do ombro.","Controle o punho e a linha do cotovelo, sem tranco.","Estenda aos poucos e solte na hora ao sinal de desistência."],
+  erro:"Buscar a extensão sem controlar o tronco. Corrija a posição antes da pressão.",defesa:"Juntar as mãos, girar e recuperar a postura no começo.",conexoes:"Armbar → triângulo → omoplata, conforme a defesa."},
+ tecAzul("al1",{cat:"finaliz",nome:"Armbar da guarda",chave:"Quadril alto e polegar dele para cima."}),
+ tecAzul("k3",{cat:"finaliz",nome:"Kimura da guarda",chave:"Pegada de punho fechada e cotovelo dele longe do corpo."}),
+ tecAzul("k1",{cat:"finaliz",nome:"Americana do 100 kg",chave:"Punho dele colado no chão, cotovelo perto do quadril dele."}),
+ tecAzul("t1",{cat:"finaliz",nome:"Triângulo da guarda",chave:"Um braço dentro, um fora; ajuste o ângulo antes de apertar."}),
+ tecAzul("o1",{cat:"finaliz",nome:"Omoplata da guarda",chave:"Segure a cintura dele: sem isso ele rola e escapa."}),
+ tecAzul("e1",{cat:"finaliz",nome:"Mata-leão",chave:"Cotovelo alinhado ao queixo e cabeça colada na dele."}),
+ tecAzul("e2",{cat:"finaliz",nome:"Estrangulamento cruzado da montada",chave:"Primeira pegada funda; os cotovelos descem ao chão."}),
+ {id:"m_f2",cat:"finaliz",nome:"Estrangulamento arco e flecha",pos:"costas",chave:"Gola funda, perna no quadril dele e corpo de lado como um arco.",
+  passos:["Das costas, pegue a gola dele bem funda com a mão que passa pelo pescoço.","Com a outra mão, segure a calça na altura do joelho.","Gire o corpo de lado e passe a sua perna por cima do quadril dele.","Estique o corpo como um arco, puxando a gola e empurrando com a perna."],
+  erro:"Pegada rasa na gola ou ficar atrás dele sem girar o corpo."}
+];
+const TEO_MARROM = [
+ // SISTEMAS E ESTRATÉGIA
+ {id:"m_s1",cat:"estrategia",q:"Qual a diferença entre técnica isolada e sistema de ataque?",a:"Sistema tem alternativa e transição para quando o adversário reage; a técnica isolada não tem saída se falhar",w:["Sistema é saber mais de 50 técnicas","Técnica isolada é mais avançada que sistema","Não há diferença: as duas são golpes únicos"],ex:"A luta não é uma coleção de golpes independentes. Cada ataque precisa de alternativa defensiva e transição lógica."},
+ {id:"m_s2",cat:"estrategia",q:"O que deve acontecer antes de uma raspagem contra uma base sólida?",a:"Comprometer o apoio dele: controle de distância, retirada de apoio e desequilíbrio",w:["Fazer mais força com as pernas","Esperar ele cansar","Puxar a gola com as duas mãos"],ex:"Não tente só com as pernas: ajuste o ângulo do quadril e as pegadas primeiro."},
+ {id:"m_s3",cat:"estrategia",q:"Seu ataque principal foi defendido. Qual é o plano B?",a:"Migrar para a resposta preparada daquele ataque, sem forçar o mesmo movimento",w:["Repetir o mesmo ataque com mais força","Parar e esperar o árbitro","Soltar tudo e voltar em pé"],ex:"Contra uma defesa pronta, forçar o mesmo golpe só gasta energia. Vá para a transição preparada."},
+ {id:"m_s4",cat:"estrategia",q:"Você está ganhando por 2 pontos. Qual é a decisão madura?",a:"Manter atividade, base e controle, buscando progressão real, sem defesa passiva",w:["Fugir da luta até acabar o tempo","Arriscar tudo numa finalização","Ficar parado segurando a pegada"],ex:"Defesa passiva rende punição por falta de combatividade e entrega o jogo."},
+ {id:"m_s5",cat:"estrategia",q:"Você está perdendo porque sofreu uma passagem. O que priorizar?",a:"Escapar ou recuperar a guarda antes de tentar ataques arriscados",w:["Atacar o pé dele de qualquer jeito","Ficar parado esperando o tempo","Pedir para recomeçar em pé"],ex:"Primeiro recupere posição segura. De uma posição ruim, ataque arriscado costuma piorar o placar."},
+ {id:"m_s6",cat:"estrategia",q:"O adversário é muito mais pesado. Qual é a estratégia?",a:"Criar frames e ângulos e recuperar mobilidade, evitando disputa de força pura",w:["Disputar força desde o início","Puxar para a guarda fechada e esperar","Ficar por baixo achatado"],ex:"Contra peso, use estrutura e ângulo, não força."},
+ {id:"m_s7",cat:"estrategia",q:"O oponente é mais veloz que você. O que fazer?",a:"Disputar distância, pegadas e conexão antes de tentar impor pressão",w:["Correr atrás dele","Fazer só ataques rápidos","Ficar longe sem pegada"],ex:"Com conexão, a velocidade dele perde valor."},
+ {id:"m_s8",cat:"estrategia",q:"Na guarda fechada, ele posta o braço no seu peito depois da tentativa de tesoura. O que estudar?",a:"Triângulo ou armbar",w:["Botinha reta","Sair da guarda e ficar em pé","Mata-leão"],ex:"Sistema da guarda fechada: quebrar a postura → tesoura. Se ele postar o braço, triângulo ou armbar."},
+ {id:"m_s9",cat:"estrategia",q:"Na borboleta, ele tira o peso de cima do gancho. Qual é a resposta?",a:"Subida (single leg) ou entrada na guarda X",w:["Insistir na mesma raspagem","Deitar e fechar a guarda","Puxar a gola com força"],ex:"Sistema da borboleta: desequilibrar → raspagem. Se ele retirar o peso, subida ou guarda X."},
+ {id:"m_s10",cat:"estrategia",q:"Na meia-guarda por baixo, ele bloqueia a sua subida. Para onde ir?",a:"Recuperar a borboleta ou o joelho escudo",w:["Ficar achatado de costas","Abraçar o pescoço dele","Esticar os braços e empurrar"],ex:"Sistema da meia-guarda: frames → underhook. Se ele bloquear a subida, mude de guarda."},
+ {id:"m_s11",cat:"estrategia",q:"Passando a guarda em pé com o torreando, ele recompõe as pernas. O que fazer?",a:"Trocar a direção para knee cut ou leg drag",w:["Tentar o torreando de novo, mais rápido","Pular na guarda dele","Desistir da passagem"],ex:"Passagem boa liga duas direções: se fechar um lado, abre o outro."},
+ {id:"m_s12",cat:"estrategia",q:"No controle lateral, ele gira para dentro (de frente para você). Qual é o ajuste?",a:"Ir para o norte-sul ou para as costas",w:["Soltar e voltar em pé","Ficar parado esperando","Tentar a montada pulando"],ex:"Sistema do controle lateral: estabilizar quadril e ombro; se ele girar, ajuste a posição."},
+ {id:"m_s13",cat:"estrategia",q:"Por baixo da montada, você bloqueou e fez a ponte, mas ele abriu a base. E agora?",a:"Recuperar o joelho (cotovelo-joelho) e a meia-guarda",w:["Fazer a ponte de novo mais forte","Virar de costas","Empurrar com os braços esticados"],ex:"Ponte → cotovelo-joelho → meia-guarda: um escape leva ao outro."},
+ {id:"m_s14",cat:"estrategia",q:"Qual é o critério que mais conta para a marrom, segundo a apostila?",a:"Autonomia e maturidade: um jogo simples, conectado e repetível",w:["Volume: saber 100 técnicas","Força física","Número de medalhas"],ex:"Um jogo simples e conectado pode ser mais avançado que um repertório grande e instável."},
+ {id:"m_s15",cat:"estrategia",q:"Antes de agir, qual destas é uma das três perguntas da apostila?",a:"Essa ação melhora a minha posição sem expor pescoço, joelhos ou braços?",w:["Quantos pontos o adversário tem?","Quem está assistindo?","Qual técnica é mais bonita?"],ex:"As três: qual é o principal apoio dele e como afetá-lo; qual controle preservar se falhar; e se a ação melhora a posição sem te expor."},
+ {id:"m_s16",cat:"estrategia",q:"Na passagem corte de joelho, o que você neutraliza primeiro?",a:"O underhook dele",w:["Os pés dele","A gola dele","O seu próprio quadril"],ex:"Chave do knee cut: mate o underhook dele primeiro; o joelho corta depois."},
+ {id:"m_s17",cat:"estrategia",q:"No controle das costas, o que vem antes da finalização?",a:"Reter a posição: controle de tronco e quadril",w:["Cruzar os pés na frente","Soltar um gancho para atacar","Puxar o pescoço com força"],ex:"Chave das costas: priorize reter; finalização só com controle firme."},
+ {id:"m_s18",cat:"estrategia",tipo:"order",q:"Monte a sequência do núcleo mínimo:",itens:["Raspagem","Knee cut","Lateral","Montada","Armbar"],ex:"Raspagem → knee cut → lateral → montada → armbar. Se perder a posição, upa."},
+ {id:"m_s19",cat:"estrategia",tipo:"order",long:true,q:"Ordene o plano de 6 meses da apostila:",itens:["Defesa, escapes, base e frames","Guardas e raspagens","Passagens e estabilização","Montada, costas e finalizações","Quedas, tática e placar","Revisão e simulado"],ex:"Começa pela defesa e termina na revisão. E, toda semana, intercale defesa, uma guarda e uma passagem."},
+ // REGRAS E GOLPES (o que muda na marrom)
+ {id:"m_rg1",cat:"regras",q:"Na faixa MARROM adulto com kimono, CHAVE DE JOELHO RETA (knee bar) é:",a:"Permitida",w:["Proibida","Permitida só no sem kimono","Permitida só na preta"],ex:"Chave de joelho reta é liberada para marrom e preta. Na azul e na roxa é proibida."},
+ {id:"m_rg2",cat:"regras",q:"Na faixa MARROM adulto com kimono, CHAVE DE BÍCEPS e CHAVE DE PANTURRILHA são:",a:"Permitidas",w:["Proibidas","Só a de bíceps é permitida","Permitidas só no master"],ex:"As duas passam a valer na marrom e na preta."},
+ {id:"m_rg3",cat:"regras",q:"Na faixa MARROM adulto com kimono, MATA-LEÃO NO PÉ (toe hold) é:",a:"Permitido, sem forçar o pé para o lado de fora",w:["Proibido","Permitido forçando para qualquer lado","Permitido só sem kimono"],ex:"O mata-leão no pé é liberado na marrom, mas aplicar a pressão para o lado externo do pé continua proibido."},
+ {id:"m_rg4",cat:"regras",q:"Na faixa MARROM adulto COM kimono, CHAVE DE CALCANHAR é:",a:"Proibida",w:["Permitida","Permitida a partir do 2º grau","Permitida no absoluto"],ex:"Com kimono, chave de calcanhar é proibida em todas as faixas. Sem kimono, é liberada só para marrom e preta adulto."},
+ {id:"m_rg5",cat:"regras",q:"A CRUZADA DE PERNA (reaping) com kimono, na faixa marrom:",a:"Continua proibida",w:["Passa a ser permitida","É permitida só na 50/50","É permitida só no absoluto"],ex:"A exceção para marrom e preta vale só no sem kimono adulto e não torna todas as cruzadas legais."},
+ {id:"m_rg6",cat:"regras",q:"Mudou de roxa para marrom. Pode presumir que tudo foi liberado?",a:"Não. Diferencie técnica, categoria e modalidade e confira a tabela de golpes proibidos",w:["Sim, na marrom tudo é permitido","Sim, exceto o bate-estaca","Só precisa conferir no sem kimono"],ex:"A tabela tem colunas por idade, faixa e modalidade (com ou sem kimono)."},
+ {id:"m_rg7",cat:"regras",q:"Na chave de pé reta, GIRAR para o lado do pé que não está sendo atacado, na faixa marrom:",a:"Permitido",w:["Proibido","Permitido só sem kimono","Vale punição"],ex:"Esse giro é proibido até a roxa e liberado para marrom e preta."},
+ {id:"m_rg8",cat:"regras",q:"Bate-estaca, chave de cervical e queda-tesoura na faixa marrom:",a:"Continuam proibidos",w:["Passam a ser permitidos","Só o bate-estaca é proibido","Permitidos sem kimono"],ex:"Esses golpes são proibidos para todas as faixas."},
+ {id:"m_rg9",cat:"regras",q:"Quanto tempo dura a luta de faixa MARROM adulto?",a:"8 minutos",w:["7 minutos","10 minutos","6 minutos"],ex:"Adulto: branca 5, azul 6, roxa 7, marrom 8, preta 10 minutos."},
+ {id:"m_rg10",cat:"regras",q:"Por que não se conta uma passagem antes de estabilizar?",a:"Porque a regra exige, em geral, 3 segundos de estabilização para validar a posição",w:["Porque passagem só vale vantagem","Porque o árbitro precisa pedir","Porque só conta no fim da luta"],ex:"Sem estabilizar (salvo as exceções do livro de regras), não pontua."},
+ {id:"m_rg11",cat:"regras",q:"A vantagem é automática quando você quase pontua?",a:"Não. Depende da regra específica de cada situação",w:["Sim, sempre","Sim, se o público reagir","Só na faixa preta"],ex:"Vantagem não é automática: o livro descreve quando ela é dada."},
+ {id:"m_rg12",cat:"regras",q:"A IBJJF anunciou mudanças de regra com início em 1º de janeiro de 2027. O que fazer antes de competir?",a:"Conferir a regra completa e os vídeos no site oficial da IBJJF",w:["Aplicar as mudanças já em 2026","Ignorar até alguém avisar","Seguir o que falam nas redes sociais"],ex:"Mudanças recentes podem ser ajustadas. Não aplique a eventos anteriores à vigência."},
+ // GRADUAÇÃO
+ {id:"m_g1",cat:"graduacao",q:"Qual é a idade mínima para a faixa marrom?",a:"18 anos",w:["16 anos","17 anos","19 anos"],ex:"Azul e roxa: 16. Marrom: 18. Preta: 19."},
+ {id:"m_g2",cat:"graduacao",q:"Tempo mínimo na faixa roxa (adulto) antes da marrom:",a:"1 ano e meio",w:["1 ano","2 anos","6 meses"],ex:"Azul: 2 anos. Roxa: 1 ano e meio. Marrom: 1 ano."},
+ {id:"m_g3",cat:"graduacao",q:"Tempo mínimo na faixa marrom antes da preta:",a:"1 ano",w:["6 meses","2 anos","3 anos"],ex:"Marrom: 1 ano. Preta a partir de 19 anos."},
+ {id:"m_g4",cat:"graduacao",q:"Existe uma prova mundial padronizada de 100 técnicas para a marrom?",a:"Não. A promoção técnica é do professor e da academia",w:["Sim, feita pela IBJJF","Sim, com 50 técnicas","Sim, só para competidores"],ex:"A IBJJF tem regras de graduação e reconhecimento, mas a avaliação técnica pertence ao professor."},
+ ...reuse(["r_g2","r_g4","r_g5","r_g6"],"graduacao"),
+ {...TEO_AZUL.find(x=>x.id==="ord1"),cat:"graduacao"},
+ // MATURIDADE E SEGURANÇA
+ {id:"m_et1",cat:"etica",q:"Você sente risco na cervical ou no joelho durante o rola. O que fazer?",a:"Interromper, não forçar, reposicionar e bater se precisar; com lesão, parar e buscar avaliação",w:["Aguentar para não perder","Fazer força para sair rápido","Esperar o parceiro perceber"],ex:"Segurança acima do resultado."},
+ {id:"m_et2",cat:"etica",q:"Como aplicar um armbar no treino?",a:"Extensão mínima e progressiva, soltando na hora ao sinal de desistência",w:["Com tranco, para garantir","Rápido, antes que ele defenda","Só para quando o professor mandar"],ex:"Chave do armbar: controle ombro e linha do cotovelo antes de estender; a extensão é progressiva."},
+ {id:"m_et3",cat:"etica",q:"O que faz parte da responsabilidade do praticante avançado?",a:"Controlar a intensidade, proteger iniciantes, aceitar o tap e receber correções",w:["Finalizar todos os iniciantes","Treinar só com os mais fortes","Ignorar a higiene se for graduado"],ex:"Higiene, respeito às regras e aceitar correções também contam."},
+ {id:"m_et4",cat:"etica",q:"Você está nas costas de um parceiro iniciante. O que fazer?",a:"Reter a posição com controle e só finalizar com segurança",w:["Apertar o pescoço sem ajuste","Cruzar os pés e espremer","Soltar tudo para ele se sentir bem"],ex:"Controle firme vem antes da finalização. Não pressione a garganta indevidamente."},
+ {id:"m_et5",cat:"etica",q:"Ao treinar técnicas de perna (chave de pé e de joelho), o certo é:",a:"Praticar só o que é legal para a categoria, devagar e com supervisão",w:["Treinar tudo, já que é marrom","Treinar com iniciantes para testar","Aplicar com força para ver se funciona"],ex:"A apostila pede prática legal e supervisionada."},
+ ...reuse(["et3","et9","et12","et13"]),
+ {...TEO_ROXA.find(x=>x.id==="x_e1")},
+ {...TEO_ROXA.find(x=>x.id==="x_d3"),cat:"etica"},
+ {...TEO_ROXA.find(x=>x.id==="x_d2"),cat:"etica"},
+ // HISTÓRIA (as mesmas da roxa)
+ ...TEO_ROXA.filter(q=>q.cat==="historia"),
+ // pontuação e punições (valem para todas)
+ ...reuse(["r_p1","r_p2","r_p3","r_p4","r_p5","r_p6","r_p7","r_p8","r_d1","r_d2","r_d3","r_f1","r_f2","r_f3","r_f4"]),
+ ...TEO_ROXA.filter(q=>["x_r1","x_r2","x_r3","x_r8","x_r10"].includes(q.id)),
+ ...reuse(["ord3","ord4","ord5"])
+];
+
 /* ================= FAIXAS ================= */
 const BELTS = {
   azul:   {id:"azul",   nome:"Azul",   de:"Branca", cor:"#1C5FC9", deCor:"#FFFFFF", key:"rumoazul.v1",      pronto:true, cats:CATS_AZUL, tec:TEC_AZUL, teo:TEO_AZUL, notas:true,
            desc:"Teoria e as técnicas da lista do sensei, com vídeos"},
   roxa:   {id:"roxa",   nome:"Roxa",   de:"Azul",   cor:"#6A2C91", deCor:"#1C5FC9", key:"rumoazul.roxa.v1", pronto:true, cats:CATS_ROXA, tec:[],       teo:TEO_ROXA,
            desc:"Prova teórica: regras, golpes proibidos, ética, socorro e história"},
-  marrom: {id:"marrom", nome:"Marrom", de:"Roxa",   cor:"#6B3E1F", deCor:"#6A2C91", pronto:false,
-           desc:"Em breve: aguardando a lista do sensei"}
+  marrom: {id:"marrom", nome:"Marrom", de:"Roxa",   cor:"#6B3E1F", deCor:"#6A2C91", key:"rumoazul.marrom.v1", pronto:true, cats:CATS_MARROM, tec:TEC_MARROM, teo:TEO_MARROM, nucleo:true,
+           desc:"Núcleo mínimo, fichas com dica-mestre, sistemas e regras da marrom"}
 };
 const FKEY = "rumoazul.faixa";
 function faixaSalva(){
@@ -586,11 +741,11 @@ const CAT = Object.fromEntries([...CATS, ...CATS_AZUL].map(c => [c.id, c]).rever
 
 /* ================= MÍDIA (fotos e vídeos reais, Wikimedia Commons) ================= */
 // Vídeos de técnicas: id da técnica -> arquivo em midia/
-const VID = {k1:"americana", k3:"kimura_guarda", al1:"armbar_guarda", al2:"armbar_montada", t1:"triangulo", r5:"tesoura", e4:"estr_guarda", e2:"estr_montada", o1:"omoplata", e1:"mataleao"};
+const VID = {m_r1:"tesoura", m_f1:"armbar_montada", m_f2:"arco_flecha", k1:"americana", k3:"kimura_guarda", al1:"armbar_guarda", al2:"armbar_montada", t1:"triangulo", r5:"tesoura", e4:"estr_guarda", e2:"estr_montada", o1:"omoplata", e1:"mataleao"};
 // Fotos de posição: posição -> arquivo em midia/
 const POSIMG = {guarda:"pos_guarda.jpg", montada:"pos_montada.jpg", cem:"pos_cem.jpg", costas:"pos_costas.jpg", meia:"pos_meia.jpg", borboleta:"pos_borboleta.jpg", joelho:"pos_joelho.jpg", queda:"pos_queda.jpg"};
 const CREDITOS = [
-  {o:"Vídeos de americana, kimura, armlock, triângulo, raspagem de tesoura, estrangulamentos, omoplata e mata-leão, e fotos de montada, 100 kg e costas tiradas deles", a:"Ddanielcruzz (técnicas por Ángel Gómez, Top Brother México)", l:"CC BY-SA 4.0", u:"https://commons.wikimedia.org/wiki/User:Ddanielcruzz"},
+  {o:"Vídeos de americana, kimura, armlock, triângulo, raspagem de tesoura, estrangulamentos (inclusive arco e flecha), omoplata e mata-leão, e fotos de montada, 100 kg e costas tiradas deles", a:"Ddanielcruzz (técnicas por Ángel Gómez, Top Brother México)", l:"CC BY-SA 4.0", u:"https://commons.wikimedia.org/wiki/User:Ddanielcruzz"},
   {o:"Foto de guarda fechada", a:"MartialArtsNomad.com", l:"CC BY 2.0", u:"https://commons.wikimedia.org/wiki/File:Brazilian_Jiu-jitsu-Closed_guard.jpg"},
   {o:"Foto de meia-guarda", a:"parhessiastes", l:"CC BY-SA 2.0", u:"https://commons.wikimedia.org/wiki/File:BJJ-half_guard.jpg"},
   {o:"Foto de guarda borboleta", a:"Cpl. Jeff Sisto, Marinha dos EUA", l:"domínio público", u:"https://commons.wikimedia.org/wiki/File:Judo10-butterfly_guard.jpg"},
@@ -733,7 +888,7 @@ function sobre(){
   <section class="about">
     <h2>Fontes</h2>
     <p>Regras, pontos, punições e faixas: Livro de Regras da IBJJF, versão 6.1 (2024).</p>
-    <p>Faixa azul: folha de conteúdo da prova passada pelo sensei. Faixa roxa: prova teórica de exemplo da B9 e resumo do material do sensei.</p>
+    <p>Faixa azul: folha de conteúdo da prova passada pelo sensei. Faixa roxa: prova teórica de exemplo da B9 e resumo do material do sensei. Faixa marrom: apostila "Da Faixa Roxa à Faixa Marrom" (fichas, núcleo mínimo, sistemas e regras).</p>
   </section>
   <section class="about">
     <h2>Créditos das fotos e vídeos</h2>
@@ -781,10 +936,14 @@ function home(){
     <p>${esc(nm())}, o foco de hoje é <b>${foco.map(c=>c.nome).join("</b> e <b>")}</b>, onde você está mais fraco.</p>
     <button class="btn btn-blue btn-wide" id="goToday">Treino do dia · 12 perguntas</button>
   </section>
+  ${B.nucleo?`<section class="nucleo"><h3>Núcleo mínimo</h3><p class="belt-meta" style="margin:0 0 8px">${esc(nm())}, comece por estas seis: juntas já formam um jogo completo.</p>
+    <div class="seq">${["m_r2","m_p2","m_c1","m_f1"].map((id,i)=>`${i?"<span>→</span>":""}<button data-t="${id}">${esc(TEC.find(t=>t.id===id).nome.replace("Passagem corte de joelho (knee cut)","Knee cut").replace("Da lateral para a montada","Lateral → montada").replace("Armbar da montada","Armbar"))}</button>`).join("")}</div>
+    <div class="seq" style="margin-top:6px"><span class="belt-meta">Perdeu a posição?</span><button data-t="m_e1">Upa</button><span class="belt-meta">Em pé:</span><button data-t="m_q0">Base e quedas</button></div></section>`:""}
   <div class="section-h"><h2>Mapa da prova</h2><span>toque para estudar</span></div>
   <div class="map">${CATS.map(c=>{const m=mastery(c.id); return `<button class="tile ${m<.25?"weak":""}" data-cat="${c.id}"><div class="tile-top"><b>${c.nome}</b><em>${Math.round(m*100)}%</em></div><div class="bar"><i style="width:${Math.max(m*100,3)}%"></i></div></button>`;}).join("")}</div>`;
   $("#goToday").onclick=()=>startQuiz("dia");
   $("#swapF").onclick=trocarFaixa;
+  app.querySelectorAll(".nucleo button[data-t]").forEach(b=>b.onclick=()=>openTec(b.dataset.t));
   app.querySelectorAll(".tile").forEach(t=>t.onclick=()=>{const c=CAT[t.dataset.cat]; if(c.tipo==="tec") go("tec",c.id); else startQuiz(c.id);});
 }
 
@@ -814,7 +973,7 @@ function bindNotes(){app.querySelectorAll("textarea[data-note]").forEach(t=>t.on
 
 /* ---------- geração de perguntas ---------- */
 function qFromTeo(q){
-  if(q.tipo==="order") return {id:q.id,cat:q.cat,tipo:"order",q:q.q,itens:q.itens,ex:q.ex};
+  if(q.tipo==="order") return {id:q.id,cat:q.cat,tipo:"order",long:q.long,q:q.q,itens:q.itens,ex:q.ex};
   const opts=shuffle([{label:q.a,ok:true},...q.w.map(w=>({label:w,ok:false}))]);
   return {id:q.id,cat:q.cat,q:q.q,svg:(q.pose&&posImg(q.pose))?photoHTML(posImg(q.pose),POS_NOME[q.pose]):"",opts,ex:q.ex};
 }
@@ -866,8 +1025,16 @@ function qDeOnde(t){
     opts:shuffle([{label:fullName(t),ok:true},...outros.map(o=>({label:fullName(o),ok:false}))]),
     ex:`A foto mostra ${POS_NOME[t.pos].toLowerCase()}. Daqui sai ${fullName(t)}. ${t.passos[0]}`};
 }
+// 5) reconhece a dica-mestre (chave) da técnica
+function qChave(t){
+  const outros=shuffle(TEC.filter(x=>x.chave&&x.cat!==t.cat)).slice(0,3);
+  return {id:t.id,cat:t.cat,q:`Qual é a dica-mestre (chave) de ${fullName(t)}?`,
+    opts:shuffle([{label:t.chave,ok:true},...outros.map(o=>({label:o.chave,ok:false}))]),
+    ex:`Chave: ${t.chave}`};
+}
 function qTecnica(t){
   const tipos=[qOrdem,qErro];
+  if(t.chave && TEC.filter(x=>x.chave&&x.cat!==t.cat).length>=3) tipos.push(qChave);
   if(VID[t.id]) tipos.push(qVideo,qVideo);
   if(posImg(t.pos) && t.pos!=="queda") tipos.push(qDeOnde);
   return tipos[Math.floor(Math.random()*tipos.length)](t);
@@ -975,7 +1142,7 @@ function tecList(cat){
   <div class="chips" role="tablist">${[{id:"todas",nome:"Todas"},...cats].map(c=>`<button class="chip ${tecFilter===c.id?"on":""}" data-f="${c.id}">${c.nome}</button>`).join("")}</div>
   ${tecFilter!=="todas"?`<button class="btn btn-blue btn-wide" id="qcat" style="margin-bottom:10px">Quiz de ${esc(CAT[tecFilter].nome)}</button>`:""}
   <div class="legend"><span><i style="background:var(--bad)"></i>revisar</span><span><i style="background:var(--gold)"></i>mais ou menos</span><span><i style="background:var(--ok)"></i>domino</span></div>
-  <div class="tlist">${list.map(t=>`<button class="titem" data-id="${t.id}">${tecThumb(t)}<span class="info"><b>${esc(t.nome)}</b><span>${esc(CAT[t.cat].nome)} · ${esc(POS_NOME[t.pos])}${VID[t.id]?" · <b class=\"vtag\">com vídeo</b>":""}</span></span><span class="dot ${lvlClass(t.id)}" aria-label="${lvlName(t.id)}"></span></button>`).join("")}</div>`;
+  <div class="tlist">${list.map(t=>`<button class="titem" data-id="${t.id}">${tecThumb(t)}<span class="info"><b>${esc(t.nome)}${t.nucleo?'<span class="ntag">★ núcleo</span>':""}</b><span>${esc(CAT[t.cat].nome)} · ${esc(POS_NOME[t.pos])}${VID[t.id]?" · <b class=\"vtag\">com vídeo</b>":""}</span></span><span class="dot ${lvlClass(t.id)}" aria-label="${lvlName(t.id)}"></span></button>`).join("")}</div>`;
   app.querySelectorAll(".chips .chip").forEach(c=>c.onclick=()=>{tecFilter=c.dataset.f; tecList();});
   app.querySelectorAll(".titem").forEach(b=>b.onclick=()=>openTec(b.dataset.id));
   const qc=$("#qcat"); if(qc) qc.onclick=()=>startQuiz(tecFilter);
@@ -992,9 +1159,11 @@ function openTec(id){
     <div class="sheet-h"><div><div class="qcat">${esc(CAT[t.cat].nome)}</div><h2>${esc(t.nome)}</h2></div><button class="xbtn" id="sx" aria-label="Fechar">✕</button></div>
     ${(()=>{const m=tecMedia(t); return m?`<div class="figure" style="margin-top:10px">${m.html}</div><div class="belt-meta" style="margin:-4px 0 10px">${esc(m.cap)}</div>`:`<div class="belt-meta" style="margin:10px 0">Posição inicial: ${esc(POS_NOME[t.pos])}</div>`;})()}
     <a class="btn btn-wide yt" href="${ytURL(t)}" target="_blank" rel="noopener">▶ Ver vídeos desta técnica no YouTube</a>
+    ${t.chave?`<div class="chave"><b>🔑 Chave</b>${esc(t.chave)}</div>`:""}
     <div class="sub">Passo a passo</div>
     <ol class="steps">${t.passos.map(p=>`<li>${esc(p)}</li>`).join("")}</ol>
     <div class="warn"><b>Erro comum:</b> ${esc(t.erro)}</div>
+    ${t.defesa||t.conexoes?`<div class="info2">${t.defesa?`<span><b>Defesa provável:</b> ${esc(t.defesa)}</span>`:""}${t.conexoes?`<span><b>Conexões:</b> ${esc(t.conexoes)}</span>`:""}</div>`:""}
     <div class="sub">Como está essa técnica?</div>
     <div class="rate">
       <button class="l1" data-v="0">Revisar</button><button class="l2" data-v="2">Mais ou menos</button><button class="l3" data-v="4">Domino</button>
@@ -1095,7 +1264,7 @@ function simDraw(){
   function reveal(){
     clearInterval(timerId);
     const m=tecMedia(t);
-    $("#sbody").innerHTML=`${m?`<div class="figure" style="margin-top:12px">${m.html}</div>`:""}<a class="btn btn-wide yt" href="${ytURL(t)}" target="_blank" rel="noopener" style="margin:10px 0">▶ Ver no YouTube</a><ol class="steps">${t.passos.map(p=>`<li>${esc(p)}</li>`).join("")}</ol>
+    $("#sbody").innerHTML=`${m?`<div class="figure" style="margin-top:12px">${m.html}</div>`:""}<a class="btn btn-wide yt" href="${ytURL(t)}" target="_blank" rel="noopener" style="margin:10px 0">▶ Ver no YouTube</a>${t.chave?`<div class="chave" style="margin:0 0 10px"><b>🔑 Chave</b>${esc(t.chave)}</div>`:""}<ol class="steps">${t.passos.map(p=>`<li>${esc(p)}</li>`).join("")}</ol>
     <div class="warn"><b>Erro comum:</b> ${esc(t.erro)}</div>
     <div class="sub">Como você foi?</div>
     <div class="rate"><button class="l1" data-v="0">Travei</button><button class="l2" data-v="1">Quase</button><button class="l3" data-v="2">Executei</button></div>`;
