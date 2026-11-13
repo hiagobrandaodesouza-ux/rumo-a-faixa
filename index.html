@@ -829,7 +829,7 @@ const CREDITOS = [
   {o:"Foto de pegada nas costas", a:"autor anônimo", l:"domínio público", u:"https://commons.wikimedia.org/wiki/File:Back_mount.jpg"},
   {o:"Foto de passagem em pé diante da guarda", a:"Yossigur", l:"CC BY-SA 4.0", u:"https://commons.wikimedia.org/wiki/File:BJJ,_brazilian-jiujitsu_05.jpg"},
   {o:"Foto de disputa de pegada em pé", a:"parhessiastes", l:"CC BY-SA 2.0", u:"https://commons.wikimedia.org/wiki/File:Looking_for_the_takedown.jpg"},
-  {o:"Ilustrações de morote-gari, amortecimento e rolamentos", a:"Judcosta", l:"CC BY-SA 3.0", u:"https://commons.wikimedia.org/wiki/File:Jud-morote-gari.svg"},
+  {o:"Ilustrações de morote-gari, amortecimento e rolamento", a:"Judcosta", l:"CC BY-SA 3.0", u:"https://commons.wikimedia.org/wiki/File:Jud-morote-gari.svg"},
   {o:"Ilustrações de o-soto-gari, o-soto-guruma, o-uchi-gari e de-ashi-barai", a:"Michael Hultström", l:"CC BY-SA 3.0", u:"https://commons.wikimedia.org/wiki/File:O-soto-gari.jpg"},
   {o:"Foto de single leg", a:"Chris Hunkeler", l:"CC BY-SA 2.0", u:"https://commons.wikimedia.org/wiki/File:Single-Leg_Takedown_(8111417907).jpg"},
   {o:"Foto de sprawl", a:"Lorenzo Bryce", l:"CC BY-SA 3.0", u:"https://commons.wikimedia.org/wiki/File:Sprawl_(85602581).jpeg"}
@@ -847,7 +847,6 @@ const PI="Posição inicial: ";
 // Terceiro campo "ilu": ilustração, mostrada inteira (sem corte) em fundo branco.
 const IMG = {
   // aquecimento (ilustrações de judô)
-  a2:["i_rolamento_tras.jpg","Ilustração: rolamento para trás por cima do ombro","ilu"],
   a3:["i_amortecimento.jpg","Ilustração: amortecimento de lado, braço batendo no chão","ilu"],
   a4:["i_rolamento.jpg","Ilustração: rolamento para a frente pelo ombro","ilu"],
   // saídas: a foto mostra o ataque de que você está saindo
@@ -1517,7 +1516,7 @@ function apostila(){
   ${sec("Uniforme",li(["Kimono inteiro branco, azul royal ou preto (paletó e calça da mesma cor).","Manga até 2 cm do punho, braços esticados à frente.","Calça até 2 cm acima do osso do tornozelo.","Gola: até 1,3 cm de espessura e 5 cm de largura. Folga da manga: mínimo 7 cm.","Faixa de 4 a 5 cm, duas voltas, nó duplo, pontas de 20 a 30 cm.","Limpo, seco, sem rasgos e sem mau cheiro. São 3 checagens para aprovar.","Homem: sem camiseta por baixo. Mulher: camisa elástica colada por baixo."])+(B.id==="roxa"?`<p class="apn">Atenção: na prova de exemplo da roxa o gabarito marcou 5 cm para a manga; a regra oficial diz 2 cm. Confirme com o sensei.</p>`:""))}
   ${(AP_EXTRA[B.id]||[]).map(s=>sec(esc(s.t),li(s.itens))).join("")}
   ${TEC.length?CATS.filter(c=>c.tipo==="tec").map((c,i)=>{const ts=TEC.filter(t=>t.cat===c.id); if(!ts.length) return ""; return sec("Técnicas · "+esc(c.nome),`<div class="aptecs">${ts.map(t=>`<article class="aptec">${apTecImg(t)}<div><small class="apc">${esc(CAT[t.cat].nome)}</small><h3>${esc(t.nome)}${t.nucleo?' <span class="ntag">★ núcleo</span>':""}</h3>${t.chave?`<p class="apk">🔑 ${esc(t.chave)}</p>`:""}<ol>${t.passos.map(p=>`<li>${esc(p)}</li>`).join("")}</ol><p class="ape">Erro comum: ${esc(t.erro)}</p></div></article>`).join("")}</div>`,i===0);}).join(""):""}
-  ${sec("Pontos principais da teoria",teoCats.map(c=>{const qs=digest(c.id); if(!qs.length) return ""; return `<h3>${esc(c.nome)}</h3><dl class="apq">${qs.map(q=>`<dt>${esc(q.q)}</dt><dd>${esc(q.a)}</dd>`).join("")}</dl>`;}).join(""),true)}
+  ${sec("Pontos principais da teoria",teoCats.map(c=>{const qs=digest(c.id); if(!qs.length) return ""; return `<h3>${esc(c.nome)}</h3><dl class="apq">${qs.map(q=>`<dt>${esc(q.q)}</dt><dd>${esc(q.a)}</dd>`).join("")}</dl>`;}).join(""))}
   ${sec("História",`<ol class="aphist">${AP_HIST.map(x=>`<li><b>${x[0]}</b>${esc(x[1])}</li>`).join("")}</ol>`)}
   ${sec("Ética no tatame",li(AP_ETICA))}
   <section class="aps"><h2>Créditos</h2><p class="apn">Desenvolvido por Hiago Barbosa Burman. Regras: Livro de Regras IBJJF v6.1 (2024). Fotos e vídeos: Wikimedia Commons.</p><div class="credits">${CREDITOS.map(c=>`<span>${esc(c.o)}: ${esc(c.a)}, licença ${esc(c.l)}.</span>`).join("")}</div></section>
