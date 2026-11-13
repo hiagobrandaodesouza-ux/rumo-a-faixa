@@ -266,6 +266,7 @@ textarea{width:100%;min-height:80px;border:1px solid var(--line);background:var(
 .aptec{display:grid;grid-template-columns:120px 1fr;gap:10px;border-top:1px solid var(--line);padding-top:10px}
 .apti{margin:0;width:120px}
 .apti img{width:120px;aspect-ratio:4/3;object-fit:cover;border-radius:8px;display:block}
+img.ilu{object-fit:contain!important;background:#fff!important}
 .apti figcaption{font-size:10px;color:var(--muted);line-height:1.25;margin-top:3px}
 .aptec>div:only-child{grid-column:1/-1}
 .aptec h3{margin:0 0 4px;font-size:16px}
@@ -827,47 +828,66 @@ const CREDITOS = [
   {o:"Foto de montada", a:"Akban Martial Arts Academy", l:"CC BY-SA 2.0", u:"https://commons.wikimedia.org/wiki/File:Renzo_Gracie_explaining_the_mount_sweep.jpg"},
   {o:"Foto de pegada nas costas", a:"autor anônimo", l:"domínio público", u:"https://commons.wikimedia.org/wiki/File:Back_mount.jpg"},
   {o:"Foto de passagem em pé diante da guarda", a:"Yossigur", l:"CC BY-SA 4.0", u:"https://commons.wikimedia.org/wiki/File:BJJ,_brazilian-jiujitsu_05.jpg"},
-  {o:"Foto de disputa de pegada em pé", a:"parhessiastes", l:"CC BY-SA 2.0", u:"https://commons.wikimedia.org/wiki/File:Looking_for_the_takedown.jpg"}
+  {o:"Foto de disputa de pegada em pé", a:"parhessiastes", l:"CC BY-SA 2.0", u:"https://commons.wikimedia.org/wiki/File:Looking_for_the_takedown.jpg"},
+  {o:"Ilustrações de morote-gari, amortecimento e rolamentos", a:"Judcosta", l:"CC BY-SA 3.0", u:"https://commons.wikimedia.org/wiki/File:Jud-morote-gari.svg"},
+  {o:"Ilustrações de o-soto-gari, o-soto-guruma, o-uchi-gari e de-ashi-barai", a:"Michael Hultström", l:"CC BY-SA 3.0", u:"https://commons.wikimedia.org/wiki/File:O-soto-gari.jpg"},
+  {o:"Foto de single leg", a:"Chris Hunkeler", l:"CC BY-SA 2.0", u:"https://commons.wikimedia.org/wiki/File:Single-Leg_Takedown_(8111417907).jpg"},
+  {o:"Foto de sprawl", a:"Lorenzo Bryce", l:"CC BY-SA 3.0", u:"https://commons.wikimedia.org/wiki/File:Sprawl_(85602581).jpeg"}
 ];
 const CAT_COR = {aquec:"#8A5A2B",saidas:"#C8261E",quedas:"#111111",raspagens:"#2E8B3A",passagem:"#1C5FC9",estrang:"#6A2C91",chavepe:"#F07A12",armlock:"#0F7C8C",triangulo:"#B0407A",maovaca:"#5B6B2F",kimura:"#7A3E1F",omoplata:"#3C4F9E",crucifixo:"#9E2B25",defesa:"#4A4245"};
 const CAT_SIGLA = {aquec:"AQ",saidas:"SA",quedas:"QU",raspagens:"RA",passagem:"PG",estrang:"ES",chavepe:"CP",armlock:"AL",triangulo:"TR",maovaca:"MV",kimura:"KA",omoplata:"OM",crucifixo:"CR",defesa:"DP"};
 const posImg = pos => POSIMG[pos] ? "midia/"+POSIMG[pos] : null;
-function photoHTML(src,alt){return `<img class="photo" src="${src}" alt="${esc(alt)}" loading="lazy">`;}
+function photoHTML(src,alt,ilu){return `<img class="photo${ilu?" ilu":""}" src="${src}" alt="${esc(alt)}" loading="lazy">`;}
 function videoHTML(name,alt){return `<video class="photo" src="midia/${name}.mp4" poster="midia/${name}.jpg" muted loop playsinline autoplay controls aria-label="${esc(alt)}"></video>`;}
 // Foto escolhida a dedo para técnicas sem vídeo próprio: [arquivo, legenda].
 // A legenda diz exatamente o que a foto mostra (a técnica, a situação ou só a posição inicial).
 const PI="Posição inicial: ";
+// Regra: só entra imagem que mostra a própria técnica ou a situação exata de que ela sai.
+// Sem imagem adequada, fica sem foto (melhor que uma foto genérica repetida).
+// Terceiro campo "ilu": ilustração, mostrada inteira (sem corte) em fundo branco.
 const IMG = {
-  s1:["f_montada.jpg",PI+"você por baixo da montada"], s2:["armbar_guarda.jpg","Situação: ele ataca o armlock da guarda"],
-  s3:["f_100kg.jpg",PI+"você por baixo do 100 kg"], s4:["f_costas.jpg","Situação: ele pegou as suas costas"],
-  s5:["f_triangulo_entrada.jpg","Situação: ele monta o triângulo"], s6:["f_omoplata_entrada.jpg","Situação: ele encaixa a omoplata"],
+  // aquecimento (ilustrações de judô)
+  a2:["i_rolamento_tras.jpg","Ilustração: rolamento para trás por cima do ombro","ilu"],
+  a3:["i_amortecimento.jpg","Ilustração: amortecimento de lado, braço batendo no chão","ilu"],
+  a4:["i_rolamento.jpg","Ilustração: rolamento para a frente pelo ombro","ilu"],
+  // saídas: a foto mostra o ataque de que você está saindo
+  s1:["f_montada.jpg","Situação: você por baixo da montada"], s2:["armbar_guarda.jpg","Situação: ele ataca o armlock da guarda"],
+  s3:["f_100kg.jpg","Situação: você por baixo do 100 kg"], s4:["f_costas.jpg","Situação: ele pegou as suas costas"],
+  s5:["triangulo.jpg","Situação: você preso no triângulo"], s6:["omoplata.jpg","Situação: você preso na omoplata"],
   s7:["estr_guarda.jpg","Situação: estrangulamento com pegada na gola"], s8:["mataleao.jpg","Situação: mata-leão pelas costas"],
-  q1:["f_pegada.jpg",PI+"em pé, disputando a pegada"], q2:["f_pegada.jpg",PI+"em pé, disputando a pegada"],
-  q3:["f_pegada.jpg",PI+"em pé, disputando a pegada"], q4:["f_pegada.jpg",PI+"em pé, disputando a pegada"], q5:["f_pegada.jpg",PI+"em pé, disputando a pegada"],
-  r1:["f_empe_guarda.jpg",PI+"ele fica em pé na sua guarda"], r2:["pos_guarda.jpg",PI+"guarda fechada"],
-  r3:["pos_meia.jpg",PI+"meia-guarda, você por baixo"], r4:["pos_borboleta.jpg",PI+"guarda borboleta"],
-  p1:["f_empe_guarda.jpg",PI+"em pé diante da guarda dele"], p2:["f_empe_guarda.jpg",PI+"em pé diante da guarda dele"],
-  p3:["f_guarda_cima.jpg",PI+"você dentro da guarda fechada dele"], p4:["f_guarda_cima.jpg",PI+"você dentro da guarda fechada dele"],
-  p5:["pos_meia.jpg",PI+"meia-guarda, você por cima"], p6:["pos_meia.jpg",PI+"meia-guarda, você por cima"],
-  e3:["f_100kg.jpg",PI+"100 kg, você por cima"],
+  // quedas (fotos e ilustrações da própria técnica)
+  q1:["i_morote.jpg","Ilustração: morote-gari, as duas mãos atrás dos joelhos","ilu"],
+  q2:["f_single_leg.jpg","Foto: single leg, prendendo uma perna"],
+  q3:["i_osoto.jpg","Ilustração: o-soto-gari, ceifando a perna de apoio por fora","ilu"],
+  q4:["i_osoto_guruma.jpg","Ilustração: o-soto-guruma, a perna bloqueia as duas pernas dele","ilu"],
+  q5:["i_ouchi.jpg","Ilustração: o-uchi-gari, ceifando por dentro","ilu"],
+  // raspagens: uma foto por posição de partida, sem repetir
+  r1:["f_empe_guarda.jpg","Posição inicial: ele fica em pé na sua guarda"], r2:["pos_guarda.jpg","Posição inicial: guarda fechada"],
+  r3:["pos_meia.jpg","Posição inicial: meia-guarda, você por baixo"], r4:["pos_borboleta.jpg","Posição inicial: guarda borboleta"],
+  // passagens
+  p3:["f_guarda_cima.jpg","Posição inicial: você dentro da guarda fechada dele"],
+  // finalizações sem vídeo próprio: a mesma chave, de outra posição
   k2:["americana.jpg","A pegada da americana (na foto, do 100 kg)"], k4:["kimura_guarda.jpg","A pegada da kimura (na foto, da guarda)"],
   t2:["triangulo.jpg","O triângulo fechado (na foto, da guarda)"],
-  m_q0:["f_pegada.jpg","Base e disputa de pegadas"], m_q1:["f_pegada.jpg",PI+"em pé, disputando a pegada"],
-  m_r2:["pos_borboleta.jpg",PI+"guarda borboleta"], m_r3:["pos_meia.jpg",PI+"meia-guarda, você por baixo"],
-  m_r4:["f_guarda_cima.jpg",PI+"ele com a postura alta na sua guarda"],
-  m_p1:["f_empe_guarda.jpg",PI+"em pé diante da guarda aberta"], m_p2:["pos_meia.jpg",PI+"meia-guarda, você por cima"],
-  m_c1:["f_100kg.jpg",PI+"100 kg (controle lateral)"], m_c2:["f_costas.jpg","Controle das costas"],
-  m_e1:["f_montada.jpg",PI+"você por baixo da montada"], m_e2:["f_montada.jpg",PI+"você por baixo da montada"]
+  // marrom
+  m_q0:["f_pegada.jpg","Foto: base e disputa de pegadas"],
+  m_q1:["i_deashi.jpg","Ilustração: de-ashi-barai, varrendo o pé no passo","ilu"],
+  m_q2:["f_sprawl.jpg","Foto: sprawl, quadril para trás e para baixo"],
+  m_r2:["pos_borboleta.jpg","Posição inicial: guarda borboleta"], m_r3:["pos_meia.jpg","Posição inicial: meia-guarda, você por baixo"],
+  m_r4:["f_guarda_cima.jpg","Posição inicial: ele com a postura alta na sua guarda"],
+  m_p1:["f_empe_guarda.jpg","Posição inicial: em pé diante da guarda aberta"],
+  m_c2:["f_costas.jpg","Foto: controle das costas"],
+  m_e1:["f_montada.jpg","Situação: você por baixo da montada"]
 };
 // melhor imagem para uma técnica: vídeo próprio; senão a foto escolhida; senão nenhuma (melhor que foto errada)
 function tecMedia(t){
   if(VID[t.id]) return {html:videoHTML(VID[t.id],t.nome), cap:"Vídeo real da técnica"};
-  if(IMG[t.id]) return {html:photoHTML("midia/"+IMG[t.id][0],IMG[t.id][1]), cap:IMG[t.id][1]+". Veja a técnica completa no botão do YouTube."};
+  if(IMG[t.id]) return {html:photoHTML("midia/"+IMG[t.id][0],IMG[t.id][1],IMG[t.id][2]), cap:IMG[t.id][1]+". Veja a técnica completa no botão do YouTube."};
   return null;
 }
 function tecThumb(t){
   if(VID[t.id]) return `<span class="thumb"><img src="midia/${VID[t.id]}.jpg" alt=""><i class="play">▶</i></span>`;
-  if(IMG[t.id]) return `<span class="thumb"><img src="midia/${IMG[t.id][0]}" alt=""></span>`;
+  if(IMG[t.id]) return `<span class="thumb"><img class="${IMG[t.id][2]?"ilu":""}" src="midia/${IMG[t.id][0]}" alt=""></span>`;
   return "";
 }
 const ytURL = t => "https://www.youtube.com/results?search_query="+encodeURIComponent(`${t.nome} ${CAT[t.cat].nome} jiu jitsu técnica`);
@@ -1465,7 +1485,7 @@ const AP_EXTRA={
 function apFoto(src,cap){return `<figure class="apf"><img src="midia/${src}" alt="${esc(cap)}" loading="eager"><figcaption>${esc(cap)}</figcaption></figure>`;}
 function apTecImg(t){
   if(VID[t.id]) return `<figure class="apti"><img src="midia/${VID[t.id]}.jpg" alt="" loading="eager"><figcaption>Quadro do vídeo da técnica</figcaption></figure>`;
-  if(IMG[t.id]) return `<figure class="apti"><img src="midia/${IMG[t.id][0]}" alt="" loading="eager"><figcaption>${esc(IMG[t.id][1])}</figcaption></figure>`;
+  if(IMG[t.id]) return `<figure class="apti"><img class="${IMG[t.id][2]?"ilu":""}" src="midia/${IMG[t.id][0]}" alt="" loading="eager"><figcaption>${esc(IMG[t.id][1])}</figcaption></figure>`;
   return "";
 }
 function apostila(){
